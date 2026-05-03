@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TrackWise — Stop Wasting Money</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --green: #1D9E75;
+      --green-light: #E8F8F2;
+      --green-dark: #0F6E56;
+      --red: #D85A30;
+      --red-light: #FDF0EB;
+      --yellow: #F5A623;
+      --orange: #E8833A;
+      --bg: #F4F6F9;
+      --card: #FFFFFF;
+      --text: #1A1A2E;
+      --text-muted: #6B7280;
+      --border: #E5E7EB;
+      --input-bg: #F4F6F9;
+      --badge-bg: #E8F8F2;
+      --badge-text: #0F6E56;
+      --sub-bg: #FFFFFF;
+      --radius: 16px;
+      --font: 'Inter', sans-serif;
+    }
+    [data-theme="dark"] {
+      --bg: #0F0F13;
+      --card: #1A1A24;
+      --text: #E8E8F0;
+      --text-muted: #9090A8;
+      --border: #2A2A38;
+      --input-bg: #12121A;
+      --badge-bg: #0F2E22;
+      --badge-text: #5DCAA5;
+      --sub-bg: #12121A;
+      --green-light: #0F2E22;
+      --red-light: #2E1510;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+    input, select, button { font-family: var(--font); }
+
+    .header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-icon { font-size: 22px; }
+    .logo-text { font-size: 20px; font-weight: 800; color: var(--green); }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .tagline { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+    .theme-toggle {
+      background: var(--input-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 50px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .theme-toggle:hover { border-color: var(--green); color: var(--green); }
+
+    .main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 28px;
+      border: 1px solid var(--border);
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+    }
+
+    .score-section { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .score-card { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; }
+    .score-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+    .score-number { font-size: 96px; font-weight: 800; line-height: 1; color: var(--green); transition: color 0.4s; }
+    .score-number.yellow { color: var(--yellow); }
+    .score-number.orange { color: var(--orange); }
+    .score-number.red { color: var(--red); }
+    .score-out-of { font-size: 12px; color: var(--text-muted); }
+    .score-verdict { font-size: 14px; font-weight: 500; color: var(--text); margin: 6px 0; }
+    .score-stats { display: flex; gap: 28px; margin: 12px 0; }
+    .stat { display: flex; flex-direction: column; gap: 3px; align-items: center; }
+    .stat-label { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+    .stat-value { font-size: 22px; font-weight: 700; color: var(--text); }
+    .stat-value.danger { color: var(--red); }
+
+    .advice-card {
+      background: linear-gradient(135deg, #1D9E75, #0A5C42);
+      border-radius: var(--radius);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border: none;
+      min-height: 200px;
+    }
+    .advice-header { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.65); }
+    .advice-text { font-size: 14px; line-height: 1.75; color: white; flex: 1; }
+    .advice-empty { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.7; flex: 1; }
+
+    .btn {
+      padding: 13px 24px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-primary { background: var(--green); color: white; }
+    .btn-primary:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .btn-disabled { opacity: 0.6; pointer-events: none; }
+    .full-width { width: 100%; }
+
+    .chart-section { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .chart-wrapper { position: relative; height: 220px; }
+    .category-list { display: flex; flex-direction: column; gap: 12px; }
+    .category-item { display: flex; align-items: center; gap: 10px; }
+    .category-bar-bg { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .category-bar { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+    .category-name { font-size: 12px; font-weight: 500; width: 80px; color: var(--text); flex-shrink: 0; }
+    .category-amount { font-size: 12px; font-weight: 600; color: var(--text); width: 55px; text-align: right; flex-shrink: 0; }
+
+    .alerts-list { display: flex; flex-direction: column; gap: 8px; }
+    .alert-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 10px; font-size: 13px; }
+    .alert-item.critical { background: var(--red-light); color: var(--red); }
+    .alert-item.high { background: #FEF3E2; color: var(--orange); }
+    .alert-item.medium { background: #FFFBEB; color: var(--yellow); }
+    .alert-left { display: flex; flex-direction: column; gap: 2px; }
+    .alert-name { font-weight: 600; font-size: 14px; }
+    .alert-days { font-size: 11px; opacity: 0.75; }
+    .alert-price { font-weight: 700; font-size: 15px; }
+
+    .add-form { display: flex; flex-direction: column; gap: 14px; }
+    .form-row { display: flex; gap: 14px; flex-wrap: wrap; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 180px; }
+    .form-group label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+    .form-group input, .form-group select {
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--input-bg);
+      transition: border-color 0.2s, background 0.3s;
+      outline: none;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: var(--green); }
+    .form-divider { text-align: center; font-size: 12px; color: var(--text-muted); font-weight: 500; position: relative; }
+    .form-divider::before, .form-divider::after { content: ''; position: absolute; top: 50%; width: 44%; height: 1px; background: var(--border); }
+    .form-divider::before { left: 0; }
+    .form-divider::after { right: 0; }
+
+    .subs-grid { display: flex; flex-direction: column; gap: 8px; }
+    .sub-card { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border: 1.5px solid var(--border); border-radius: 12px; background: var(--sub-bg); transition: all 0.2s; }
+    .sub-card:hover { border-color: var(--green); }
+    .sub-left { display: flex; align-items: center; gap: 12px; }
+    .sub-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--green-light); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .sub-info { display: flex; flex-direction: column; gap: 2px; }
+    .sub-name { font-size: 14px; font-weight: 600; color: var(--text); }
+    .sub-meta { font-size: 11px; color: var(--text-muted); }
+    .sub-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .sub-price { font-size: 15px; font-weight: 700; color: var(--text); }
+    .sub-badge { font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 20px; background: var(--badge-bg); color: var(--badge-text); }
+    .sub-delete { background: none; border: none; cursor: pointer; font-size: 16px; opacity: 0.3; transition: opacity 0.2s; padding: 4px; color: var(--text); }
+    .sub-delete:hover { opacity: 1; }
+    .sub-count { background: var(--green); color: white; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+
+    .empty-state { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 40px; color: var(--text-muted); }
+    .empty-icon { font-size: 40px; }
+    .empty-text { font-size: 13px; text-align: center; line-height: 1.6; }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 640px) {
+      .score-section { grid-template-columns: 1fr; }
+      .chart-section { grid-template-columns: 1fr; }
+      .score-number { font-size: 72px; }
+      .main { padding: 16px; gap: 16px; }
+      .tagline { display: none; }
+      .sub-badge { display: none; }
+      .form-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">💸</span>
+        <span class="logo-text">TrackWise</span>
+      </div>
+      <div class="header-right">
+        <span class="tagline">Your AI Money Advisor</span>
+        <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">🌙 Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <div class="score-section">
+      <div class="card score-card">
+        <div class="score-label">Your Waste Score</div>
+        <div class="score-number" id="scoreNumber">0</div>
+        <div class="score-out-of">out of 100</div>
+        <div class="score-verdict" id="scoreVerdict">Add subscriptions to get started</div>
+        <div class="score-stats">
+          <div class="stat">
+            <div class="stat-label">Monthly Spend</div>
+            <div class="stat-value" id="totalMonthly">₹0</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Est. Waste</div>
+            <div class="stat-value danger" id="wastedAmount">₹0</div>
+          </div>
+        </div>
+        <button class="btn btn-primary full-width" id="getAdviceBtn" onclick="getAIAdvice()">✨ Get AI Advice</button>
+      </div>
+
+      <div class="advice-card">
+        <div class="advice-header">🤖 TrackWise AI Says</div>
+        <div class="advice-text hidden" id="adviceText"></div>
+        <div class="advice-empty" id="adviceEmpty">Add your subscriptions and click "Get AI Advice" to receive personalised money saving tips.</div>
+      </div>
+    </div>
+
+    <div class="chart-section">
+      <div class="card">
+        <div class="section-title">📊 Spend by Category</div>
+        <div class="chart-wrapper">
+          <canvas id="categoryChart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title">💸 Category Breakdown</div>
+        <div class="category-list" id="categoryList">
+          <div style="color:var(--text-muted);font-size:13px">No subscriptions yet.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card hidden" id="alertsSection">
+      <div class="section-title">⚠️ Upcoming Renewals</div>
+      <div class="alerts-list" id="alertsList"></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">➕ Add Subscription</div>
+      <div class="add-form">
+        <div class="form-group">
+          <label>Quick add from presets</label>
+          <select id="presetSelect" onchange="fillFromPreset()">
+            <option value="">-- Select a subscription --</option>
+          </select>
+        </div>
+        <div class="form-divider">or add manually</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="subName" placeholder="e.g. Netflix" />
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <select id="subCategory">
+              <option value="OTT">OTT</option>
+              <option value="Music">Music</option>
+              <option value="Mobile">Mobile</option>
+              <option value="Cloud">Cloud</option>
+              <option value="Fitness">Fitness</option>
+              <option value="Insurance">Insurance</option>
+              <option value="SIP">SIP</option>
+              <option value="EMI">EMI</option>
+              <option value="Productivity">Productivity</option>
+              <option value="AI Tools">AI Tools</option>
+              <option value="Finance">Finance</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Price (₹/month)</label>
+            <input type="number" id="subPrice" placeholder="e.g. 649" />
+          </div>
+          <div class="form-group">
+            <label>Next Renewal Date</label>
+            <input type="date" id="subRenewal" />
+          </div>
+        </div>
+        <button class="btn btn-primary full-width" onclick="addSubscription()">Add Subscription</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">
+        📋 My Subscriptions
+        <span class="sub-count" id="subCount">0</span>
+      </div>
+      <div class="subs-grid" id="subsList">
+        <div class="empty-state">
+          <div class="empty-icon">🎯</div>
+          <div class="empty-text">No subscriptions yet.<br>Add one above to get your Waste Score!</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    const API = 'http://127.0.0.1:5000/api';
+    let isUpdating = false;
+    let chartInstance = null;
+    const COLORS = ['#1D9E75','#D85A30','#F5A623','#3B82F6','#8B5CF6','#EC4899','#10B981','#F59E0B','#EF4444','#6366F1','#14B8A6'];
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('themeBtn').textContent = isDark ? '🌙 Dark' : '☀️ Light';
+      if (chartInstance) {
+        const textColor = isDark ? '#1A1A2E' : '#E8E8F0';
+        chartInstance.options.plugins.legend.labels.color = textColor;
+        chartInstance.update();
+      }
+    }
+
+    async function loadPresets() {
+      try {
+        const res = await fetch(`${API}/presets`);
+        const data = await res.json();
+        const select = document.getElementById('presetSelect');
+        const grouped = {};
+        data.data.subscriptions.forEach(sub => {
+          if (!grouped[sub.category]) grouped[sub.category] = [];
+          grouped[sub.category].push(sub);
+        });
+        Object.entries(grouped).forEach(([cat, subs]) => {
+          const group = document.createElement('optgroup');
+          group.label = cat;
+          subs.forEach(sub => {
+            const opt = document.createElement('option');
+            opt.value = JSON.stringify(sub);
+            opt.textContent = `${sub.name} — ₹${sub.price}/mo`;
+            group.appendChild(opt);
+          });
+          select.appendChild(group);
+        });
+      } catch(e) { console.error(e); }
+    }
+
+    function fillFromPreset() {
+      const val = document.getElementById('presetSelect').value;
+      if (!val) return;
+      const sub = JSON.parse(val);
+      document.getElementById('subName').value = sub.name;
+      document.getElementById('subCategory').value = sub.category;
+      document.getElementById('subPrice').value = sub.price;
+    }
+
+    async function loadSubscriptions() {
+      try {
+        const res = await fetch(`${API}/subscriptions`);
+        const data = await res.json();
+        renderSubscriptions(data.data);
+        document.getElementById('subCount').textContent = data.count;
+        renderChart(data.data);
+      } catch(e) { console.error(e); }
+    }
+
+    function renderSubscriptions(subs) {
+      const list = document.getElementById('subsList');
+      if (!subs || subs.length === 0) {
+        list.innerHTML = `<div class="empty-state"><div class="empty-icon">🎯</div><div class="empty-text">No subscriptions yet.<br>Add one above to get your Waste Score!</div></div>`;
+        return;
+      }
+      list.innerHTML = subs.map(sub => `
+        <div class="sub-card">
+          <div class="sub-left">
+            <div class="sub-icon">${emoji(sub.category)}</div>
+            <div class="sub-info">
+              <div class="sub-name">${sub.name}</div>
+              <div class="sub-meta">${sub.category} · ${sub.renewal_date ? 'Renews ' + sub.renewal_date : 'No renewal date'}</div>
+            </div>
+          </div>
+          <div class="sub-right">
+            <div class="sub-price">₹${sub.price}/mo</div>
+            <div class="sub-badge">${sub.category}</div>
+            <button class="sub-delete" onclick="deleteSub(${sub.id})">🗑️</button>
+          </div>
+        </div>`).join('');
+    }
+
+    async function addSubscription() {
+      const name = document.getElementById('subName').value.trim();
+      const category = document.getElementById('subCategory').value;
+      const price = document.getElementById('subPrice').value;
+      const renewal = document.getElementById('subRenewal').value;
+      if (!name || !price) { alert('Please enter a name and price.'); return; }
+      try {
+        const res = await fetch(`${API}/subscriptions`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, category, price: parseFloat(price), renewal_date: renewal || null })
+        });
+        const data = await res.json();
+        if (data.success) {
+          document.getElementById('subName').value = '';
+          document.getElementById('subPrice').value = '';
+          document.getElementById('subRenewal').value = '';
+          document.getElementById('presetSelect').value = '';
+          loadSubscriptions();
+          loadAlerts();
+          updateWasteScore();
+        }
+      } catch(e) { console.error(e); }
+    }
+
+    async function deleteSub(id) {
+      try {
+        await fetch(`${API}/subscriptions/${id}`, { method: 'DELETE' });
+        loadSubscriptions();
+        loadAlerts();
+        updateWasteScore();
+      } catch(e) { console.error(e); }
+    }
+
+    async function updateWasteScore() {
+      if (isUpdating) return;
+      isUpdating = true;
+      try {
+        const res = await fetch(`${API}/waste-score`);
+        const data = await res.json();
+        const score = data.data;
+        animateScore(score.score, score.color);
+        document.getElementById('scoreVerdict').textContent = score.verdict;
+        document.getElementById('totalMonthly').textContent = `₹${score.total_monthly}`;
+        document.getElementById('wastedAmount').textContent = `₹${score.wasted_amount}`;
+      } catch(e) { console.error(e); }
+      finally { setTimeout(() => { isUpdating = false; }, 1500); }
+    }
+
+    function animateScore(target, color) {
+      const el = document.getElementById('scoreNumber');
+      const start = parseInt(el.textContent) || 0;
+      const duration = 1000;
+      const startTime = performance.now();
+      function tick(now) {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(start + (target - start) * eased);
+        if (progress < 1) { requestAnimationFrame(tick); }
+        else { el.textContent = target; el.className = `score-number ${color}`; }
+      }
+      requestAnimationFrame(tick);
+    }
+
+    function renderChart(subs) {
+      const grouped = {};
+      if (subs) subs.forEach(s => { grouped[s.category] = (grouped[s.category] || 0) + s.price; });
+      const labels = Object.keys(grouped);
+      const values = Object.values(grouped);
+      const total = values.reduce((a,b) => a+b, 0);
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+      const catList = document.getElementById('categoryList');
+      if (labels.length === 0) {
+        catList.innerHTML = `<div style="color:var(--text-muted);font-size:13px">No subscriptions yet.</div>`;
+      } else {
+        const max = Math.max(...values);
+        catList.innerHTML = labels.map((l,i) => `
+          <div class="category-item">
+            <div class="category-name">${l}</div>
+            <div class="category-bar-bg">
+              <div class="category-bar" style="width:${Math.round(values[i]/max*100)}%;background:${COLORS[i%COLORS.length]}"></div>
+            </div>
+            <div class="category-amount">₹${values[i]}</div>
+          </div>`).join('');
+      }
+
+      const ctx = document.getElementById('categoryChart').getContext('2d');
+      if (chartInstance) chartInstance.destroy();
+      chartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: labels.length > 0 ? labels : ['No data'],
+          datasets: [{
+            data: values.length > 0 ? values : [1],
+            backgroundColor: values.length > 0 ? COLORS.slice(0, labels.length) : ['#E5E7EB'],
+            borderWidth: 0,
+            hoverOffset: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '65%',
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color: isDark ? '#E8E8F0' : '#1A1A2E',
+                font: { size: 11, family: 'Inter' },
+                padding: 10,
+                boxWidth: 10,
+                boxHeight: 10
+              }
+            },
+            tooltip: {
+              callbacks: { label: ctx => ` ₹${ctx.raw}/mo` }
+            }
+          }
+        }
+      });
+    }
+
+    async function getAIAdvice() {
+      const btn = document.getElementById('getAdviceBtn');
+      const text = document.getElementById('adviceText');
+      const empty = document.getElementById('adviceEmpty');
+      btn.textContent = '⏳ Thinking...';
+      btn.classList.add('btn-disabled');
+      try {
+        const res = await fetch(`${API}/ai-advice`);
+        const data = await res.json();
+        text.textContent = data.advice;
+        text.classList.remove('hidden');
+        empty.classList.add('hidden');
+      } catch(e) {
+        text.textContent = 'Could not get advice right now. Try again!';
+        text.classList.remove('hidden');
+        empty.classList.add('hidden');
+      } finally {
+        btn.textContent = '✨ Get AI Advice';
+        btn.classList.remove('btn-disabled');
+      }
+    }
+
+    async function loadAlerts() {
+      try {
+        const res = await fetch(`${API}/alerts`);
+        const data = await res.json();
+        const alerts = data.data;
+        const section = document.getElementById('alertsSection');
+        const list = document.getElementById('alertsList');
+        if (alerts.total_upcoming === 0) { section.classList.add('hidden'); return; }
+        section.classList.remove('hidden');
+        list.innerHTML = alerts.upcoming_renewals.map(r => `
+          <div class="alert-item ${r.urgency}">
+            <div class="alert-left">
+              <div class="alert-name">${r.name}</div>
+              <div class="alert-days">${r.days_left === 0 ? 'Renews TODAY' : `Renews in ${r.days_left} day${r.days_left > 1 ? 's' : ''}`}</div>
+            </div>
+            <div class="alert-price">₹${r.price}</div>
+          </div>`).join('');
+      } catch(e) { console.error(e); }
+    }
+
+    function emoji(cat) {
+      return {'OTT':'📺','Music':'🎵','Mobile':'📱','Cloud':'☁️','Fitness':'💪','Insurance':'🛡️','SIP':'📈','EMI':'🏦','Productivity':'⚡','AI Tools':'🤖','Finance':'💰'}[cat] || '📦';
+    }
+
+    // ── START — runs once only ──
+    loadPresets();
+    loadSubscriptions();
+    loadAlerts();
+    updateWasteScore();
+  </script>
+
+</body>
+</html>

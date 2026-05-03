@@ -1,0 +1,67 @@
+{
+  "subscriptions": [
+    
+    { "name": "Netflix", "category": "OTT", "price": 649, "cycle": "monthly" },
+    { "name": "Amazon Prime", "category": "OTT", "price": 299, "cycle": "monthly" },
+    { "name": "Disney+ Hotstar", "category": "OTT", "price": 299, "cycle": "monthly" },
+    { "name": "SonyLIV", "category": "OTT", "price": 299, "cycle": "monthly" },
+    { "name": "Zee5", "category": "OTT", "price": 149, "cycle": "monthly" },
+    { "name": "JioCinema Premium", "category": "OTT", "price": 29, "cycle": "monthly" },
+    { "name": "Apple TV+", "category": "OTT", "price": 99, "cycle": "monthly" },
+
+    { "name": "Spotify", "category": "Music", "price": 119, "cycle": "monthly" },
+    { "name": "Apple Music", "category": "Music", "price": 99, "cycle": "monthly" },
+    { "name": "JioSaavn Pro", "category": "Music", "price": 99, "cycle": "monthly" },
+    { "name": "YouTube Premium", "category": "Music", "price": 129, "cycle": "monthly" },
+
+    { "name": "Jio Recharge", "category": "Mobile", "price": 349, "cycle": "monthly" },
+    { "name": "Airtel Recharge", "category": "Mobile", "price": 359, "cycle": "monthly" },
+    { "name": "Vi Recharge", "category": "Mobile", "price": 299, "cycle": "monthly" },
+    { "name": "BSNL Recharge", "category": "Mobile", "price": 197, "cycle": "monthly" },
+
+    { "name": "Google One 100GB", "category": "Cloud", "price": 130, "cycle": "monthly" },
+    { "name": "Google One 200GB", "category": "Cloud", "price": 210, "cycle": "monthly" },
+    { "name": "iCloud 50GB", "category": "Cloud", "price": 75, "cycle": "monthly" },
+    { "name": "iCloud 200GB", "category": "Cloud", "price": 219, "cycle": "monthly" },
+    { "name": "Dropbox Plus", "category": "Cloud", "price": 800, "cycle": "monthly" },
+
+    { "name": "Gym Membership", "category": "Fitness", "price": 1000, "cycle": "monthly" },
+    { "name": "Cult.fit", "category": "Fitness", "price": 899, "cycle": "monthly" },
+    { "name": "Fittr Pro", "category": "Fitness", "price": 499, "cycle": "monthly" },
+
+    { "name": "LIC Premium", "category": "Insurance", "price": 2000, "cycle": "monthly" },
+    { "name": "Health Insurance", "category": "Insurance", "price": 1500, "cycle": "monthly" },
+    { "name": "Term Insurance", "category": "Insurance", "price": 800, "cycle": "monthly" },
+
+    { "name": "SIP - Equity Fund", "category": "SIP", "price": 2000, "cycle": "monthly" },
+    { "name": "SIP - ELSS Fund", "category": "SIP", "price": 1000, "cycle": "monthly" },
+    { "name": "SIP - Index Fund", "category": "SIP", "price": 500, "cycle": "monthly" },
+
+    { "name": "Phone EMI", "category": "EMI", "price": 2000, "cycle": "monthly" },
+    { "name": "Laptop EMI", "category": "EMI", "price": 3000, "cycle": "monthly" },
+    { "name": "Bike EMI", "category": "EMI", "price": 4000, "cycle": "monthly" },
+    { "name": "Home Loan EMI", "category": "EMI", "price": 15000, "cycle": "monthly" },
+
+    { "name": "Notion Pro", "category": "Productivity", "price": 330, "cycle": "monthly" },
+    { "name": "ChatGPT Plus", "category": "AI Tools", "price": 1700, "cycle": "monthly" },
+    { "name": "Adobe Creative Cloud", "category": "Productivity", "price": 1675, "cycle": "monthly" },
+    { "name": "Microsoft 365", "category": "Productivity", "price": 420, "cycle": "monthly" },
+    { "name": "Canva Pro", "category": "Productivity", "price": 499, "cycle": "monthly" },
+    { "name": "Zerodha Kite", "category": "Finance", "price": 0, "cycle": "monthly" },
+    { "name": "Groww Pro", "category": "Finance", "price": 99, "cycle": "monthly" }
+  ],
+
+  "categories": [
+    "OTT",
+    "Music",
+    "Mobile",
+    "Cloud",
+    "Fitness",
+    "Insurance",
+    "SIP",
+    "EMI",
+    "Productivity",
+    "AI Tools",
+    "Finance"
+  ]
+}
