@@ -41,76 +41,48 @@
       --red-light: #2E1510;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: var(--font);
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      transition: background 0.3s, color 0.3s;
-    }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; transition: background 0.3s, color 0.3s; }
     input, select, button { font-family: var(--font); }
 
-    .header {
-      background: var(--card);
-      border-bottom: 1px solid var(--border);
-      padding: 0 24px;
-      height: 64px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      transition: background 0.3s, border-color 0.3s;
-    }
-    .header-inner {
-      max-width: 960px;
-      margin: 0 auto;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+    /* ── ONBOARDING ── */
+    .onboarding { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 1000; overflow-y: auto; display: flex; flex-direction: column; }
+    .onboarding-header { background: var(--card); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+    .onboarding-logo { font-size: 20px; font-weight: 800; color: var(--green); }
+    .onboarding-step { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+    .onboarding-body { padding: 24px; max-width: 600px; margin: 0 auto; width: 100%; flex: 1; }
+    .onboarding-title { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+    .onboarding-subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.6; }
+    .presets-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+    @media (max-width: 400px) { .presets-grid { grid-template-columns: repeat(2, 1fr); } }
+    .preset-tile { background: var(--card); border: 2px solid var(--border); border-radius: 14px; padding: 16px 8px; text-align: center; cursor: pointer; transition: all 0.15s; user-select: none; }
+    .preset-tile:active { transform: scale(0.96); }
+    .preset-tile.selected { border-color: var(--green); background: var(--green-light); }
+    .preset-tile-icon { font-size: 24px; }
+    .preset-tile-name { font-size: 12px; font-weight: 700; color: var(--text); margin-top: 6px; }
+    .preset-tile-price { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .preset-tile.selected .preset-tile-name { color: var(--green-dark); }
+    .onboarding-footer { background: var(--card); border-top: 1px solid var(--border); padding: 16px 24px; position: sticky; bottom: 0; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .onboarding-summary { font-size: 13px; color: var(--text-muted); font-weight: 500; flex-shrink: 0; }
+    .onboarding-summary span { color: var(--green); font-weight: 700; }
+    .skip-btn { font-size: 13px; color: var(--text-muted); background: none; border: none; cursor: pointer; text-decoration: underline; flex-shrink: 0; }
+
+    /* ── HEADER ── */
+    .header { background: var(--card); border-bottom: 1px solid var(--border); padding: 0 24px; height: 64px; position: sticky; top: 0; z-index: 100; transition: background 0.3s, border-color 0.3s; }
+    .header-inner { max-width: 960px; margin: 0 auto; height: 100%; display: flex; align-items: center; justify-content: space-between; }
     .logo { display: flex; align-items: center; gap: 10px; }
     .logo-icon { font-size: 22px; }
     .logo-text { font-size: 20px; font-weight: 800; color: var(--green); }
     .header-right { display: flex; align-items: center; gap: 16px; }
     .tagline { font-size: 13px; color: var(--text-muted); font-weight: 500; }
-    .theme-toggle {
-      background: var(--input-bg);
-      border: 1.5px solid var(--border);
-      border-radius: 50px;
-      padding: 6px 16px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
+    .theme-toggle { background: var(--input-bg); border: 1.5px solid var(--border); border-radius: 50px; padding: 6px 16px; font-size: 13px; font-weight: 600; color: var(--text); cursor: pointer; transition: all 0.2s; }
     .theme-toggle:hover { border-color: var(--green); color: var(--green); }
 
-    .main {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 32px 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-    .card {
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 28px;
-      border: 1px solid var(--border);
-      transition: background 0.3s, border-color 0.3s;
-    }
-    .section-title {
-      font-size: 15px;
-      font-weight: 700;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--text);
-    }
+    /* ── MAIN ── */
+    .main { max-width: 960px; margin: 0 auto; padding: 32px 24px; display: flex; flex-direction: column; gap: 24px; }
+    .card { background: var(--card); border-radius: var(--radius); padding: 28px; border: 1px solid var(--border); transition: background 0.3s, border-color 0.3s; }
+    .section-title { font-size: 15px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; color: var(--text); }
 
+    /* ── SCORE ── */
     .score-section { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
     .score-card { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; }
     .score-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
@@ -125,39 +97,19 @@
     .stat-label { font-size: 11px; color: var(--text-muted); font-weight: 500; }
     .stat-value { font-size: 22px; font-weight: 700; color: var(--text); }
     .stat-value.danger { color: var(--red); }
-
-    .advice-card {
-      background: linear-gradient(135deg, #1D9E75, #0A5C42);
-      border-radius: var(--radius);
-      padding: 28px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      border: none;
-      min-height: 200px;
-    }
+    .advice-card { background: linear-gradient(135deg, #1D9E75, #0A5C42); border-radius: var(--radius); padding: 28px; display: flex; flex-direction: column; gap: 12px; border: none; min-height: 200px; }
     .advice-header { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.65); }
     .advice-text { font-size: 14px; line-height: 1.75; color: white; flex: 1; }
     .advice-empty { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.7; flex: 1; }
 
-    .btn {
-      padding: 13px 24px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
+    /* ── BUTTONS ── */
+    .btn { padding: 13px 24px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
     .btn-primary { background: var(--green); color: white; }
     .btn-primary:hover { background: var(--green-dark); transform: translateY(-1px); }
     .btn-disabled { opacity: 0.6; pointer-events: none; }
     .full-width { width: 100%; }
 
+    /* ── CHART ── */
     .chart-section { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
     .chart-wrapper { position: relative; height: 220px; }
     .category-list { display: flex; flex-direction: column; gap: 12px; }
@@ -167,6 +119,7 @@
     .category-name { font-size: 12px; font-weight: 500; width: 80px; color: var(--text); flex-shrink: 0; }
     .category-amount { font-size: 12px; font-weight: 600; color: var(--text); width: 55px; text-align: right; flex-shrink: 0; }
 
+    /* ── ALERTS ── */
     .alerts-list { display: flex; flex-direction: column; gap: 8px; }
     .alert-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 10px; font-size: 13px; }
     .alert-item.critical { background: var(--red-light); color: var(--red); }
@@ -177,26 +130,19 @@
     .alert-days { font-size: 11px; opacity: 0.75; }
     .alert-price { font-weight: 700; font-size: 15px; }
 
+    /* ── FORM ── */
     .add-form { display: flex; flex-direction: column; gap: 14px; }
     .form-row { display: flex; gap: 14px; flex-wrap: wrap; }
     .form-group { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 180px; }
     .form-group label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
-    .form-group input, .form-group select {
-      padding: 11px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      font-size: 14px;
-      color: var(--text);
-      background: var(--input-bg);
-      transition: border-color 0.2s, background 0.3s;
-      outline: none;
-    }
+    .form-group input, .form-group select { padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; color: var(--text); background: var(--input-bg); transition: border-color 0.2s, background 0.3s; outline: none; }
     .form-group input:focus, .form-group select:focus { border-color: var(--green); }
     .form-divider { text-align: center; font-size: 12px; color: var(--text-muted); font-weight: 500; position: relative; }
     .form-divider::before, .form-divider::after { content: ''; position: absolute; top: 50%; width: 44%; height: 1px; background: var(--border); }
     .form-divider::before { left: 0; }
     .form-divider::after { right: 0; }
 
+    /* ── SUBSCRIPTIONS ── */
     .subs-grid { display: flex; flex-direction: column; gap: 8px; }
     .sub-card { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border: 1.5px solid var(--border); border-radius: 12px; background: var(--sub-bg); transition: all 0.2s; }
     .sub-card:hover { border-color: var(--green); }
@@ -211,11 +157,9 @@
     .sub-delete { background: none; border: none; cursor: pointer; font-size: 16px; opacity: 0.3; transition: opacity 0.2s; padding: 4px; color: var(--text); }
     .sub-delete:hover { opacity: 1; }
     .sub-count { background: var(--green); color: white; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
-
     .empty-state { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 40px; color: var(--text-muted); }
     .empty-icon { font-size: 40px; }
     .empty-text { font-size: 13px; text-align: center; line-height: 1.6; }
-
     .hidden { display: none !important; }
 
     @media (max-width: 640px) {
@@ -231,6 +175,25 @@
 </head>
 <body>
 
+  <!-- ── ONBOARDING OVERLAY ── -->
+  <div class="onboarding" id="onboarding">
+    <div class="onboarding-header">
+      <div class="onboarding-logo">💸 TrackWise</div>
+      <div class="onboarding-step">Quick setup — 10 seconds</div>
+    </div>
+    <div class="onboarding-body">
+      <div class="onboarding-title">Which of these do you use? 👇</div>
+      <div class="onboarding-subtitle">Tap all that apply — we'll add them instantly and calculate your Waste Score</div>
+      <div class="presets-grid" id="presetsGrid"></div>
+    </div>
+    <div class="onboarding-footer">
+      <div class="onboarding-summary" id="onboardingSummary">0 selected · ₹0/mo</div>
+      <button class="skip-btn" onclick="skipOnboarding()">Skip</button>
+      <button class="btn btn-primary" id="onboardingBtn" onclick="finishOnboarding()">Show my Waste Score →</button>
+    </div>
+  </div>
+
+  <!-- ── MAIN APP ── -->
   <header class="header">
     <div class="header-inner">
       <div class="logo">
@@ -245,7 +208,6 @@
   </header>
 
   <main class="main">
-
     <div class="score-section">
       <div class="card score-card">
         <div class="score-label">Your Waste Score</div>
@@ -264,7 +226,6 @@
         </div>
         <button class="btn btn-primary full-width" id="getAdviceBtn" onclick="getAIAdvice()">✨ Get AI Advice</button>
       </div>
-
       <div class="advice-card">
         <div class="advice-header">🤖 TrackWise AI Says</div>
         <div class="advice-text hidden" id="adviceText"></div>
@@ -275,9 +236,7 @@
     <div class="chart-section">
       <div class="card">
         <div class="section-title">📊 Spend by Category</div>
-        <div class="chart-wrapper">
-          <canvas id="categoryChart"></canvas>
-        </div>
+        <div class="chart-wrapper"><canvas id="categoryChart"></canvas></div>
       </div>
       <div class="card">
         <div class="section-title">💸 Category Breakdown</div>
@@ -350,27 +309,109 @@
         </div>
       </div>
     </div>
-
   </main>
 
   <script>
     const API = 'https://trackwise-api.onrender.com/api';
-    let isUpdating = false;
     let chartInstance = null;
+    let isUpdating = false;
+    let selectedPresets = [];
     const COLORS = ['#1D9E75','#D85A30','#F5A623','#3B82F6','#8B5CF6','#EC4899','#10B981','#F59E0B','#EF4444','#6366F1','#14B8A6'];
 
+    const QUICK_PRESETS = [
+      { name: 'Netflix', category: 'OTT', price: 649, icon: '📺' },
+      { name: 'Hotstar', category: 'OTT', price: 299, icon: '📺' },
+      { name: 'Amazon Prime', category: 'OTT', price: 299, icon: '📺' },
+      { name: 'Spotify', category: 'Music', price: 119, icon: '🎵' },
+      { name: 'YouTube Premium', category: 'Music', price: 129, icon: '🎵' },
+      { name: 'Jio Recharge', category: 'Mobile', price: 349, icon: '📱' },
+      { name: 'Airtel Recharge', category: 'Mobile', price: 359, icon: '📱' },
+      { name: 'iCloud 50GB', category: 'Cloud', price: 75, icon: '☁️' },
+      { name: 'Google One', category: 'Cloud', price: 130, icon: '☁️' },
+      { name: 'Gym', category: 'Fitness', price: 1000, icon: '💪' },
+      { name: 'ChatGPT Plus', category: 'AI Tools', price: 1700, icon: '🤖' },
+      { name: 'SonyLIV', category: 'OTT', price: 299, icon: '📺' },
+      { name: 'Zee5', category: 'OTT', price: 149, icon: '📺' },
+      { name: 'Canva Pro', category: 'Productivity', price: 499, icon: '⚡' },
+      { name: 'Microsoft 365', category: 'Productivity', price: 420, icon: '⚡' },
+      { name: 'LIC Premium', category: 'Insurance', price: 2000, icon: '🛡️' },
+      { name: 'SIP', category: 'SIP', price: 2000, icon: '📈' },
+      { name: 'Phone EMI', category: 'EMI', price: 2000, icon: '🏦' },
+    ];
+
+    // ── ONBOARDING ──
+    function renderOnboarding() {
+      const grid = document.getElementById('presetsGrid');
+      grid.innerHTML = QUICK_PRESETS.map((p, i) => `
+        <div class="preset-tile" id="tile-${i}" onclick="togglePreset(${i})">
+          <div class="preset-tile-icon">${p.icon}</div>
+          <div class="preset-tile-name">${p.name}</div>
+          <div class="preset-tile-price">₹${p.price}/mo</div>
+        </div>
+      `).join('');
+    }
+
+    function togglePreset(index) {
+      const tile = document.getElementById(`tile-${index}`);
+      const preset = QUICK_PRESETS[index];
+      const idx = selectedPresets.findIndex(p => p.name === preset.name);
+      if (idx === -1) {
+        selectedPresets.push(preset);
+        tile.classList.add('selected');
+      } else {
+        selectedPresets.splice(idx, 1);
+        tile.classList.remove('selected');
+      }
+      updateOnboardingSummary();
+    }
+
+    function updateOnboardingSummary() {
+      const total = selectedPresets.reduce((a, p) => a + p.price, 0);
+      const summary = document.getElementById('onboardingSummary');
+      summary.innerHTML = `<span>${selectedPresets.length} selected</span> · ₹${total}/mo`;
+    }
+
+    async function finishOnboarding() {
+      const btn = document.getElementById('onboardingBtn');
+      btn.textContent = 'Adding...';
+      btn.classList.add('btn-disabled');
+
+      for (const preset of selectedPresets) {
+        try {
+          await fetch(`${API}/subscriptions`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: preset.name, category: preset.category, price: preset.price, renewal_date: null })
+          });
+        } catch(e) { console.error(e); }
+      }
+
+      document.getElementById('onboarding').classList.add('hidden');
+      loadSubscriptions();
+      loadAlerts();
+      updateWasteScore();
+    }
+
+    function skipOnboarding() {
+      document.getElementById('onboarding').classList.add('hidden');
+      loadSubscriptions();
+      loadAlerts();
+      updateWasteScore();
+    }
+
+    // ── THEME ──
     function toggleTheme() {
       const html = document.documentElement;
       const isDark = html.getAttribute('data-theme') === 'dark';
       html.setAttribute('data-theme', isDark ? 'light' : 'dark');
       document.getElementById('themeBtn').textContent = isDark ? '🌙 Dark' : '☀️ Light';
       if (chartInstance) {
-        const textColor = isDark ? '#1A1A2E' : '#E8E8F0';
-        chartInstance.options.plugins.legend.labels.color = textColor;
+        chartInstance.options.plugins.legend.labels.color = isDark ? '#1A1A2E' : '#E8E8F0';
         chartInstance.update();
       }
     }
 
+    // ── PRESETS DROPDOWN ──
     async function loadPresets() {
       try {
         const res = await fetch(`${API}/presets`);
@@ -404,6 +445,7 @@
       document.getElementById('subPrice').value = sub.price;
     }
 
+    // ── SUBSCRIPTIONS ──
     async function loadSubscriptions() {
       try {
         const res = await fetch(`${API}/subscriptions`);
@@ -471,6 +513,7 @@
       } catch(e) { console.error(e); }
     }
 
+    // ── WASTE SCORE ──
     async function updateWasteScore() {
       if (isUpdating) return;
       isUpdating = true;
@@ -501,14 +544,13 @@
       requestAnimationFrame(tick);
     }
 
+    // ── CHART ──
     function renderChart(subs) {
       const grouped = {};
       if (subs) subs.forEach(s => { grouped[s.category] = (grouped[s.category] || 0) + s.price; });
       const labels = Object.keys(grouped);
       const values = Object.values(grouped);
-      const total = values.reduce((a,b) => a+b, 0);
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-
       const catList = document.getElementById('categoryList');
       if (labels.length === 0) {
         catList.innerHTML = `<div style="color:var(--text-muted);font-size:13px">No subscriptions yet.</div>`;
@@ -517,49 +559,29 @@
         catList.innerHTML = labels.map((l,i) => `
           <div class="category-item">
             <div class="category-name">${l}</div>
-            <div class="category-bar-bg">
-              <div class="category-bar" style="width:${Math.round(values[i]/max*100)}%;background:${COLORS[i%COLORS.length]}"></div>
-            </div>
+            <div class="category-bar-bg"><div class="category-bar" style="width:${Math.round(values[i]/max*100)}%;background:${COLORS[i%COLORS.length]}"></div></div>
             <div class="category-amount">₹${values[i]}</div>
           </div>`).join('');
       }
-
       const ctx = document.getElementById('categoryChart').getContext('2d');
       if (chartInstance) chartInstance.destroy();
       chartInstance = new Chart(ctx, {
         type: 'doughnut',
         data: {
           labels: labels.length > 0 ? labels : ['No data'],
-          datasets: [{
-            data: values.length > 0 ? values : [1],
-            backgroundColor: values.length > 0 ? COLORS.slice(0, labels.length) : ['#E5E7EB'],
-            borderWidth: 0,
-            hoverOffset: 6
-          }]
+          datasets: [{ data: values.length > 0 ? values : [1], backgroundColor: values.length > 0 ? COLORS.slice(0, labels.length) : ['#E5E7EB'], borderWidth: 0, hoverOffset: 6 }]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          cutout: '65%',
+          responsive: true, maintainAspectRatio: false, cutout: '65%',
           plugins: {
-            legend: {
-              position: 'bottom',
-              labels: {
-                color: isDark ? '#E8E8F0' : '#1A1A2E',
-                font: { size: 11, family: 'Inter' },
-                padding: 10,
-                boxWidth: 10,
-                boxHeight: 10
-              }
-            },
-            tooltip: {
-              callbacks: { label: ctx => ` ₹${ctx.raw}/mo` }
-            }
+            legend: { position: 'bottom', labels: { color: isDark ? '#E8E8F0' : '#1A1A2E', font: { size: 11, family: 'Inter' }, padding: 10, boxWidth: 10, boxHeight: 10 } },
+            tooltip: { callbacks: { label: ctx => ` ₹${ctx.raw}/mo` } }
           }
         }
       });
     }
 
+    // ── AI ADVICE ──
     async function getAIAdvice() {
       const btn = document.getElementById('getAdviceBtn');
       const text = document.getElementById('adviceText');
@@ -582,6 +604,7 @@
       }
     }
 
+    // ── ALERTS ──
     async function loadAlerts() {
       try {
         const res = await fetch(`${API}/alerts`);
@@ -606,12 +629,9 @@
       return {'OTT':'📺','Music':'🎵','Mobile':'📱','Cloud':'☁️','Fitness':'💪','Insurance':'🛡️','SIP':'📈','EMI':'🏦','Productivity':'⚡','AI Tools':'🤖','Finance':'💰'}[cat] || '📦';
     }
 
-    // ── START — runs once only ──
+    // ── START ──
+    renderOnboarding();
     loadPresets();
-    loadSubscriptions();
-    loadAlerts();
-    updateWasteScore();
   </script>
-
 </body>
 </html>
