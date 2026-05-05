@@ -232,7 +232,7 @@
         <div class="advice-empty" id="adviceEmpty">Add your subscriptions and click "Get AI Advice" to receive personalised money saving tips.</div>
       </div>
     </div>
-    
+
  <!-- CUT PLAN -->
     <div class="card hidden" id="cutPlanSection">
       <div class="section-title">✂️ Your Cut Plan
@@ -540,6 +540,9 @@
         document.getElementById('scoreVerdict').textContent = score.verdict;
         document.getElementById('totalMonthly').textContent = `₹${score.total_monthly}`;
         document.getElementById('wastedAmount').textContent = `₹${score.wasted_amount}`;
+        if (score.breakdown && score.breakdown.length > 0) {
+          renderCutPlan(score.breakdown);
+        }
       } catch(e) { console.error(e); }
       finally { setTimeout(() => { isUpdating = false; }, 1500); }
     }
@@ -557,6 +560,145 @@
         else { el.textContent = target; el.className = `score-number ${color}`; }
       }
       requestAnimationFrame(tick);
+    }
+    function renderCutPlan(breakdown) {
+      const CANCEL_GUIDES = {
+        'Netflix': 'Go to netflix.com → Account → Cancel Membership',
+        'Hotstar': 'Go to hotstar.com → Profile → Subscription → Cancel',
+        'Amazon Prime': 'Go to amazon.in → Account → Prime → End Membership',
+        'Spotify': 'Go to spotify.com → Account → Subscription → Cancel',
+        'YouTube Premium': 'Go to youtube.com → Paid Memberships → Cancel',
+        'SonyLIV': 'Go to sonyliv.com → Profile → Subscription → Cancel',
+        'Zee5': 'Go to zee5.com → Profile → My Subscription → Cancel',
+        'Gym': 'Visit your gym directly and request cancellation in writing',
+        'iCloud 50GB': 'iPhone → Settings → Apple ID → iCloud → Manage → Downgrade',
+        'Google One 100GB': 'Go to one.google.com → Manage → Cancel Plan',
+        'ChatGPT Plus': 'Go to chat.openai.com → Settings → My Plan → Cancel',
+        'Canva Pro': 'Go to canva.com → Account → Billing → Cancel',
+      };
+
+      const KEEP_CATEGORIES = ['Insurance', 'SIP', 'Mobile', 'EMI'];
+
+      const cutCandidates = breakdown
+        .filter(item => !KEEP_CATEGORIES.includes(item.category))
+        .filter(item => item.waste_contribution > 0)
+        .sort((a, b) => b.waste_contribution - a.waste_contribution)
+        .slice(0, 3);
+
+      if (cutCandidates.length === 0) {
+        document.getElementById('cutPlanSection').classList.add('hidden');
+        return;
+      }
+
+      const totalYearlySavings = cutCandidates.reduce((a, b) => a + b.price, 0) * 12;
+      document.getElementById('totalSavings').textContent = `₹${totalYearlySavings.toLocaleString('en-IN')} saved/year`;
+
+      const list = document.getElementById('cutPlanList');
+      list.innerHTML = cutCandidates.map((item) => {
+        const guide = CANCEL_GUIDES[item.name] || `Search "${item.name} cancel subscription" on Google`;
+        const yearlySaving = item.price * 12;
+        const reasons = {
+          'OTT': 'Multiple OTT subscriptions overlap — you probably watch one more than the rest',
+          'Music': 'Music streaming services have similar libraries — one is enough',
+          'Fitness': 'Unused gym memberships are the #1 forgotten subscription in India',
+          'Cloud': 'Check your actual storage usage — you might not need this tier',
+          'Productivity': 'Free tier is usually enough for personal use',
+          'AI Tools': 'Only worth it if you use it every single day',
+          'Finance': 'Most finance apps have generous free tiers',
+        };
+        const reason = reasons[item.category] || 'This subscription has high waste potential';
+        return `
+          <div style="border:1.5px solid var(--border);border-radius:12px;overflow:hidden">
+            <div style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;background:var(--sub-bg)">
+              <div style="display:flex;align-items:center;gap:12px">
+                <div style="width:36px;height:36px;border-radius:8px;background:#FDF0EB;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">${emoji(item.category)}</div>
+                <div>
+                  <div style="font-size:14px;font-weight:700;color:var(--text)">${item.name}</div>
+                  <div style="font-size:11px;color:var(--text-muted)">${reason}</div>
+                </div>
+              </div>
+              <div style="text-align:right;flex-shrink:0">
+                <div style="font-size:15px;font-weight:700;color:#D85A30">₹${item.price}/mo</div>
+                <div style="font-size:11px;color:var(--text-muted)">₹${yearlySaving.toLocaleString('en-IN')}/yr</div>
+              </div>
+            </div>
+            <div style="padding:12px 18px;background:var(--input-bg);border-top:1px solid var(--border)">
+              <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">How to cancel</div>
+              <div style="font-size:13px;color:var(--text)">${guide}</div>
+            </div>
+          </div>`;
+      }).join('');
+
+      document.getElementById('cutPlanSection').classList.remove('hidden');
+    }function renderCutPlan(breakdown) {
+      const CANCEL_GUIDES = {
+        'Netflix': 'Go to netflix.com → Account → Cancel Membership',
+        'Hotstar': 'Go to hotstar.com → Profile → Subscription → Cancel',
+        'Amazon Prime': 'Go to amazon.in → Account → Prime → End Membership',
+        'Spotify': 'Go to spotify.com → Account → Subscription → Cancel',
+        'YouTube Premium': 'Go to youtube.com → Paid Memberships → Cancel',
+        'SonyLIV': 'Go to sonyliv.com → Profile → Subscription → Cancel',
+        'Zee5': 'Go to zee5.com → Profile → My Subscription → Cancel',
+        'Gym': 'Visit your gym directly and request cancellation in writing',
+        'iCloud 50GB': 'iPhone → Settings → Apple ID → iCloud → Manage → Downgrade',
+        'Google One 100GB': 'Go to one.google.com → Manage → Cancel Plan',
+        'ChatGPT Plus': 'Go to chat.openai.com → Settings → My Plan → Cancel',
+        'Canva Pro': 'Go to canva.com → Account → Billing → Cancel',
+      };
+
+      const KEEP_CATEGORIES = ['Insurance', 'SIP', 'Mobile', 'EMI'];
+
+      const cutCandidates = breakdown
+        .filter(item => !KEEP_CATEGORIES.includes(item.category))
+        .filter(item => item.waste_contribution > 0)
+        .sort((a, b) => b.waste_contribution - a.waste_contribution)
+        .slice(0, 3);
+
+      if (cutCandidates.length === 0) {
+        document.getElementById('cutPlanSection').classList.add('hidden');
+        return;
+      }
+
+      const totalYearlySavings = cutCandidates.reduce((a, b) => a + b.price, 0) * 12;
+      document.getElementById('totalSavings').textContent = `₹${totalYearlySavings.toLocaleString('en-IN')} saved/year`;
+
+      const list = document.getElementById('cutPlanList');
+      list.innerHTML = cutCandidates.map((item) => {
+        const guide = CANCEL_GUIDES[item.name] || `Search "${item.name} cancel subscription" on Google`;
+        const yearlySaving = item.price * 12;
+        const reasons = {
+          'OTT': 'Multiple OTT subscriptions overlap — you probably watch one more than the rest',
+          'Music': 'Music streaming services have similar libraries — one is enough',
+          'Fitness': 'Unused gym memberships are the #1 forgotten subscription in India',
+          'Cloud': 'Check your actual storage usage — you might not need this tier',
+          'Productivity': 'Free tier is usually enough for personal use',
+          'AI Tools': 'Only worth it if you use it every single day',
+          'Finance': 'Most finance apps have generous free tiers',
+        };
+        const reason = reasons[item.category] || 'This subscription has high waste potential';
+        return `
+          <div style="border:1.5px solid var(--border);border-radius:12px;overflow:hidden">
+            <div style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;background:var(--sub-bg)">
+              <div style="display:flex;align-items:center;gap:12px">
+                <div style="width:36px;height:36px;border-radius:8px;background:#FDF0EB;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">${emoji(item.category)}</div>
+                <div>
+                  <div style="font-size:14px;font-weight:700;color:var(--text)">${item.name}</div>
+                  <div style="font-size:11px;color:var(--text-muted)">${reason}</div>
+                </div>
+              </div>
+              <div style="text-align:right;flex-shrink:0">
+                <div style="font-size:15px;font-weight:700;color:#D85A30">₹${item.price}/mo</div>
+                <div style="font-size:11px;color:var(--text-muted)">₹${yearlySaving.toLocaleString('en-IN')}/yr</div>
+              </div>
+            </div>
+            <div style="padding:12px 18px;background:var(--input-bg);border-top:1px solid var(--border)">
+              <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">How to cancel</div>
+              <div style="font-size:13px;color:var(--text)">${guide}</div>
+            </div>
+          </div>`;
+      }).join('');
+
+      document.getElementById('cutPlanSection').classList.remove('hidden');
     }
 
     // ── CHART ──
