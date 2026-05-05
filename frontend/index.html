@@ -175,7 +175,7 @@
 </head>
 <body>
 
-  <!-- ── ONBOARDING OVERLAY ── -->
+  <!-- ── ONBOARDING ── -->
   <div class="onboarding" id="onboarding">
     <div class="onboarding-header">
       <div class="onboarding-logo">💸 TrackWise</div>
@@ -189,7 +189,7 @@
     <div class="onboarding-footer">
       <div class="onboarding-summary" id="onboardingSummary">0 selected · ₹0/mo</div>
       <button class="skip-btn" onclick="skipOnboarding()">Skip</button>
-      <button class="btn btn-primary" id="onboardingBtn" onclick="finishOnboarding()">Show my Waste Score →</button>
+      <button class="btn btn-primary" onclick="finishOnboarding()">Show my Waste Score →</button>
     </div>
   </div>
 
@@ -208,6 +208,8 @@
   </header>
 
   <main class="main">
+
+    <!-- SCORE + AI -->
     <div class="score-section">
       <div class="card score-card">
         <div class="score-label">Your Waste Score</div>
@@ -233,7 +235,7 @@
       </div>
     </div>
 
- <!-- CUT PLAN -->
+    <!-- CUT PLAN -->
     <div class="card hidden" id="cutPlanSection">
       <div class="section-title">✂️ Your Cut Plan
         <span style="background:#FDF0EB;color:#D85A30;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600">Save money now</span>
@@ -248,6 +250,7 @@
       </div>
     </div>
 
+    <!-- CHARTS -->
     <div class="chart-section">
       <div class="card">
         <div class="section-title">📊 Spend by Category</div>
@@ -261,11 +264,25 @@
       </div>
     </div>
 
+    <!-- RENEWAL CALENDAR -->
+    <div class="card hidden" id="calendarSection">
+      <div class="section-title">🗓️ Renewal Calendar
+        <span style="background:var(--green-light);color:var(--green-dark);font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600" id="calendarMonth"></span>
+      </div>
+      <div id="calendarList" style="display:flex;flex-direction:column;gap:8px"></div>
+      <div style="margin-top:16px;padding:14px 18px;background:var(--input-bg);border-radius:12px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--border)">
+        <div style="font-size:13px;color:var(--text-muted);font-weight:500">Total leaving this month</div>
+        <div style="font-size:18px;font-weight:800;color:var(--red)" id="calendarTotal">₹0</div>
+      </div>
+    </div>
+
+    <!-- ALERTS -->
     <div class="card hidden" id="alertsSection">
       <div class="section-title">⚠️ Upcoming Renewals</div>
       <div class="alerts-list" id="alertsList"></div>
     </div>
 
+    <!-- ADD SUBSCRIPTION -->
     <div class="card">
       <div class="section-title">➕ Add Subscription</div>
       <div class="add-form">
@@ -312,6 +329,7 @@
       </div>
     </div>
 
+    <!-- SUBSCRIPTIONS LIST -->
     <div class="card">
       <div class="section-title">
         📋 My Subscriptions
@@ -324,6 +342,7 @@
         </div>
       </div>
     </div>
+
   </main>
 
   <script>
@@ -370,27 +389,20 @@
       const tile = document.getElementById(`tile-${index}`);
       const preset = QUICK_PRESETS[index];
       const idx = selectedPresets.findIndex(p => p.name === preset.name);
-      if (idx === -1) {
-        selectedPresets.push(preset);
-        tile.classList.add('selected');
-      } else {
-        selectedPresets.splice(idx, 1);
-        tile.classList.remove('selected');
-      }
+      if (idx === -1) { selectedPresets.push(preset); tile.classList.add('selected'); }
+      else { selectedPresets.splice(idx, 1); tile.classList.remove('selected'); }
       updateOnboardingSummary();
     }
 
     function updateOnboardingSummary() {
       const total = selectedPresets.reduce((a, p) => a + p.price, 0);
-      const summary = document.getElementById('onboardingSummary');
-      summary.innerHTML = `<span>${selectedPresets.length} selected</span> · ₹${total}/mo`;
+      document.getElementById('onboardingSummary').innerHTML = `<span>${selectedPresets.length} selected</span> · ₹${total}/mo`;
     }
 
     async function finishOnboarding() {
-      const btn = document.getElementById('onboardingBtn');
+      const btn = document.querySelector('.onboarding-footer .btn-primary');
       btn.textContent = 'Adding...';
       btn.classList.add('btn-disabled');
-
       for (const preset of selectedPresets) {
         try {
           await fetch(`${API}/subscriptions`, {
@@ -400,18 +412,13 @@
           });
         } catch(e) { console.error(e); }
       }
-
       document.getElementById('onboarding').classList.add('hidden');
-      loadSubscriptions();
-      loadAlerts();
-      updateWasteScore();
+      refreshAll();
     }
 
     function skipOnboarding() {
       document.getElementById('onboarding').classList.add('hidden');
-      loadSubscriptions();
-      loadAlerts();
-      updateWasteScore();
+      refreshAll();
     }
 
     // ── THEME ──
@@ -424,6 +431,14 @@
         chartInstance.options.plugins.legend.labels.color = isDark ? '#1A1A2E' : '#E8E8F0';
         chartInstance.update();
       }
+    }
+
+    // ── REFRESH ALL ──
+    function refreshAll() {
+      loadSubscriptions();
+      loadAlerts();
+      loadCalendar();
+      updateWasteScore();
     }
 
     // ── PRESETS DROPDOWN ──
@@ -512,9 +527,7 @@
           document.getElementById('subPrice').value = '';
           document.getElementById('subRenewal').value = '';
           document.getElementById('presetSelect').value = '';
-          loadSubscriptions();
-          loadAlerts();
-          updateWasteScore();
+          refreshAll();
         }
       } catch(e) { console.error(e); }
     }
@@ -522,9 +535,7 @@
     async function deleteSub(id) {
       try {
         await fetch(`${API}/subscriptions/${id}`, { method: 'DELETE' });
-        loadSubscriptions();
-        loadAlerts();
-        updateWasteScore();
+        refreshAll();
       } catch(e) { console.error(e); }
     }
 
@@ -561,6 +572,8 @@
       }
       requestAnimationFrame(tick);
     }
+
+    // ── CUT PLAN ──
     function renderCutPlan(breakdown) {
       const CANCEL_GUIDES = {
         'Netflix': 'Go to netflix.com → Account → Cancel Membership',
@@ -576,105 +589,27 @@
         'ChatGPT Plus': 'Go to chat.openai.com → Settings → My Plan → Cancel',
         'Canva Pro': 'Go to canva.com → Account → Billing → Cancel',
       };
-
       const KEEP_CATEGORIES = ['Insurance', 'SIP', 'Mobile', 'EMI'];
-
       const cutCandidates = breakdown
         .filter(item => !KEEP_CATEGORIES.includes(item.category))
         .filter(item => item.waste_contribution > 0)
         .sort((a, b) => b.waste_contribution - a.waste_contribution)
         .slice(0, 3);
-
-      if (cutCandidates.length === 0) {
-        document.getElementById('cutPlanSection').classList.add('hidden');
-        return;
-      }
-
+      if (cutCandidates.length === 0) { document.getElementById('cutPlanSection').classList.add('hidden'); return; }
       const totalYearlySavings = cutCandidates.reduce((a, b) => a + b.price, 0) * 12;
       document.getElementById('totalSavings').textContent = `₹${totalYearlySavings.toLocaleString('en-IN')} saved/year`;
-
-      const list = document.getElementById('cutPlanList');
-      list.innerHTML = cutCandidates.map((item) => {
-        const guide = CANCEL_GUIDES[item.name] || `Search "${item.name} cancel subscription" on Google`;
-        const yearlySaving = item.price * 12;
-        const reasons = {
-          'OTT': 'Multiple OTT subscriptions overlap — you probably watch one more than the rest',
-          'Music': 'Music streaming services have similar libraries — one is enough',
-          'Fitness': 'Unused gym memberships are the #1 forgotten subscription in India',
-          'Cloud': 'Check your actual storage usage — you might not need this tier',
-          'Productivity': 'Free tier is usually enough for personal use',
-          'AI Tools': 'Only worth it if you use it every single day',
-          'Finance': 'Most finance apps have generous free tiers',
-        };
-        const reason = reasons[item.category] || 'This subscription has high waste potential';
-        return `
-          <div style="border:1.5px solid var(--border);border-radius:12px;overflow:hidden">
-            <div style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;background:var(--sub-bg)">
-              <div style="display:flex;align-items:center;gap:12px">
-                <div style="width:36px;height:36px;border-radius:8px;background:#FDF0EB;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">${emoji(item.category)}</div>
-                <div>
-                  <div style="font-size:14px;font-weight:700;color:var(--text)">${item.name}</div>
-                  <div style="font-size:11px;color:var(--text-muted)">${reason}</div>
-                </div>
-              </div>
-              <div style="text-align:right;flex-shrink:0">
-                <div style="font-size:15px;font-weight:700;color:#D85A30">₹${item.price}/mo</div>
-                <div style="font-size:11px;color:var(--text-muted)">₹${yearlySaving.toLocaleString('en-IN')}/yr</div>
-              </div>
-            </div>
-            <div style="padding:12px 18px;background:var(--input-bg);border-top:1px solid var(--border)">
-              <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">How to cancel</div>
-              <div style="font-size:13px;color:var(--text)">${guide}</div>
-            </div>
-          </div>`;
-      }).join('');
-
-      document.getElementById('cutPlanSection').classList.remove('hidden');
-    }function renderCutPlan(breakdown) {
-      const CANCEL_GUIDES = {
-        'Netflix': 'Go to netflix.com → Account → Cancel Membership',
-        'Hotstar': 'Go to hotstar.com → Profile → Subscription → Cancel',
-        'Amazon Prime': 'Go to amazon.in → Account → Prime → End Membership',
-        'Spotify': 'Go to spotify.com → Account → Subscription → Cancel',
-        'YouTube Premium': 'Go to youtube.com → Paid Memberships → Cancel',
-        'SonyLIV': 'Go to sonyliv.com → Profile → Subscription → Cancel',
-        'Zee5': 'Go to zee5.com → Profile → My Subscription → Cancel',
-        'Gym': 'Visit your gym directly and request cancellation in writing',
-        'iCloud 50GB': 'iPhone → Settings → Apple ID → iCloud → Manage → Downgrade',
-        'Google One 100GB': 'Go to one.google.com → Manage → Cancel Plan',
-        'ChatGPT Plus': 'Go to chat.openai.com → Settings → My Plan → Cancel',
-        'Canva Pro': 'Go to canva.com → Account → Billing → Cancel',
+      const reasons = {
+        'OTT': 'Multiple OTT subscriptions overlap — you probably watch one more than the rest',
+        'Music': 'Music streaming services have similar libraries — one is enough',
+        'Fitness': 'Unused gym memberships are the #1 forgotten subscription in India',
+        'Cloud': 'Check your actual storage usage — you might not need this tier',
+        'Productivity': 'Free tier is usually enough for personal use',
+        'AI Tools': 'Only worth it if you use it every single day',
+        'Finance': 'Most finance apps have generous free tiers',
       };
-
-      const KEEP_CATEGORIES = ['Insurance', 'SIP', 'Mobile', 'EMI'];
-
-      const cutCandidates = breakdown
-        .filter(item => !KEEP_CATEGORIES.includes(item.category))
-        .filter(item => item.waste_contribution > 0)
-        .sort((a, b) => b.waste_contribution - a.waste_contribution)
-        .slice(0, 3);
-
-      if (cutCandidates.length === 0) {
-        document.getElementById('cutPlanSection').classList.add('hidden');
-        return;
-      }
-
-      const totalYearlySavings = cutCandidates.reduce((a, b) => a + b.price, 0) * 12;
-      document.getElementById('totalSavings').textContent = `₹${totalYearlySavings.toLocaleString('en-IN')} saved/year`;
-
-      const list = document.getElementById('cutPlanList');
-      list.innerHTML = cutCandidates.map((item) => {
+      document.getElementById('cutPlanList').innerHTML = cutCandidates.map(item => {
         const guide = CANCEL_GUIDES[item.name] || `Search "${item.name} cancel subscription" on Google`;
         const yearlySaving = item.price * 12;
-        const reasons = {
-          'OTT': 'Multiple OTT subscriptions overlap — you probably watch one more than the rest',
-          'Music': 'Music streaming services have similar libraries — one is enough',
-          'Fitness': 'Unused gym memberships are the #1 forgotten subscription in India',
-          'Cloud': 'Check your actual storage usage — you might not need this tier',
-          'Productivity': 'Free tier is usually enough for personal use',
-          'AI Tools': 'Only worth it if you use it every single day',
-          'Finance': 'Most finance apps have generous free tiers',
-        };
         const reason = reasons[item.category] || 'This subscription has high waste potential';
         return `
           <div style="border:1.5px solid var(--border);border-radius:12px;overflow:hidden">
@@ -697,8 +632,52 @@
             </div>
           </div>`;
       }).join('');
-
       document.getElementById('cutPlanSection').classList.remove('hidden');
+    }
+
+    // ── RENEWAL CALENDAR ──
+    async function loadCalendar() {
+      try {
+        const res = await fetch(`${API}/subscriptions`);
+        const data = await res.json();
+        const subs = data.data;
+        const section = document.getElementById('calendarSection');
+        const list = document.getElementById('calendarList');
+        const withDates = subs ? subs.filter(s => s.renewal_date) : [];
+        if (withDates.length === 0) { section.classList.add('hidden'); return; }
+        section.classList.remove('hidden');
+        const now = new Date();
+        const monthName = now.toLocaleString('en-IN', { month: 'long', year: 'numeric' });
+        document.getElementById('calendarMonth').textContent = monthName;
+        const sorted = withDates.sort((a, b) => new Date(a.renewal_date).getDate() - new Date(b.renewal_date).getDate());
+        const today = now.getDate();
+        const total = sorted.reduce((a, s) => a + s.price, 0);
+        document.getElementById('calendarTotal').textContent = `₹${total.toLocaleString('en-IN')}`;
+        list.innerHTML = sorted.map(sub => {
+          const day = new Date(sub.renewal_date).getDate();
+          const isPast = day < today;
+          const isToday = day === today;
+          const isSoon = day > today && day <= today + 3;
+          let dayColor = 'var(--text)';
+          let borderStyle = '';
+          let badge = '';
+          if (isToday) { dayColor = '#D85A30'; borderStyle = 'border-color:#D85A30'; badge = '<span style="font-size:10px;background:#FDF0EB;color:#D85A30;padding:2px 6px;border-radius:20px;font-weight:700;margin-left:6px">TODAY</span>'; }
+          else if (isSoon) { dayColor = '#E8833A'; borderStyle = 'border-color:#E8833A'; badge = '<span style="font-size:10px;background:#FEF3E2;color:#E8833A;padding:2px 6px;border-radius:20px;font-weight:700;margin-left:6px">SOON</span>'; }
+          else if (isPast) { dayColor = 'var(--text-muted)'; badge = '<span style="font-size:10px;background:var(--input-bg);color:var(--text-muted);padding:2px 6px;border-radius:20px;font-weight:700;margin-left:6px">DONE</span>'; }
+          return `
+            <div style="display:flex;align-items:center;gap:14px;padding:12px 16px;border:1.5px solid var(--border);border-radius:12px;background:var(--sub-bg);${borderStyle}">
+              <div style="width:44px;height:44px;border-radius:10px;background:var(--input-bg);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--border)">
+                <div style="font-size:18px;font-weight:800;color:${dayColor};line-height:1">${day}</div>
+                <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em">${now.toLocaleString('en-IN',{month:'short'})}</div>
+              </div>
+              <div style="flex:1">
+                <div style="font-size:14px;font-weight:600;color:var(--text);display:flex;align-items:center">${sub.name}${badge}</div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${sub.category} · auto debit</div>
+              </div>
+              <div style="font-size:15px;font-weight:700;color:${isPast ? 'var(--text-muted)' : isToday || isSoon ? '#D85A30' : 'var(--text)'}">₹${sub.price}</div>
+            </div>`;
+        }).join('');
+      } catch(e) { console.error(e); }
     }
 
     // ── CHART ──
@@ -726,7 +705,7 @@
         type: 'doughnut',
         data: {
           labels: labels.length > 0 ? labels : ['No data'],
-          datasets: [{ data: values.length > 0 ? values : [1], backgroundColor: values.length > 0 ? COLORS.slice(0, labels.length) : ['#E5E7EB'], borderWidth: 0, hoverOffset: 6 }]
+          datasets: [{ data: values.length > 0 ? values : [1], backgroundColor: values.length > 0 ? COLORS.slice(0,labels.length) : ['#E5E7EB'], borderWidth: 0, hoverOffset: 6 }]
         },
         options: {
           responsive: true, maintainAspectRatio: false, cutout: '65%',
@@ -782,6 +761,7 @@
       } catch(e) { console.error(e); }
     }
 
+    // ── HELPERS ──
     function emoji(cat) {
       return {'OTT':'📺','Music':'🎵','Mobile':'📱','Cloud':'☁️','Fitness':'💪','Insurance':'🛡️','SIP':'📈','EMI':'🏦','Productivity':'⚡','AI Tools':'🤖','Finance':'💰'}[cat] || '📦';
     }
@@ -789,6 +769,7 @@
     // ── START ──
     renderOnboarding();
     loadPresets();
+    refreshAll();
   </script>
 </body>
 </html>
