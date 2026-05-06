@@ -264,6 +264,14 @@
       </div>
     </div>
 
+    <!-- DUPLICATE DETECTOR -->
+    <div class="card hidden" id="duplicateSection">
+      <div class="section-title">🔍 Duplicate Detector
+        <span style="background:#FEF3E2;color:#E8833A;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600">Overlapping subscriptions found</span>
+      </div>
+      <div id="duplicateList" style="display:flex;flex-direction:column;gap:12px"></div>
+    </div>
+
     <!-- RENEWAL CALENDAR -->
     <div class="card hidden" id="calendarSection">
       <div class="section-title">🗓️ Renewal Calendar
@@ -441,6 +449,17 @@
       updateWasteScore();
     }
 
+    async function loadSubscriptions() {
+      try {
+        const res = await fetch(`${API}/subscriptions`);
+        const data = await res.json();
+        renderSubscriptions(data.data);
+        document.getElementById('subCount').textContent = data.count;
+        renderChart(data.data);
+        renderDuplicates(data.data);
+      } catch(e) { console.error(e); }
+    }
+
     // ── PRESETS DROPDOWN ──
     async function loadPresets() {
       try {
@@ -556,6 +575,82 @@
         }
       } catch(e) { console.error(e); }
       finally { setTimeout(() => { isUpdating = false; }, 1500); }
+    }
+
+    // ── DUPLICATE DETECTOR ──
+    function renderDuplicates(subs) {
+      if (!subs || subs.length === 0) {
+        document.getElementById('duplicateSection').classList.add('hidden');
+        return;
+      }
+
+      const DUPLICATE_CATEGORIES = ['OTT', 'Music', 'Cloud', 'Fitness', 'Productivity', 'AI Tools'];
+      const grouped = {};
+
+      subs.forEach(sub => {
+        if (DUPLICATE_CATEGORIES.includes(sub.category)) {
+          if (!grouped[sub.category]) grouped[sub.category] = [];
+          grouped[sub.category].push(sub);
+        }
+      });
+
+      const duplicates = Object.entries(grouped).filter(([cat, items]) => items.length > 1);
+
+      if (duplicates.length === 0) {
+        document.getElementById('duplicateSection').classList.add('hidden');
+        return;
+      }
+
+      const CATEGORY_ADVICE = {
+        'OTT': 'Most people actively watch only 1 OTT platform. Keep your favourite and cancel the rest.',
+        'Music': 'All music apps have similar libraries. You only need one.',
+        'Cloud': 'You can consolidate storage into one provider and save money.',
+        'Fitness': 'Multiple fitness subscriptions usually means you\'re not using all of them.',
+        'Productivity': 'Check if the free tier of one covers everything you need.',
+        'AI Tools': 'Pick the one AI tool you actually use daily and cancel the rest.',
+      };
+
+      const list = document.getElementById('duplicateList');
+      list.innerHTML = duplicates.map(([category, items]) => {
+        const totalSpend = items.reduce((a, b) => a + b.price, 0);
+        const cheapest = items.reduce((a, b) => a.price < b.price ? a : b);
+        const mostExpensive = items.reduce((a, b) => a.price > b.price ? a : b);
+        const potentialSaving = totalSpend - cheapest.price;
+        const advice = CATEGORY_ADVICE[category] || 'Consider which one you use most and cancel the others.';
+
+        return `
+          <div style="border:1.5px solid #E8833A;border-radius:12px;overflow:hidden">
+            <div style="padding:14px 18px;background:#FEF3E2;display:flex;justify-content:space-between;align-items:center">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:18px">${emoji(category)}</span>
+                <div>
+                  <div style="font-size:14px;font-weight:700;color:#1A1A2E">You have ${items.length} ${category} subscriptions</div>
+                  <div style="font-size:11px;color:#6B7280">${items.map(i => i.name).join(' + ')}</div>
+                </div>
+              </div>
+              <div style="text-align:right;flex-shrink:0">
+                <div style="font-size:15px;font-weight:700;color:#E8833A">₹${totalSpend}/mo</div>
+                <div style="font-size:11px;color:#6B7280">combined</div>
+              </div>
+            </div>
+            <div style="padding:14px 18px;background:var(--sub-bg)">
+              <div style="font-size:13px;color:var(--text);margin-bottom:10px">${advice}</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                ${items.map(item => `
+                  <div style="padding:6px 12px;border-radius:8px;background:var(--input-bg);border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text)">
+                    ${item.name} · ₹${item.price}/mo
+                    ${item.name === cheapest.name ? '<span style="color:#1D9E75;margin-left:4px">← keep</span>' : '<span style="color:#D85A30;margin-left:4px">← consider cutting</span>'}
+                  </div>
+                `).join('')}
+              </div>
+              <div style="margin-top:12px;padding:10px 14px;background:var(--green-light);border-radius:8px;font-size:13px;font-weight:600;color:var(--green-dark)">
+                💡 Cancel the others and save ₹${potentialSaving}/mo · ₹${(potentialSaving * 12).toLocaleString('en-IN')}/year
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+
+      document.getElementById('duplicateSection').classList.remove('hidden');
     }
 
     function animateScore(target, color) {
