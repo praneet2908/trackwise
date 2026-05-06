@@ -864,7 +864,20 @@
     // ── START ──
     renderOnboarding();
     loadPresets();
-    refreshAll();
-  </script>
+    checkOnboarding();
+
+    async function checkOnboarding() {
+      try {
+        const res = await fetch(`${API}/subscriptions`);
+        const data = await res.json();
+        if (data.count > 0) {
+          document.getElementById('onboarding').classList.add('hidden');
+          refreshAll();
+        }
+      } catch(e) {
+        refreshAll();
+      }
+    }
+    </script>
 </body>
 </html>
