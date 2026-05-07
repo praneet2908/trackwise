@@ -170,6 +170,19 @@
 </head>
 <body>
 
+  <!-- LOADING SCREEN -->
+  <div id="loadingScreen" class="hidden" style="position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);z-index:2000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px">
+    <div style="font-size:48px">💸</div>
+    <div style="font-size:20px;font-weight:800;color:var(--green)">TrackWise</div>
+    <div style="font-size:14px;color:var(--text-muted)">Loading your finances...</div>
+    <div style="width:40px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:8px">
+      <div style="width:40%;height:100%;background:var(--green);border-radius:2px;animation:load 1s infinite alternate"></div>
+    </div>
+  </div>
+  <style>
+    @keyframes load { from { transform: translateX(0); } to { transform: translateX(150%); } }
+  </style>
+
   <!-- ONBOARDING -->
   <div class="onboarding" id="onboarding">
     <div class="onboarding-header">
@@ -886,21 +899,31 @@
       return {'OTT':'📺','Music':'🎵','Mobile':'📱','Cloud':'☁️','Fitness':'💪','Insurance':'🛡️','SIP':'📈','EMI':'🏦','Productivity':'⚡','AI Tools':'🤖','Finance':'💰'}[cat]||'📦';
     }
 
-    // ── START ──
+    
+   // ── START ──
     renderOnboarding();
     loadPresets();
+
+    // Show loading screen while checking
+    document.getElementById('onboarding').classList.add('hidden');
+    document.getElementById('loadingScreen').classList.remove('hidden');
 
     async function checkOnboarding() {
       try {
         const res = await fetch(`${API}/subscriptions`);
         const data = await res.json();
+        document.getElementById('loadingScreen').classList.add('hidden');
         if (data.count > 0) {
-          document.getElementById('onboarding').classList.add('hidden');
           refreshAll();
+        } else {
+          document.getElementById('onboarding').classList.remove('hidden');
         }
-      } catch(e) { refreshAll(); }
+      } catch(e) {
+        document.getElementById('loadingScreen').classList.add('hidden');
+        document.getElementById('onboarding').classList.remove('hidden');
+      }
     }
     checkOnboarding();
-  </script>
+    </script>
 </body>
 </html>
