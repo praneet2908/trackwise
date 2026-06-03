@@ -1282,17 +1282,46 @@
     loadPresets();
     initRetention();
 
+    // Handles Render free tier cold start (can take up to 50s)
+    // Retries every 8 seconds, shows friendly message so user doesn't leave
     async function checkOnboarding() {
-      try{
-        const r=await fetch(`${API}/subscriptions`);
-        const d=await r.json();
-        document.getElementById('loadingScreen').classList.add('hidden');
-        if(d.count>0){refreshAll();}
-        else{document.getElementById('onboarding').classList.remove('hidden');}
-      }catch(e){
-        document.getElementById('loadingScreen').classList.add('hidden');
-        document.getElementById('onboarding').classList.remove('hidden');
+      const loadSub = document.querySelector('.loading-sub');
+      const loadScreen = document.getElementById('loadingScreen');
+      let attempts = 0;
+      const MAX = 12; // 12 × 8s = 96 seconds max wait
+
+      const MSGS = [
+        'Loading your finances...',
+        'Waking up the server... ☕',
+        'Almost there, hang tight...',
+        'Still warming up... (free servers sleep!) 😅',
+        'This is the longest it takes, promise...',
+        'Nearly ready...',
+      ];
+
+      async function tryFetch() {
+        attempts++;
+        if (loadSub) loadSub.textContent = MSGS[Math.min(attempts - 1, MSGS.length - 1)];
+        try {
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 7000); // 7s per attempt
+          const r = await fetch(`${API}/subscriptions`, { signal: controller.signal });
+          clearTimeout(timeout);
+          const d = await r.json();
+          loadScreen.classList.add('hidden');
+          if (d.count > 0) { refreshAll(); }
+          else { document.getElementById('onboarding').classList.remove('hidden'); }
+        } catch(e) {
+          if (attempts < MAX) {
+            setTimeout(tryFetch, 8000);
+          } else {
+            // Give up after ~96s — show onboarding anyway
+            loadScreen.classList.add('hidden');
+            document.getElementById('onboarding').classList.remove('hidden');
+          }
+        }
       }
+      tryFetch();
     }
     checkOnboarding();
   </script>
