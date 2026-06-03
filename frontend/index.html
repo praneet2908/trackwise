@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
-    /* ── NIGHT THEME (default) ── */
     [data-theme="night"] {
       --bg: #080810;
       --bg2: #0D0D1A;
@@ -28,14 +27,16 @@
       --yellow: #FFD60A;
       --blue: #4A90FF;
       --purple: #9B59F5;
+      --health: #10b981;
+      --health-bg: rgba(16,185,129,0.08);
+      --pulse: #f7c948;
+      --pulse-bg: rgba(247,201,72,0.08);
       --glow: 0 0 40px rgba(0,229,160,0.15);
       --shadow: 0 4px 24px rgba(0,0,0,0.4);
       --radius: 16px;
       --font-head: 'Syne', sans-serif;
       --font-body: 'DM Sans', sans-serif;
     }
-
-    /* ── SUNRISE THEME ── */
     [data-theme="sunrise"] {
       --bg: #FFF8F0;
       --bg2: #FFF3E8;
@@ -56,47 +57,30 @@
       --yellow: #C07A00;
       --blue: #1A5FCC;
       --purple: #6B35CC;
+      --health: #059669;
+      --health-bg: rgba(5,150,105,0.08);
+      --pulse: #b45309;
+      --pulse-bg: rgba(180,83,9,0.08);
       --glow: 0 0 40px rgba(0,135,90,0.1);
       --shadow: 0 4px 24px rgba(100,60,0,0.12);
       --radius: 16px;
       --font-head: 'Syne', sans-serif;
       --font-body: 'DM Sans', sans-serif;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--text); min-height: 100vh; transition: background 0.4s, color 0.4s; overflow-x: hidden; }
 
-    body {
-      font-family: var(--font-body);
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      transition: background 0.4s, color 0.4s;
-      overflow-x: hidden;
-    }
-
-    /* ── LOADING ── */
-    #loadingScreen {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: var(--bg); z-index: 3000;
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
-    }
+    /* LOADING */
+    #loadingScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 3000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
     .loading-logo { font-family: var(--font-head); font-size: 32px; font-weight: 800; color: var(--green); letter-spacing: -1px; }
     .loading-sub { font-size: 14px; color: var(--text3); }
     .loading-bar { width: 120px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
     .loading-fill { height: 100%; width: 40%; background: var(--green); border-radius: 2px; animation: loadfill 1.2s ease-in-out infinite alternate; }
     @keyframes loadfill { from { transform: translateX(-100%); } to { transform: translateX(300%); } }
 
-    /* ── ONBOARDING ── */
-    #onboarding {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: var(--bg); z-index: 2000; overflow-y: auto;
-      display: flex; flex-direction: column;
-    }
-    .ob-header {
-      background: var(--card); border-bottom: 1px solid var(--border);
-      padding: 18px 28px; display: flex; justify-content: space-between; align-items: center;
-      position: sticky; top: 0; z-index: 10;
-    }
+    /* ONBOARDING */
+    #onboarding { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; overflow-y: auto; display: flex; flex-direction: column; }
+    .ob-header { background: var(--card); border-bottom: 1px solid var(--border); padding: 18px 28px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
     .ob-logo { font-family: var(--font-head); font-size: 20px; font-weight: 800; color: var(--green); }
     .ob-tag { font-size: 12px; color: var(--text3); }
     .ob-body { padding: 32px 24px; max-width: 640px; margin: 0 auto; width: 100%; flex: 1; }
@@ -104,88 +88,60 @@
     .ob-sub { font-size: 14px; color: var(--text2); margin-bottom: 28px; line-height: 1.6; }
     .ob-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
     @media (max-width: 400px) { .ob-grid { grid-template-columns: repeat(2, 1fr); } }
-    .ob-tile {
-      background: var(--card); border: 1.5px solid var(--border); border-radius: 14px;
-      padding: 18px 8px; text-align: center; cursor: pointer;
-      transition: all 0.15s; user-select: none;
-    }
+    .ob-tile { background: var(--card); border: 1.5px solid var(--border); border-radius: 14px; padding: 18px 8px; text-align: center; cursor: pointer; transition: all 0.15s; user-select: none; }
     .ob-tile:active { transform: scale(0.95); }
     .ob-tile.sel { border-color: var(--green); background: var(--green-bg); }
     .ob-tile-icon { font-size: 26px; }
     .ob-tile-name { font-size: 12px; font-weight: 600; color: var(--text); margin-top: 8px; font-family: var(--font-head); }
     .ob-tile-price { font-size: 11px; color: var(--text3); margin-top: 3px; }
     .ob-tile.sel .ob-tile-name { color: var(--green); }
-    .ob-footer {
-      background: var(--card); border-top: 1px solid var(--border);
-      padding: 18px 28px; position: sticky; bottom: 0;
-      display: flex; justify-content: space-between; align-items: center; gap: 16px;
-    }
+    .ob-footer { background: var(--card); border-top: 1px solid var(--border); padding: 18px 28px; position: sticky; bottom: 0; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
     .ob-sum { font-size: 13px; color: var(--text2); flex-shrink: 0; }
     .ob-sum span { color: var(--green); font-weight: 700; }
     .ob-skip { font-size: 13px; color: var(--text3); background: none; border: none; cursor: pointer; text-decoration: underline; }
 
-    /* ── HEADER ── */
-    .header {
-      background: var(--card); border-bottom: 1px solid var(--border);
-      padding: 0 28px; height: 68px; position: sticky; top: 0; z-index: 100;
-    }
+    /* STREAK BANNER */
+    #streak-banner { display: none; background: linear-gradient(135deg, #ff6b35, #f7c948); color: #1a1206; text-align: center; padding: 11px 16px; font-weight: 700; font-size: 0.9rem; position: relative; z-index: 50; }
+    #streak-banner.show { display: block; animation: slideDown 0.5s ease; }
+    @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    #streak-close { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 16px; color: #1a1206; opacity: 0.6; }
+    #streak-close:hover { opacity: 1; }
+
+    /* HEADER */
+    .header { background: var(--card); border-bottom: 1px solid var(--border); padding: 0 28px; height: 68px; position: sticky; top: 0; z-index: 100; }
     .header-inner { max-width: 1000px; margin: 0 auto; height: 100%; display: flex; align-items: center; justify-content: space-between; }
     .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
     .logo-icon { font-size: 24px; }
     .logo-text { font-family: var(--font-head); font-size: 22px; font-weight: 800; color: var(--green); letter-spacing: -0.5px; }
     .header-right { display: flex; align-items: center; gap: 12px; }
     .tagline { font-size: 12px; color: var(--text3); }
-
-    /* THEME SWITCHER */
     .theme-switcher { display: flex; gap: 6px; }
-    .theme-btn {
-      padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
-      cursor: pointer; border: 1.5px solid var(--border); background: transparent;
-      color: var(--text2); transition: all 0.2s; font-family: var(--font-body);
-    }
+    .theme-btn { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1.5px solid var(--border); background: transparent; color: var(--text2); transition: all 0.2s; font-family: var(--font-body); }
     .theme-btn.active { background: var(--green); color: #000; border-color: var(--green); }
     .theme-btn:hover:not(.active) { border-color: var(--green); color: var(--green); }
 
-    /* ── MAIN ── */
+    /* MAIN */
     .main { max-width: 1000px; margin: 0 auto; padding: 32px 28px; display: flex; flex-direction: column; gap: 20px; }
 
-    /* ── CARDS ── */
-    .card {
-      background: var(--card); border-radius: var(--radius);
-      border: 1px solid var(--border); transition: background 0.4s, border-color 0.4s;
-    }
+    /* CARDS */
+    .card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); transition: background 0.4s, border-color 0.4s; }
     .card-pad { padding: 28px; }
-    .sec-title {
-      font-family: var(--font-head); font-size: 15px; font-weight: 700;
-      display: flex; align-items: center; gap: 10px; color: var(--text); flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-    .badge {
-      font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
-      letter-spacing: 0.04em; text-transform: uppercase;
-    }
+    .sec-title { font-family: var(--font-head); font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 10px; color: var(--text); flex-wrap: wrap; margin-bottom: 20px; }
+    .badge { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: 0.04em; text-transform: uppercase; }
     .badge-red { background: var(--red-bg); color: var(--red); }
     .badge-orange { background: var(--orange-bg); color: var(--orange); }
     .badge-green { background: var(--green-bg); color: var(--green); }
 
-    /* ── SCORE SECTION ── */
+    /* SCORE SECTION */
     .score-section { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     .score-card { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 36px 28px; position: relative; overflow: hidden; }
-    .score-card::before {
-      content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
-      width: 200px; height: 200px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(0,229,160,0.06), transparent 70%);
-      pointer-events: none;
-    }
+    .score-card::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(0,229,160,0.06), transparent 70%); pointer-events: none; }
     .score-lbl { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
     .score-num { font-family: var(--font-head); font-size: 100px; font-weight: 800; line-height: 1; color: var(--green); transition: color 0.4s; }
     .score-num.yellow { color: var(--yellow); }
     .score-num.orange { color: var(--orange); }
     .score-num.red { color: var(--red); }
-    .score-grade {
-      font-family: var(--font-head); font-size: 18px; font-weight: 800;
-      padding: 4px 18px; border-radius: 8px; margin: 8px 0 4px;
-    }
+    .score-grade { font-family: var(--font-head); font-size: 18px; font-weight: 800; padding: 4px 18px; border-radius: 8px; margin: 8px 0 4px; }
     .grade-a { background: var(--green-bg); color: var(--green); }
     .grade-b { background: rgba(74,144,255,0.1); color: var(--blue); }
     .grade-c { background: rgba(255,214,10,0.1); color: var(--yellow); }
@@ -200,26 +156,14 @@
     .stat-val.danger { color: var(--red); }
 
     /* AI CARD */
-    .ai-card {
-      background: linear-gradient(135deg, #003D2A 0%, #001A12 100%);
-      border: 1px solid rgba(0,229,160,0.2);
-      border-radius: var(--radius); padding: 28px;
-      display: flex; flex-direction: column; gap: 14px; min-height: 200px;
-    }
-    [data-theme="sunrise"] .ai-card {
-      background: linear-gradient(135deg, #003D28 0%, #002018 100%);
-    }
+    .ai-card { background: linear-gradient(135deg, #003D2A 0%, #001A12 100%); border: 1px solid rgba(0,229,160,0.2); border-radius: var(--radius); padding: 28px; display: flex; flex-direction: column; gap: 14px; min-height: 200px; }
+    [data-theme="sunrise"] .ai-card { background: linear-gradient(135deg, #003D28 0%, #002018 100%); }
     .ai-header { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(0,229,160,0.6); }
     .ai-text { font-size: 14px; line-height: 1.75; color: rgba(255,255,255,0.85); flex: 1; }
     .ai-empty { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.7; flex: 1; }
 
-    /* ── BUTTONS ── */
-    .btn {
-      padding: 13px 24px; border-radius: 10px; font-size: 13px; font-weight: 600;
-      cursor: pointer; border: none; transition: all 0.2s;
-      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-      font-family: var(--font-body);
-    }
+    /* BUTTONS */
+    .btn { padding: 13px 24px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-family: var(--font-body); }
     .btn-green { background: var(--green); color: #000; }
     .btn-green:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: var(--glow); }
     .btn-ghost { background: var(--green-bg); color: var(--green); border: 1px solid rgba(0,229,160,0.2); }
@@ -227,7 +171,57 @@
     .btn-disabled { opacity: 0.5; pointer-events: none; }
     .w-full { width: 100%; }
 
-    /* ── CUT PLAN ── */
+    /* WEEKLY MONEY PULSE */
+    #weekly-pulse-section { display: none; background: var(--card); border: 1.5px solid var(--pulse); border-radius: var(--radius); padding: 24px; position: relative; overflow: hidden; }
+    #weekly-pulse-section.show { display: block; animation: pulseIn 0.6s ease; }
+    @keyframes pulseIn { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+    #weekly-pulse-section::before { content: ''; position: absolute; top: -40px; right: -40px; width: 140px; height: 140px; background: radial-gradient(circle, var(--pulse-bg), transparent 70%); border-radius: 50%; pointer-events: none; }
+    .pulse-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+    .pulse-title { font-family: var(--font-head); font-size: 15px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .pulse-badge-new { background: var(--pulse-bg); color: var(--pulse); font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em; border: 1px solid rgba(247,201,72,0.2); }
+    .pulse-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+    @media (max-width: 600px) { .pulse-grid { grid-template-columns: repeat(2, 1fr); } }
+    .pulse-stat { background: var(--bg2); border-radius: 12px; padding: 14px 10px; text-align: center; border: 1px solid var(--border); }
+    .pulse-stat-val { font-family: var(--font-head); font-size: 1.3rem; font-weight: 800; color: var(--pulse); display: block; }
+    .pulse-stat-lbl { font-size: 11px; color: var(--text3); margin-top: 3px; }
+    .pulse-insight { background: var(--red-bg); border: 1px solid rgba(255,90,60,0.15); border-radius: 10px; padding: 12px 14px; font-size: 13px; color: var(--text2); line-height: 1.55; }
+    .pulse-insight strong { color: var(--red); }
+    .pulse-streak { display: flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 13px; color: var(--text2); }
+    .streak-fire { font-size: 1.2rem; animation: flicker 1.5s infinite alternate; }
+    @keyframes flicker { from { filter: brightness(1); } to { filter: brightness(1.4); } }
+    .streak-num { font-family: var(--font-head); font-size: 1rem; font-weight: 800; color: #ff6b35; }
+
+    /* FINANCIAL HEALTH SCORE */
+    #health-score-section { background: var(--card); border: 1.5px solid var(--health); border-radius: var(--radius); padding: 24px; position: relative; overflow: hidden; }
+    #health-score-section::before { content: ''; position: absolute; bottom: -40px; left: -40px; width: 150px; height: 150px; background: radial-gradient(circle, var(--health-bg), transparent 70%); border-radius: 50%; pointer-events: none; }
+    .health-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; gap: 16px; }
+    .health-title { font-family: var(--font-head); font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .health-sub { font-size: 12px; color: var(--text3); }
+    .health-ring-wrap { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+    .health-ring { position: relative; width: 86px; height: 86px; }
+    .health-ring svg { transform: rotate(-90deg); }
+    .health-ring circle.track { fill: none; stroke: var(--border2); stroke-width: 7; }
+    .health-ring circle.fill { fill: none; stroke: var(--health); stroke-width: 7; stroke-linecap: round; stroke-dasharray: 226; stroke-dashoffset: 226; transition: stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1); }
+    .health-ring-num { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: var(--font-head); font-size: 1.4rem; font-weight: 900; color: var(--health); line-height: 1; }
+    .health-grade-lbl { font-size: 11px; color: var(--text3); margin-top: 4px; text-align: center; }
+    .health-actions { display: flex; flex-direction: column; gap: 9px; }
+    .ha-row { display: flex; align-items: center; gap: 10px; background: var(--bg2); border-radius: 10px; padding: 10px 13px; border: 1px solid var(--border); }
+    .ha-icon { font-size: 1.1rem; flex-shrink: 0; width: 24px; text-align: center; }
+    .ha-info { flex: 1; }
+    .ha-label { font-size: 13px; color: var(--text); font-weight: 600; }
+    .ha-pts { font-size: 11px; color: var(--text3); margin-top: 1px; }
+    .ha-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
+    .ha-badge.done { background: var(--health-bg); color: var(--health); border: 1px solid rgba(16,185,129,0.2); }
+    .ha-badge.todo { background: var(--border); color: var(--text3); }
+    .health-bar-wrap { height: 5px; background: var(--border); border-radius: 5px; margin-top: 16px; overflow: hidden; }
+    .health-bar-fill { height: 100%; background: linear-gradient(90deg, var(--health), #34d399); border-radius: 5px; transition: width 1.2s cubic-bezier(0.4,0,0.2,1); width: 0%; }
+    .health-tip { margin-top: 11px; font-size: 12px; color: var(--health); text-align: center; font-style: italic; min-height: 16px; }
+
+    /* MICRO TOAST */
+    #tw-toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--health); color: #fff; padding: 10px 22px; border-radius: 30px; font-weight: 700; font-size: 14px; z-index: 9999; opacity: 0; transition: all 0.35s ease; pointer-events: none; white-space: nowrap; }
+    #tw-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* CUT PLAN */
     .cut-item { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 12px; }
     .cut-top { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; background: var(--card2); }
     .cut-icon { width: 38px; height: 38px; border-radius: 10px; background: var(--red-bg); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
@@ -246,7 +240,7 @@
     .savings-lbl { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; margin-bottom: 4px; }
     .savings-amt { font-family: var(--font-head); font-size: 24px; font-weight: 800; color: var(--green); }
 
-    /* ── DUPLICATE ── */
+    /* DUPLICATE */
     .dup-item { border: 1.5px solid var(--orange); border-radius: 12px; overflow: hidden; margin-bottom: 12px; }
     .dup-top { padding: 14px 18px; background: var(--orange-bg); display: flex; justify-content: space-between; align-items: center; }
     .dup-title { font-family: var(--font-head); font-size: 14px; font-weight: 700; color: var(--text); }
@@ -260,7 +254,7 @@
     .dup-cut { color: var(--red); margin-left: 4px; }
     .dup-save { margin-top: 12px; padding: 10px 14px; background: var(--green-bg); border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--green); border: 1px solid rgba(0,229,160,0.15); }
 
-    /* ── CHARTS ── */
+    /* CHARTS */
     .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     .chart-wrap { position: relative; height: 220px; }
     .cat-list { display: flex; flex-direction: column; gap: 12px; }
@@ -270,23 +264,24 @@
     .cat-bar { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
     .cat-amt { font-size: 12px; font-weight: 600; color: var(--text); width: 60px; text-align: right; flex-shrink: 0; }
 
-    /* ── GOAL ── */
+    /* GOAL */
     .goal-form { display: flex; flex-direction: column; gap: 14px; }
     .goal-result { padding: 18px; background: var(--green-bg); border-radius: 12px; display: none; border: 1px solid rgba(0,229,160,0.15); }
     .goal-result.show { display: block; }
     .goal-result-title { font-family: var(--font-head); font-size: 16px; font-weight: 700; color: var(--green); margin-bottom: 8px; }
     .goal-result-text { font-size: 13px; color: var(--text2); line-height: 1.7; }
 
-    /* ── ALTERNATIVES ── */
+    /* ALTERNATIVES */
     .alt-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--card2); flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
     .alt-left { display: flex; align-items: center; gap: 12px; }
     .alt-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--green-bg); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
     .alt-name { font-size: 13px; font-weight: 600; color: var(--text); }
     .alt-free-name { font-size: 12px; color: var(--green); font-weight: 600; margin-top: 2px; }
     .alt-tip { font-size: 11px; color: var(--text3); margin-top: 2px; }
-    .alt-free-badge { font-family: var(--font-head); font-size: 12px; font-weight: 700; color: var(--green); padding: 4px 12px; background: var(--green-bg); border-radius: 20px; border: 1px solid rgba(0,229,160,0.2); }
+    .alt-free-badge { font-family: var(--font-head); font-size: 12px; font-weight: 700; color: var(--green); padding: 4px 12px; background: var(--green-bg); border-radius: 20px; border: 1px solid rgba(0,229,160,0.2); cursor: pointer; transition: all 0.2s; }
+    .alt-free-badge:hover { background: var(--green); color: #000; }
 
-    /* ── CALENDAR ── */
+    /* CALENDAR */
     .cal-item { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--card2); margin-bottom: 8px; transition: border-color 0.2s; }
     .cal-day { width: 48px; height: 48px; border-radius: 10px; background: var(--bg2); display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid var(--border); }
     .cal-day-num { font-family: var(--font-head); font-size: 20px; font-weight: 800; line-height: 1; }
@@ -299,7 +294,7 @@
     .cal-today { border-color: var(--red) !important; }
     .cal-soon { border-color: var(--orange) !important; }
 
-    /* ── ALERTS ── */
+    /* ALERTS */
     .alert-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 10px; margin-bottom: 8px; }
     .alert-item.critical { background: var(--red-bg); border: 1px solid rgba(255,90,60,0.2); }
     .alert-item.high { background: var(--orange-bg); border: 1px solid rgba(255,149,0,0.2); }
@@ -308,16 +303,12 @@
     .alert-days { font-size: 11px; color: var(--text3); margin-top: 2px; }
     .alert-price { font-family: var(--font-head); font-size: 15px; font-weight: 700; }
 
-    /* ── FORM ── */
+    /* FORM */
     .form-col { display: flex; flex-direction: column; gap: 14px; }
     .form-row { display: flex; gap: 14px; flex-wrap: wrap; }
     .form-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 180px; }
     .form-label { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; }
-    .form-input, .form-select {
-      padding: 12px 16px; border: 1.5px solid var(--border); border-radius: 10px;
-      font-size: 14px; color: var(--text); background: var(--bg2);
-      transition: border-color 0.2s; outline: none; font-family: var(--font-body);
-    }
+    .form-input, .form-select { padding: 12px 16px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; color: var(--text); background: var(--bg2); transition: border-color 0.2s; outline: none; font-family: var(--font-body); }
     .form-input:focus, .form-select:focus { border-color: var(--green); }
     .form-input::placeholder { color: var(--text3); }
     .form-divider { text-align: center; font-size: 12px; color: var(--text3); font-weight: 500; position: relative; }
@@ -325,7 +316,7 @@
     .form-divider::before { left: 0; }
     .form-divider::after { right: 0; }
 
-    /* ── SUBSCRIPTIONS ── */
+    /* SUBSCRIPTIONS */
     .sub-card { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--card2); transition: border-color 0.2s; margin-bottom: 8px; }
     .sub-card:hover { border-color: var(--green); }
     .sub-left { display: flex; align-items: center; gap: 12px; }
@@ -342,7 +333,7 @@
     .empty-icon { font-size: 44px; }
     .empty-text { font-size: 13px; text-align: center; line-height: 1.6; }
 
-    /* ── FOOTER ── */
+    /* FOOTER */
     .footer { text-align: center; padding: 40px 28px 32px; border-top: 1px solid var(--border); margin-top: 20px; }
     .footer-logo { font-family: var(--font-head); font-size: 20px; font-weight: 800; color: var(--green); margin-bottom: 8px; }
     .footer-tagline { font-size: 13px; color: var(--text3); margin-bottom: 16px; }
@@ -367,14 +358,25 @@
       .card-pad { padding: 20px; }
       .header { padding: 0 16px; }
       .ob-body { padding: 20px 16px; }
+      .health-top { flex-direction: column; }
+      .health-ring-wrap { flex-direction: row; align-items: center; gap: 12px; }
     }
   </style>
 </head>
 <body>
 
+  <!-- MICRO TOAST -->
+  <div id="tw-toast"></div>
+
+  <!-- STREAK BANNER -->
+  <div id="streak-banner">
+    <span id="streak-text">👋 Welcome back! You're on a streak!</span>
+    <button id="streak-close" onclick="document.getElementById('streak-banner').classList.remove('show')">✕</button>
+  </div>
+
   <!-- LOADING -->
   <div id="loadingScreen">
-    <div class="loading-logo">💸 TrackWise AI AI</div>
+    <div class="loading-logo">💸 TrackWise AI</div>
     <div class="loading-sub">Loading your finances...</div>
     <div class="loading-bar"><div class="loading-fill"></div></div>
   </div>
@@ -382,7 +384,7 @@
   <!-- ONBOARDING -->
   <div id="onboarding" class="hidden">
     <div class="ob-header">
-      <div class="ob-logo">💸 TrackWise AI AI</div>
+      <div class="ob-logo">💸 TrackWise AI</div>
       <div class="ob-tag">Quick setup — 10 seconds</div>
     </div>
     <div class="ob-body">
@@ -402,7 +404,7 @@
     <div class="header-inner">
       <div class="logo">
         <span class="logo-icon">💸</span>
-        <span class="logo-text">TrackWise AI AI</span>
+        <span class="logo-text">TrackWise AI</span>
       </div>
       <div class="header-right">
         <span class="tagline">India's AI Money Advisor</span>
@@ -441,6 +443,97 @@
         <div class="ai-text hidden" id="adviceText"></div>
         <div class="ai-empty" id="adviceEmpty">Add your subscriptions and click "Get AI Advice" to receive personalised money saving tips built for India.</div>
       </div>
+    </div>
+
+    <!-- WEEKLY MONEY PULSE -->
+    <div id="weekly-pulse-section">
+      <div class="pulse-top">
+        <div class="pulse-title">📊 Weekly Money Pulse</div>
+        <div class="pulse-badge-new" id="pulse-day-badge">Monday Edition</div>
+      </div>
+      <div class="pulse-grid">
+        <div class="pulse-stat">
+          <span class="pulse-stat-val" id="pulse-spend">₹0</span>
+          <div class="pulse-stat-lbl">Monthly Spend</div>
+        </div>
+        <div class="pulse-stat">
+          <span class="pulse-stat-val" id="pulse-waste">₹0</span>
+          <div class="pulse-stat-lbl">Est. Waste</div>
+        </div>
+        <div class="pulse-stat">
+          <span class="pulse-stat-val" id="pulse-count">0</span>
+          <div class="pulse-stat-lbl">Subscriptions</div>
+        </div>
+        <div class="pulse-stat">
+          <span class="pulse-stat-val" id="pulse-pct">0%</span>
+          <div class="pulse-stat-lbl">Waste %</div>
+        </div>
+      </div>
+      <div class="pulse-insight" id="pulse-insight">Add subscriptions to unlock your Weekly Money Pulse!</div>
+      <div class="pulse-streak">
+        <span class="streak-fire">🔥</span>
+        <span>App streak:</span>
+        <span class="streak-num" id="pulse-streak">0</span>
+        <span style="color:var(--text3)">days in a row</span>
+      </div>
+    </div>
+
+    <!-- FINANCIAL HEALTH SCORE -->
+    <div id="health-score-section">
+      <div class="health-top">
+        <div>
+          <div class="health-title">💚 Financial Health Score</div>
+          <div class="health-sub">Improves when you take good actions</div>
+        </div>
+        <div class="health-ring-wrap">
+          <div class="health-ring">
+            <svg viewBox="0 0 86 86" width="86" height="86">
+              <circle class="track" cx="43" cy="43" r="36"/>
+              <circle class="fill" cx="43" cy="43" r="36" id="health-ring-fill"/>
+            </svg>
+            <div class="health-ring-num" id="health-num">50</div>
+          </div>
+          <div class="health-grade-lbl" id="health-grade-lbl">Grade: C</div>
+        </div>
+      </div>
+      <div class="health-actions">
+        <div class="ha-row">
+          <div class="ha-icon">✂️</div>
+          <div class="ha-info">
+            <div class="ha-label">Cancelled a subscription</div>
+            <div class="ha-pts">+10 points each time</div>
+          </div>
+          <span class="ha-badge todo" id="ha-cancel-badge">0 done</span>
+        </div>
+        <div class="ha-row">
+          <div class="ha-icon">🆓</div>
+          <div class="ha-info">
+            <div class="ha-label">Switched to free alternative</div>
+            <div class="ha-pts">+8 points each time</div>
+          </div>
+          <span class="ha-badge todo" id="ha-free-badge">0 done</span>
+        </div>
+        <div class="ha-row">
+          <div class="ha-icon">🎯</div>
+          <div class="ha-info">
+            <div class="ha-label">Set a savings goal</div>
+            <div class="ha-pts">+5 points (one time)</div>
+          </div>
+          <span class="ha-badge todo" id="ha-goal-badge">Not done</span>
+        </div>
+        <div class="ha-row">
+          <div class="ha-icon">📅</div>
+          <div class="ha-info">
+            <div class="ha-label">Weekly login streak</div>
+            <div class="ha-pts">+3 points per new day</div>
+          </div>
+          <span class="ha-badge todo" id="ha-streak-badge">0 days</span>
+        </div>
+      </div>
+      <div class="health-bar-wrap">
+        <div class="health-bar-fill" id="health-bar"></div>
+      </div>
+      <div class="health-tip" id="health-tip">Take an action above to improve your score! 🚀</div>
     </div>
 
     <!-- CUT PLAN -->
@@ -578,9 +671,8 @@
 
   </main>
 
-  <!-- FOOTER -->
   <footer class="footer">
-    <div class="footer-logo">💸 TrackWise AI AI</div>
+    <div class="footer-logo">💸 TrackWise AI</div>
     <div class="footer-tagline">Stop wasting money. Start living better.</div>
     <div class="footer-made">Made with <span>❤️</span> in India <span class="footer-flag">🇮🇳</span></div>
     <div class="footer-links">
@@ -632,12 +724,12 @@
       'Cult.fit':{free:'YouTube Workout Channels',tip:'MadFit, Chloe Ting — completely free'},
     };
 
-    // ── THEME ──
+    // ─── THEME ───────────────────────────────────────────
     function setTheme(t) {
       document.documentElement.setAttribute('data-theme', t);
       document.getElementById('btnNight').classList.toggle('active', t==='night');
       document.getElementById('btnSunrise').classList.toggle('active', t==='sunrise');
-      if (chartInst) { updateChartTheme(); }
+      if (chartInst) updateChartTheme();
     }
     function updateChartTheme() {
       const c = getComputedStyle(document.documentElement).getPropertyValue('--text2').trim();
@@ -645,7 +737,7 @@
       chartInst.update();
     }
 
-    // ── ONBOARDING ──
+    // ─── ONBOARDING ───────────────────────────────────────
     function renderOnboarding() {
       document.getElementById('presetsGrid').innerHTML = QUICK_PRESETS.map((p,i) => `
         <div class="ob-tile" id="tile-${i}" onclick="togPreset(${i})">
@@ -654,7 +746,6 @@
           <div class="ob-tile-price">₹${p.price}/mo</div>
         </div>`).join('');
     }
-
     function togPreset(i) {
       const tile = document.getElementById(`tile-${i}`);
       const p = QUICK_PRESETS[i];
@@ -664,7 +755,6 @@
       const total = selPresets.reduce((a,x)=>a+x.price,0);
       document.getElementById('obSummary').innerHTML = `<span>${selPresets.length} selected</span> · ₹${total}/mo`;
     }
-
     async function finishOnboarding() {
       const btn = document.querySelector('.ob-footer .btn-green');
       btn.textContent='Adding...'; btn.classList.add('btn-disabled');
@@ -674,13 +764,12 @@
       document.getElementById('onboarding').classList.add('hidden');
       refreshAll();
     }
-
     function skipOnboarding() {
       document.getElementById('onboarding').classList.add('hidden');
       refreshAll();
     }
 
-    // ── REFRESH ──
+    // ─── REFRESH ─────────────────────────────────────────
     function refreshAll() {
       loadSubs();
       loadAlerts();
@@ -688,7 +777,7 @@
       updateScore();
     }
 
-    // ── PRESETS ──
+    // ─── PRESETS ─────────────────────────────────────────
     async function loadPresets() {
       try {
         const r = await fetch(`${API}/presets`);
@@ -703,7 +792,6 @@
         });
       } catch(e){}
     }
-
     function fillPreset() {
       const v = document.getElementById('presetSel').value;
       if (!v) return;
@@ -713,19 +801,20 @@
       document.getElementById('subPrice').value=s.price;
     }
 
-    // ── SUBSCRIPTIONS ──
+    // ─── SUBSCRIPTIONS ────────────────────────────────────
     async function loadSubs() {
       try {
         const r = await fetch(`${API}/subscriptions`);
         const d = await r.json();
+        window._trackwiseSubs = d.data || [];
         renderSubs(d.data);
         document.getElementById('subCount').textContent=d.count;
         renderChart(d.data);
         renderDups(d.data);
         renderAlts(d.data);
+        updatePulseData(d.data);
       } catch(e){}
     }
-
     function renderSubs(subs) {
       const el = document.getElementById('subList');
       if (!subs||subs.length===0) {
@@ -748,7 +837,6 @@
           </div>
         </div>`).join('');
     }
-
     async function addSub() {
       const name=document.getElementById('subName').value.trim();
       const cat=document.getElementById('subCat').value;
@@ -767,12 +855,15 @@
         }
       } catch(e){}
     }
-
     async function delSub(id) {
-      try{await fetch(`${API}/subscriptions/${id}`,{method:'DELETE'});refreshAll();}catch(e){}
+      try{
+        await fetch(`${API}/subscriptions/${id}`,{method:'DELETE'});
+        tw_onCancelSubscription();
+        refreshAll();
+      }catch(e){}
     }
 
-    // ── WASTE SCORE ──
+    // ─── WASTE SCORE ──────────────────────────────────────
     async function updateScore() {
       if(isUpdating)return; isUpdating=true;
       try {
@@ -788,7 +879,6 @@
       } catch(e){}
       finally{setTimeout(()=>{isUpdating=false;},1500);}
     }
-
     function updateGrade(score) {
       const el=document.getElementById('scoreGrade');
       let g,c;
@@ -799,7 +889,6 @@
       else{g='F';c='grade-f';}
       el.textContent=g; el.className=`score-grade ${c}`;
     }
-
     function animScore(target,color) {
       const el=document.getElementById('scoreNum');
       const start=parseInt(el.textContent)||0;
@@ -814,7 +903,7 @@
       requestAnimationFrame(tick);
     }
 
-    // ── CUT PLAN ──
+    // ─── CUT PLAN ─────────────────────────────────────────
     function renderCutPlan(breakdown) {
       const GUIDES={
         'Netflix':'netflix.com → Account → Cancel Membership',
@@ -869,13 +958,12 @@
       }).join('');
       document.getElementById('cutSection').classList.remove('hidden');
     }
-
     function keepSub(name){
       if(!keptSubs.includes(name)){keptSubs.push(name);localStorage.setItem('keptSubs',JSON.stringify(keptSubs));}
       updateScore();
     }
 
-    // ── DUPLICATES ──
+    // ─── DUPLICATES ───────────────────────────────────────
     function renderDups(subs) {
       if(!subs||subs.length===0){document.getElementById('dupSection').classList.add('hidden');return;}
       const DUP_CATS=['OTT','Music','Cloud','Fitness','Productivity','AI Tools'];
@@ -916,7 +1004,7 @@
       document.getElementById('dupSection').classList.remove('hidden');
     }
 
-    // ── GOAL ──
+    // ─── GOAL ─────────────────────────────────────────────
     function calcGoal() {
       const name=document.getElementById('goalName').value.trim();
       const amt=parseFloat(document.getElementById('goalAmt').value);
@@ -927,9 +1015,10 @@
       document.getElementById('goalResultTitle').textContent=`🎯 ${name} in ${months} month${months>1?'s':''}!`;
       document.getElementById('goalResultText').innerHTML=`You waste <strong>₹${wasted}/month</strong> on subscriptions. Cancel the ones in your Cut Plan and you could afford <strong>${name}</strong> in just <strong>${months} month${months>1?'s':''}</strong>. Start by cancelling the top item above.`;
       document.getElementById('goalResult').classList.add('show');
+      tw_onSetSavingsGoal();
     }
 
-    // ── ALTERNATIVES ──
+    // ─── ALTERNATIVES ─────────────────────────────────────
     function renderAlts(subs) {
       if(!subs||subs.length===0){document.getElementById('altSection').classList.add('hidden');return;}
       const found=subs.filter(s=>FREE_ALTS[s.name]);
@@ -946,13 +1035,13 @@
                 <div class="alt-tip">${alt.tip}</div>
               </div>
             </div>
-            <div class="alt-free-badge">FREE</div>
+            <div class="alt-free-badge" onclick="tw_onPickFreeAlternative()">FREE ✓</div>
           </div>`;
       }).join('');
       document.getElementById('altSection').classList.remove('hidden');
     }
 
-    // ── CHART ──
+    // ─── CHART ────────────────────────────────────────────
     function renderChart(subs) {
       const grouped={};
       if(subs) subs.forEach(s=>{grouped[s.category]=(grouped[s.category]||0)+s.price;});
@@ -978,7 +1067,7 @@
       });
     }
 
-    // ── AI ──
+    // ─── AI ───────────────────────────────────────────────
     async function getAIAdvice() {
       const btn=document.getElementById('adviceBtn');
       const text=document.getElementById('adviceText');
@@ -995,7 +1084,7 @@
       }finally{btn.textContent='✨ Get AI Advice';btn.classList.remove('btn-disabled');}
     }
 
-    // ── ALERTS ──
+    // ─── ALERTS ───────────────────────────────────────────
     async function loadAlerts() {
       try{
         const r=await fetch(`${API}/alerts`);
@@ -1015,7 +1104,7 @@
       }catch(e){}
     }
 
-    // ── CALENDAR ──
+    // ─── CALENDAR ─────────────────────────────────────────
     async function loadCal() {
       try{
         const r=await fetch(`${API}/subscriptions`);
@@ -1053,14 +1142,145 @@
       }catch(e){}
     }
 
-    // ── HELPERS ──
+    // ─── HELPERS ──────────────────────────────────────────
     function emo(cat){
       return {'OTT':'📺','Music':'🎵','Mobile':'📱','Cloud':'☁️','Fitness':'💪','Insurance':'🛡️','SIP':'📈','EMI':'🏦','Productivity':'⚡','AI Tools':'🤖','Finance':'💰'}[cat]||'📦';
     }
 
-    // ── START ──
+    // ═══════════════════════════════════════════════════
+    //  RETENTION SYSTEM: Streak + Pulse + Health Score
+    // ═══════════════════════════════════════════════════
+    const TW_KEY = 'trackwise_retention_v1';
+
+    function loadState() {
+      try { const r=localStorage.getItem(TW_KEY); if(r) return JSON.parse(r); } catch(e){}
+      return { healthScore:50, cancelCount:0, freeAltCount:0, goalSet:false, streakDays:0, lastVisitDate:null, firstVisitDate:null };
+    }
+    function saveState(s) { try { localStorage.setItem(TW_KEY, JSON.stringify(s)); } catch(e){} }
+
+    function updateStreak(state) {
+      const today = new Date().toISOString().slice(0,10);
+      if (!state.firstVisitDate) state.firstVisitDate = today;
+      if (!state.lastVisitDate) { state.lastVisitDate=today; state.streakDays=1; return {isNew:true,isFirst:true}; }
+      if (state.lastVisitDate===today) return {isNew:false,isFirst:false};
+      const diff = Math.floor((new Date(today)-new Date(state.lastVisitDate))/(86400000));
+      if (diff===1) { state.streakDays+=1; state.healthScore=Math.min(state.healthScore+3,100); }
+      else { state.streakDays=1; }
+      state.lastVisitDate=today;
+      return {isNew:true,isFirst:false};
+    }
+
+    function showStreakBanner(state, result) {
+      if (!result.isNew||result.isFirst) return;
+      const banner=document.getElementById('streak-banner');
+      const text=document.getElementById('streak-text');
+      if (!banner||!text) return;
+      if (state.streakDays>=7) text.textContent=`🏆 ${state.streakDays}-day streak! You're a TrackWise legend!`;
+      else if (state.streakDays>=3) text.textContent=`🔥 ${state.streakDays} days in a row! +3 Health Points earned. Keep it up!`;
+      else text.textContent=`👋 Welcome back! You're on a ${state.streakDays}-day streak! +3 Health Points earned.`;
+      banner.classList.add('show');
+      setTimeout(()=>{ banner.style.transition='opacity 0.5s'; banner.style.opacity='0'; setTimeout(()=>{ banner.classList.remove('show'); banner.style.opacity=''; banner.style.transition=''; },500); },5000);
+    }
+
+    function updatePulseData(subs) {
+      const state = loadState();
+      const section = document.getElementById('weekly-pulse-section');
+      const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+      const today = new Date().getDay();
+      document.getElementById('pulse-day-badge').textContent = days[today] + ' Edition';
+      section.classList.add('show');
+
+      const totalSpend = subs ? subs.reduce((s,x)=>s+parseFloat(x.price||0),0) : 0;
+      const estWaste = Math.round(totalSpend*0.35);
+      const subCount = subs ? subs.length : 0;
+      const wastePct = totalSpend>0 ? Math.round((estWaste/totalSpend)*100) : 0;
+
+      document.getElementById('pulse-spend').textContent='₹'+totalSpend.toLocaleString('en-IN');
+      document.getElementById('pulse-waste').textContent='₹'+estWaste.toLocaleString('en-IN');
+      document.getElementById('pulse-count').textContent=subCount;
+      document.getElementById('pulse-pct').textContent=wastePct+'%';
+      document.getElementById('pulse-streak').textContent=state.streakDays;
+
+      let insight='';
+      if (!subs||subs.length===0) insight='👋 Add your subscriptions to unlock Money Pulse insights!';
+      else if (wastePct>=40) insight=`⚠️ You're wasting <strong>${wastePct}% of your subscription spend</strong>. That's ₹${estWaste}/mo going nowhere. Time to cut!`;
+      else { const big=subs.reduce((a,b)=>parseFloat(b.price)>parseFloat(a.price)?b:a,subs[0]); insight=`💡 Biggest subscription: <strong>${big.name} at ₹${big.price}/mo</strong>. Is it still worth it?`; }
+      document.getElementById('pulse-insight').innerHTML=insight;
+    }
+
+    function getHealthGrade(score) {
+      if (score>=90) return {g:'A',l:'Excellent 🏆'};
+      if (score>=75) return {g:'B',l:'Good 👍'};
+      if (score>=60) return {g:'C',l:'Average 🤔'};
+      if (score>=45) return {g:'D',l:'Needs Work ⚠️'};
+      return {g:'F',l:'Critical 🚨'};
+    }
+    function getHealthTip(score) {
+      if (score>=90) return '🏆 Outstanding! You\'re a subscription minimalist.';
+      if (score>=75) return '💪 Great habits! Cancel one more to reach grade A.';
+      if (score>=60) return '📈 Progress! Switch one subscription to a free alternative.';
+      if (score>=45) return '🎯 Set a savings goal to earn +5 points right now!';
+      return '🚀 Start by cancelling your most wasteful subscription!';
+    }
+
+    function renderHealth(state) {
+      const score=Math.round(Math.min(Math.max(state.healthScore,0),100));
+      const {g,l}=getHealthGrade(score);
+      document.getElementById('health-num').textContent=score;
+      document.getElementById('health-grade-lbl').textContent=`Grade: ${g} — ${l}`;
+      const circumference=226;
+      const fill=document.getElementById('health-ring-fill');
+      if(fill) setTimeout(()=>{ fill.style.strokeDashoffset=circumference-(score/100)*circumference; },300);
+      const bar=document.getElementById('health-bar');
+      if(bar) setTimeout(()=>{ bar.style.width=score+'%'; },300);
+      document.getElementById('health-tip').textContent=getHealthTip(score);
+
+      const cb=document.getElementById('ha-cancel-badge');
+      if(cb){ cb.textContent=state.cancelCount>0?state.cancelCount+' done':'0 done'; cb.className='ha-badge '+(state.cancelCount>0?'done':'todo'); }
+      const fb=document.getElementById('ha-free-badge');
+      if(fb){ fb.textContent=state.freeAltCount>0?state.freeAltCount+' done':'0 done'; fb.className='ha-badge '+(state.freeAltCount>0?'done':'todo'); }
+      const gb=document.getElementById('ha-goal-badge');
+      if(gb){ gb.textContent=state.goalSet?'✅ Done':'Not done'; gb.className='ha-badge '+(state.goalSet?'done':'todo'); }
+      const sb=document.getElementById('ha-streak-badge');
+      if(sb){ sb.textContent=state.streakDays+' day'+(state.streakDays!==1?'s':''); sb.className='ha-badge '+(state.streakDays>1?'done':'todo'); }
+    }
+
+    // ─── ACTION HOOKS ────────────────────────────────────
+    function tw_onCancelSubscription() {
+      const s=loadState(); s.cancelCount+=1; s.healthScore=Math.min(s.healthScore+10,100);
+      saveState(s); renderHealth(s); showToast('+10 Health Points! ✂️');
+    }
+    function tw_onPickFreeAlternative() {
+      const s=loadState(); s.freeAltCount+=1; s.healthScore=Math.min(s.healthScore+8,100);
+      saveState(s); renderHealth(s); showToast('+8 Health Points! 🆓');
+    }
+    function tw_onSetSavingsGoal() {
+      const s=loadState();
+      if(!s.goalSet){ s.goalSet=true; s.healthScore=Math.min(s.healthScore+5,100); saveState(s); renderHealth(s); showToast('+5 Health Points! 🎯'); }
+    }
+
+    // ─── TOAST ────────────────────────────────────────────
+    let toastTimer=null;
+    function showToast(msg) {
+      const t=document.getElementById('tw-toast');
+      t.textContent=msg; t.classList.add('show');
+      if(toastTimer) clearTimeout(toastTimer);
+      toastTimer=setTimeout(()=>t.classList.remove('show'),2500);
+    }
+
+    // ─── INIT RETENTION ───────────────────────────────────
+    function initRetention() {
+      const state=loadState();
+      const result=updateStreak(state);
+      saveState(state);
+      showStreakBanner(state,result);
+      renderHealth(state);
+    }
+
+    // ─── START ────────────────────────────────────────────
     renderOnboarding();
     loadPresets();
+    initRetention();
 
     async function checkOnboarding() {
       try{
