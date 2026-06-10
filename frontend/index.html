@@ -267,6 +267,262 @@
     .footer-link{font-size:12px;color:var(--text3);text-decoration:none;transition:color .2s}
     .footer-link:hover{color:var(--green)}
     .footer-copy{font-size:11px;color:var(--text3);margin-top:16px}
+    /*
+ * BUDGET TRACKER STYLES
+ */
+ 
+/* Main budget card */
+.budget-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+@media(max-width:640px){ .budget-grid { grid-template-columns: 1fr; } }
+ 
+/* Income / Expense input boxes */
+.budget-input-card {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+.budget-input-title {
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.budget-item-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.budget-item-name {
+  flex: 1;
+  padding: 9px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text);
+  background: var(--bg2);
+  outline: none;
+  font-family: var(--font-body);
+  transition: border-color .2s;
+}
+.budget-item-name:focus { border-color: var(--green); }
+.budget-item-name::placeholder { color: var(--text3); }
+.budget-item-amt {
+  width: 100px;
+  padding: 9px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text);
+  background: var(--bg2);
+  outline: none;
+  font-family: var(--font-body);
+  transition: border-color .2s;
+}
+.budget-item-amt:focus { border-color: var(--green); }
+.budget-item-amt::placeholder { color: var(--text3); }
+.budget-del-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  opacity: .3;
+  transition: opacity .2s;
+  color: var(--text);
+  padding: 4px;
+  flex-shrink: 0;
+}
+.budget-del-btn:hover { opacity: 1; }
+.budget-add-btn {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px dashed var(--border2);
+  background: none;
+  color: var(--text3);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+  margin-top: 4px;
+  font-family: var(--font-body);
+}
+.budget-add-btn:hover { border-color: var(--green); color: var(--green); }
+ 
+/* Summary bar */
+.budget-summary {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+.budget-bar-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.budget-bar-label {
+  font-size: 12px;
+  color: var(--text2);
+  font-weight: 600;
+}
+.budget-bar-amt {
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 700;
+}
+.budget-progress-bg {
+  height: 8px;
+  background: var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.budget-progress-fill {
+  height: 100%;
+  border-radius: 8px;
+  transition: width 1s ease;
+}
+ 
+/* Remaining amount box */
+.budget-remaining {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 14px;
+  border: 1px solid transparent;
+}
+.budget-remaining.good {
+  background: var(--green-bg);
+  border-color: rgba(0,229,160,.15);
+}
+.budget-remaining.warn {
+  background: var(--orange-bg);
+  border-color: rgba(255,149,0,.15);
+}
+.budget-remaining.bad {
+  background: var(--red-bg);
+  border-color: rgba(255,90,60,.15);
+}
+.budget-remaining-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text2);
+  margin-bottom: 4px;
+}
+.budget-remaining-amt {
+  font-family: var(--font-head);
+  font-size: 28px;
+  font-weight: 800;
+}
+.budget-remaining.good .budget-remaining-amt { color: var(--green); }
+.budget-remaining.warn .budget-remaining-amt { color: var(--orange); }
+.budget-remaining.bad  .budget-remaining-amt { color: var(--red); }
+.budget-verdict {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.5;
+  max-width: 260px;
+  text-align: right;
+}
+ 
+/* Savings rate ring */
+.budget-rate-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  background: var(--bg2);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+.budget-rate-ring {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+}
+.budget-rate-ring svg { transform: rotate(-90deg); }
+.budget-rate-ring circle.track { fill: none; stroke: var(--border2); stroke-width: 6; }
+.budget-rate-ring circle.fill  {
+  fill: none; stroke-width: 6; stroke-linecap: round;
+  stroke-dasharray: 157; stroke-dashoffset: 157;
+  transition: stroke-dashoffset 1s ease, stroke .3s;
+}
+.budget-rate-num {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  font-family: var(--font-head);
+  font-size: 13px; font-weight: 900; line-height: 1;
+}
+.budget-rate-info { flex: 1; }
+.budget-rate-title {
+  font-family: var(--font-head);
+  font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px;
+}
+.budget-rate-sub { font-size: 12px; color: var(--text3); line-height: 1.5; }
+ 
+/* Category breakdown */
+.budget-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+}
+.budget-cat-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.budget-cat-name {
+  font-size: 12px;
+  color: var(--text2);
+  width: 110px;
+  flex-shrink: 0;
+}
+.budget-cat-bar-bg {
+  flex: 1;
+  height: 5px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.budget-cat-bar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width .8s ease;
+}
+.budget-cat-amt {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  width: 70px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.budget-cat-pct {
+  font-size: 11px;
+  color: var(--text3);
+  width: 34px;
+  text-align: right;
+  flex-shrink: 0;
+}
     .hidden{display:none!important}
 
     @media(max-width:640px){
@@ -390,6 +646,91 @@
       <div class="sec-title">🔍 Duplicate Detector <span class="badge badge-orange">Overlapping subscriptions</span></div>
       <div id="dupList"></div>
     </div>
+
+    <!-- BUDGET TRACKER -->
+    <div class="card card-pad" id="budgetSection">
+      <div class="sec-title">
+        💰 Budget Tracker
+        <span class="badge badge-green">Monthly Overview</span>
+      </div>
+ 
+      <div class="budget-grid">
+ 
+        <!-- INCOME SIDE -->
+        <div class="budget-input-card">
+          <div class="budget-input-title">📈 Income Sources</div>
+          <div id="incomeList"></div>
+          <button class="budget-add-btn" onclick="addBudgetItem('income')">+ Add income source</button>
+        </div>
+ 
+        <!-- EXPENSE SIDE -->
+        <div class="budget-input-card">
+          <div class="budget-input-title">📉 Expenses</div>
+          <div id="expenseList"></div>
+          <button class="budget-add-btn" onclick="addBudgetItem('expense')">+ Add expense</button>
+        </div>
+ 
+      </div>
+ 
+      <!-- SUMMARY -->
+      <div class="budget-summary">
+ 
+        <!-- Income bar -->
+        <div class="budget-bar-row">
+          <div class="budget-bar-label">💚 Total Income</div>
+          <div class="budget-bar-amt" id="budgetTotalIncome" style="color:var(--green)">₹0</div>
+        </div>
+        <div class="budget-progress-bg">
+          <div class="budget-progress-fill" id="budgetIncomeBar" style="width:100%;background:var(--green)"></div>
+        </div>
+ 
+        <!-- Expense bar -->
+        <div class="budget-bar-row">
+          <div class="budget-bar-label">🔴 Total Expenses</div>
+          <div class="budget-bar-amt" id="budgetTotalExpense" style="color:var(--red)">₹0</div>
+        </div>
+        <div class="budget-progress-bg">
+          <div class="budget-progress-fill" id="budgetExpenseBar" style="width:0%;background:var(--red)"></div>
+        </div>
+ 
+        <!-- Remaining -->
+        <div class="budget-remaining good" id="budgetRemaining">
+          <div>
+            <div class="budget-remaining-label">Left this month</div>
+            <div class="budget-remaining-amt" id="budgetRemainingAmt">₹0</div>
+          </div>
+          <div class="budget-verdict" id="budgetVerdict">Add your income and expenses to see your monthly picture.</div>
+        </div>
+ 
+        <!-- Savings rate ring -->
+        <div class="budget-rate-wrap">
+          <div class="budget-rate-ring">
+            <svg viewBox="0 0 60 60" width="60" height="60">
+              <circle class="track" cx="30" cy="30" r="25"/>
+              <circle class="fill"  cx="30" cy="30" r="25" id="budgetRateRing"/>
+            </svg>
+            <div class="budget-rate-num" id="budgetRateNum">0%</div>
+          </div>
+          <div class="budget-rate-info">
+            <div class="budget-rate-title">Savings Rate</div>
+            <div class="budget-rate-sub" id="budgetRateSub">
+              Financial rule of thumb: save at least <strong>20%</strong> of your income every month.
+            </div>
+          </div>
+        </div>
+ 
+        <!-- Category breakdown -->
+        <div style="margin-top:16px">
+          <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Expense Breakdown</div>
+          <div class="budget-breakdown" id="budgetBreakdown">
+            <div style="font-size:13px;color:var(--text3)">Add expenses to see breakdown.</div>
+          </div>
+        </div>
+ 
+      </div>
+ 
+    </div>
+    <!-- END BUDGET TRACKER -->
 
     <!-- SAVINGS GOAL -->
     <div class="card card-pad">
@@ -1085,6 +1426,224 @@ Give them 3-4 specific, actionable money-saving tips in 100 words. Be conversati
     refreshAll();
   }
 
+   // ═══════════════════════════════════════════════════════════
+  //  BUDGET TRACKER
+  // ═══════════════════════════════════════════════════════════
+ 
+  const BUDGET_KEY = 'tw_budget';
+ 
+  // Default budget items shown on first load
+  const DEFAULT_INCOME = [
+    { id: Date.now()+1, name: 'Salary', amount: 0 },
+  ];
+  const DEFAULT_EXPENSES = [
+    { id: Date.now()+2, name: 'Rent',      amount: 0 },
+    { id: Date.now()+3, name: 'Food',      amount: 0 },
+    { id: Date.now()+4, name: 'Transport', amount: 0 },
+  ];
+ 
+  // Load/save budget from localStorage
+  function loadBudget() {
+    try {
+      const b = localStorage.getItem(BUDGET_KEY);
+      if (b) return JSON.parse(b);
+    } catch(e) {}
+    // First time — return defaults
+    return { income: DEFAULT_INCOME, expenses: DEFAULT_EXPENSES };
+  }
+  function saveBudget(b) {
+    localStorage.setItem(BUDGET_KEY, JSON.stringify(b));
+  }
+ 
+  // Add a new empty row
+  function addBudgetItem(type) {
+    const b = loadBudget();
+    const newItem = { id: Date.now(), name: '', amount: 0 };
+    if (type === 'income') b.income.push(newItem);
+    else b.expenses.push(newItem);
+    saveBudget(b);
+    renderBudget();
+    // Focus the new name input after render
+    setTimeout(() => {
+      const inputs = document.querySelectorAll(`#${type === 'income' ? 'incomeList' : 'expenseList'} .budget-item-name`);
+      if (inputs.length) inputs[inputs.length-1].focus();
+    }, 50);
+  }
+ 
+  // Delete a row
+  function deleteBudgetItem(type, id) {
+    const b = loadBudget();
+    if (type === 'income')  b.income   = b.income.filter(i => i.id !== id);
+    else                    b.expenses = b.expenses.filter(i => i.id !== id);
+    saveBudget(b);
+    renderBudget();
+  }
+ 
+  // Called whenever a name or amount input changes
+  function onBudgetChange(type, id, field, value) {
+    const b = loadBudget();
+    const list = type === 'income' ? b.income : b.expenses;
+    const item = list.find(i => i.id === id);
+    if (!item) return;
+    if (field === 'name')   item.name   = value;
+    if (field === 'amount') item.amount = parseFloat(value) || 0;
+    saveBudget(b);
+    updateBudgetSummary(b);  // live update summary as user types
+  }
+ 
+  // Render the income and expense lists
+  function renderBudget() {
+    const b = loadBudget();
+ 
+    // Render income rows
+    document.getElementById('incomeList').innerHTML = b.income.map(item => `
+      <div class="budget-item-row">
+        <input
+          class="budget-item-name"
+          placeholder="e.g. Salary"
+          value="${item.name}"
+          onchange="onBudgetChange('income', ${item.id}, 'name', this.value)"
+        />
+        <input
+          class="budget-item-amt"
+          type="number"
+          placeholder="₹"
+          value="${item.amount || ''}"
+          onchange="onBudgetChange('income', ${item.id}, 'amount', this.value)"
+        />
+        <button class="budget-del-btn" onclick="deleteBudgetItem('income', ${item.id})">✕</button>
+      </div>`).join('');
+ 
+    // Render expense rows — auto-add subscription total as one row
+    const subs     = loadSubs();
+    const subTotal = subs.reduce((a,s) => a+s.price, 0);
+ 
+    // Build expense rows
+    let expenseHTML = b.expenses.map(item => `
+      <div class="budget-item-row">
+        <input
+          class="budget-item-name"
+          placeholder="e.g. Rent"
+          value="${item.name}"
+          onchange="onBudgetChange('expense', ${item.id}, 'name', this.value)"
+        />
+        <input
+          class="budget-item-amt"
+          type="number"
+          placeholder="₹"
+          value="${item.amount || ''}"
+          onchange="onBudgetChange('expense', ${item.id}, 'amount', this.value)"
+        />
+        <button class="budget-del-btn" onclick="deleteBudgetItem('expense', ${item.id})">✕</button>
+      </div>`).join('');
+ 
+    // Add subscriptions as a locked read-only row (auto-synced)
+    if (subTotal > 0) {
+      expenseHTML += `
+        <div class="budget-item-row" style="opacity:.7">
+          <input class="budget-item-name" value="📱 Subscriptions (auto)" readonly style="cursor:default"/>
+          <input class="budget-item-amt" value="${subTotal}" readonly style="cursor:default;color:var(--orange)"/>
+          <button class="budget-del-btn" style="opacity:0;pointer-events:none">✕</button>
+        </div>`;
+    }
+ 
+    document.getElementById('expenseList').innerHTML = expenseHTML;
+    updateBudgetSummary(b);
+  }
+ 
+  // Update the summary section (bars, remaining, savings rate, breakdown)
+  function updateBudgetSummary(b) {
+    const subs        = loadSubs();
+    const subTotal    = subs.reduce((a,s) => a+s.price, 0);
+    const totalIncome = b.income.reduce((a,i) => a+i.amount, 0);
+    const manualExp   = b.expenses.reduce((a,i) => a+i.amount, 0);
+    const totalExp    = manualExp + subTotal;
+    const remaining   = totalIncome - totalExp;
+    const savingsRate = totalIncome > 0 ? Math.round((remaining/totalIncome)*100) : 0;
+    const expPct      = totalIncome > 0 ? Math.min(Math.round((totalExp/totalIncome)*100), 100) : 0;
+ 
+    // Update numbers
+    document.getElementById('budgetTotalIncome').textContent  = '₹'+totalIncome.toLocaleString('en-IN');
+    document.getElementById('budgetTotalExpense').textContent = '₹'+totalExp.toLocaleString('en-IN');
+    document.getElementById('budgetRemainingAmt').textContent = '₹'+Math.abs(remaining).toLocaleString('en-IN');
+ 
+    // Expense bar width
+    document.getElementById('budgetExpenseBar').style.width = expPct+'%';
+ 
+    // Remaining box color + verdict
+    const box = document.getElementById('budgetRemaining');
+    const verdict = document.getElementById('budgetVerdict');
+    if (totalIncome === 0) {
+      box.className = 'budget-remaining good';
+      verdict.textContent = 'Enter your monthly income above to see your full picture.';
+    } else if (remaining >= 0) {
+      if (savingsRate >= 20) {
+        box.className = 'budget-remaining good';
+        verdict.textContent = `🎉 Amazing! You're saving ${savingsRate}% of your income. You're ahead of most Indians!`;
+      } else if (savingsRate >= 10) {
+        box.className = 'budget-remaining warn';
+        verdict.textContent = `⚠️ You're saving ${savingsRate}%. Try to reach 20% — cut one subscription to get there.`;
+      } else {
+        box.className = 'budget-remaining warn';
+        verdict.textContent = `📈 Only saving ${savingsRate}%. Review your biggest expenses and try to free up more.`;
+      }
+    } else {
+      box.className = 'budget-remaining bad';
+      document.getElementById('budgetRemainingAmt').textContent = '-₹'+Math.abs(remaining).toLocaleString('en-IN');
+      verdict.textContent = `🚨 You're overspending by ₹${Math.abs(remaining).toLocaleString('en-IN')}/mo! Cut expenses immediately.`;
+    }
+ 
+    // Savings rate ring
+    // Ring circumference = 2 × π × 25 ≈ 157
+    const clampedRate = Math.max(0, Math.min(savingsRate, 100));
+    const ringFill    = document.getElementById('budgetRateRing');
+    const rateNum     = document.getElementById('budgetRateNum');
+    const rateColor   = savingsRate >= 20 ? 'var(--green)' : savingsRate >= 10 ? 'var(--orange)' : 'var(--red)';
+    setTimeout(() => {
+      ringFill.style.strokeDashoffset = 157 - (clampedRate/100)*157;
+      ringFill.style.stroke = rateColor;
+    }, 300);
+    rateNum.textContent = clampedRate+'%';
+    rateNum.style.color = rateColor;
+ 
+    // Expense breakdown by category
+    const categories = {};
+    b.expenses.forEach(i => {
+      if (i.amount > 0) categories[i.name || 'Other'] = (categories[i.name || 'Other']||0)+i.amount;
+    });
+    if (subTotal > 0) categories['Subscriptions'] = (categories['Subscriptions']||0)+subTotal;
+ 
+    const catEntries = Object.entries(categories).sort((a,b) => b[1]-a[1]);
+    const maxCat = catEntries.length ? catEntries[0][1] : 1;
+    const catColors = ['#FF5A3C','#FF9500','#FFD60A','#4A90FF','#9B59F5','#00E5A0','#FF6B9D'];
+ 
+    if (catEntries.length) {
+      document.getElementById('budgetBreakdown').innerHTML = catEntries.map(([name, amt], i) => {
+        const pct = totalExp > 0 ? Math.round((amt/totalExp)*100) : 0;
+        return `
+          <div class="budget-cat-row">
+            <div class="budget-cat-name">${name}</div>
+            <div class="budget-cat-bar-bg">
+              <div class="budget-cat-bar" style="width:${Math.round((amt/maxCat)*100)}%;background:${catColors[i%catColors.length]}"></div>
+            </div>
+            <div class="budget-cat-amt">₹${amt.toLocaleString('en-IN')}</div>
+            <div class="budget-cat-pct">${pct}%</div>
+          </div>`;
+      }).join('');
+    } else {
+      document.getElementById('budgetBreakdown').innerHTML = `<div style="font-size:13px;color:var(--text3)">Add expenses to see breakdown.</div>`;
+    }
+ 
+    // Update savings rate subtitle
+    document.getElementById('budgetRateSub').innerHTML = savingsRate >= 20
+      ? `✅ You're hitting the <strong>20% savings rule</strong>. Great financial discipline!`
+      : `Financial rule of thumb: save at least <strong>20%</strong> of your income every month. You're at ${savingsRate}%.`;
+  }
+ 
+  // Initialize budget on page load (call this inside your init() function)
+  // ADD THIS LINE inside your existing init() function:
+  // renderBudget();
+ 
   // Run when page loads
   init();
   </script>
