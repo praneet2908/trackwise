@@ -35,8 +35,128 @@
       --shadow: 0 4px 24px rgba(100,60,0,0.12);
       --radius: 16px; --font-head: 'Syne',sans-serif; --font-body: 'DM Sans',sans-serif;
     }
+
+    /* ── STUDENT THEME VARS ── */
+    [data-mode="student"][data-theme="night"] {
+      --green:    #9B59F5;
+      --green2:   #7D3FD4;
+      --green-bg: rgba(155,89,245,0.08);
+      --glow:     0 0 40px rgba(155,89,245,0.15);
+      --health:   #9B59F5;
+      --health-bg:rgba(155,89,245,0.08);
+      --pulse:    #FF6B9D;
+      --pulse-bg: rgba(255,107,157,0.08);
+    }
+    [data-mode="student"][data-theme="sunrise"] {
+      --green:    #6B35CC;
+      --green2:   #5025A8;
+      --green-bg: rgba(107,53,204,0.08);
+      --glow:     0 0 40px rgba(107,53,204,0.1);
+      --health:   #6B35CC;
+      --health-bg:rgba(107,53,204,0.08);
+      --pulse:    #C93B7A;
+      --pulse-bg: rgba(201,59,122,0.08);
+    }
+
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;transition:background 0.4s,color 0.4s;overflow-x:hidden}
+
+    /* ── MODE SELECTOR SCREEN ── */
+    #mode-selector {
+      position: fixed; top:0; left:0; width:100%; height:100%;
+      background: var(--bg); z-index: 5000;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 24px; text-align: center;
+    }
+    #mode-selector.hidden { display: none !important; }
+    .mode-selector-logo {
+      font-family: var(--font-head); font-size: 28px; font-weight: 800;
+      color: var(--green); margin-bottom: 8px;
+    }
+    .mode-selector-sub {
+      font-size: 14px; color: var(--text3); margin-bottom: 40px;
+    }
+    .mode-cards {
+      display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
+      max-width: 700px; width: 100%;
+    }
+    .mode-card {
+      flex: 1; min-width: 260px; max-width: 320px;
+      background: var(--card); border: 2px solid var(--border);
+      border-radius: 20px; padding: 32px 24px;
+      cursor: pointer; transition: all 0.25s;
+      position: relative; overflow: hidden;
+    }
+    .mode-card:hover { transform: translateY(-4px); }
+    .mode-card.student:hover { border-color: #9B59F5; box-shadow: 0 20px 60px rgba(155,89,245,0.15); }
+    .mode-card.pro:hover     { border-color: var(--green); box-shadow: 0 20px 60px rgba(0,229,160,0.15); }
+    .mode-card-emoji { font-size: 52px; margin-bottom: 16px; display: block; }
+    .mode-card-title {
+      font-family: var(--font-head); font-size: 22px; font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .mode-card.student .mode-card-title { color: #9B59F5; }
+    .mode-card.pro     .mode-card-title { color: var(--green); }
+    .mode-card-desc { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 20px; }
+    .mode-card-tags { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+    .mode-tag {
+      font-size: 11px; font-weight: 600; padding: 3px 10px;
+      border-radius: 20px; background: var(--card2);
+      border: 1px solid var(--border); color: var(--text3);
+    }
+    .mode-card.student .mode-tag { background: rgba(155,89,245,0.1); border-color: rgba(155,89,245,0.2); color: #9B59F5; }
+    .mode-card.pro .mode-tag     { background: var(--green-bg); border-color: rgba(0,229,160,0.2); color: var(--green); }
+    .mode-selector-note { font-size: 12px; color: var(--text3); margin-top: 24px; }
+
+    /* ── MODE BADGE in header ── */
+    .mode-badge {
+      font-size: 11px; font-weight: 700; padding: 4px 12px;
+      border-radius: 20px; cursor: pointer; transition: all 0.2s;
+      border: 1.5px solid var(--border); color: var(--text2);
+      background: transparent; font-family: var(--font-body);
+    }
+    .mode-badge:hover { border-color: var(--green); color: var(--green); }
+
+    /* ── FINANCE LESSON CARD ── */
+    #finance-lesson {
+      display: none;
+      background: var(--card);
+      border: 1.5px solid #9B59F5;
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      position: relative; overflow: hidden;
+    }
+    #finance-lesson.show { display: block; animation: pulseIn 0.5s ease; }
+    #finance-lesson::before {
+      content: ''; position: absolute; top: -30px; right: -30px;
+      width: 100px; height: 100px;
+      background: radial-gradient(circle, rgba(155,89,245,0.12), transparent 70%);
+      border-radius: 50%; pointer-events: none;
+    }
+    .lesson-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .lesson-icon { font-size: 24px; }
+    .lesson-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: #9B59F5;
+    }
+    .lesson-title {
+      font-family: var(--font-head); font-size: 16px; font-weight: 700;
+      color: var(--text); margin-bottom: 6px;
+    }
+    .lesson-body { font-size: 13px; color: var(--text2); line-height: 1.65; margin-bottom: 12px; }
+    .lesson-highlight {
+      background: rgba(155,89,245,0.1); border: 1px solid rgba(155,89,245,0.2);
+      border-radius: 8px; padding: 10px 14px;
+      font-size: 13px; font-weight: 600; color: #9B59F5;
+    }
+    .lesson-next-btn {
+      background: none; border: none; cursor: pointer;
+      font-size: 12px; color: var(--text3); margin-top: 10px;
+      text-decoration: underline; font-family: var(--font-body);
+      transition: color 0.2s; display: block;
+    }
+    .lesson-next-btn:hover { color: #9B59F5; }
 
     /* STREAK BANNER */
     #streak-banner{display:none;background:linear-gradient(135deg,#ff6b35,#f7c948);color:#1a1206;text-align:center;padding:11px 16px;font-weight:700;font-size:.9rem;position:relative;z-index:50}
@@ -267,262 +387,56 @@
     .footer-link{font-size:12px;color:var(--text3);text-decoration:none;transition:color .2s}
     .footer-link:hover{color:var(--green)}
     .footer-copy{font-size:11px;color:var(--text3);margin-top:16px}
-    /*
- * BUDGET TRACKER STYLES
- */
- 
-/* Main budget card */
-.budget-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-@media(max-width:640px){ .budget-grid { grid-template-columns: 1fr; } }
- 
-/* Income / Expense input boxes */
-.budget-input-card {
-  background: var(--card2);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px;
-}
-.budget-input-title {
-  font-family: var(--font-head);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text2);
-  text-transform: uppercase;
-  letter-spacing: .06em;
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.budget-item-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-.budget-item-name {
-  flex: 1;
-  padding: 9px 12px;
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
-  font-size: 13px;
-  color: var(--text);
-  background: var(--bg2);
-  outline: none;
-  font-family: var(--font-body);
-  transition: border-color .2s;
-}
-.budget-item-name:focus { border-color: var(--green); }
-.budget-item-name::placeholder { color: var(--text3); }
-.budget-item-amt {
-  width: 100px;
-  padding: 9px 12px;
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
-  font-size: 13px;
-  color: var(--text);
-  background: var(--bg2);
-  outline: none;
-  font-family: var(--font-body);
-  transition: border-color .2s;
-}
-.budget-item-amt:focus { border-color: var(--green); }
-.budget-item-amt::placeholder { color: var(--text3); }
-.budget-del-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  opacity: .3;
-  transition: opacity .2s;
-  color: var(--text);
-  padding: 4px;
-  flex-shrink: 0;
-}
-.budget-del-btn:hover { opacity: 1; }
-.budget-add-btn {
-  width: 100%;
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px dashed var(--border2);
-  background: none;
-  color: var(--text3);
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all .2s;
-  margin-top: 4px;
-  font-family: var(--font-body);
-}
-.budget-add-btn:hover { border-color: var(--green); color: var(--green); }
- 
-/* Summary bar */
-.budget-summary {
-  background: var(--card2);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 16px;
-}
-.budget-bar-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-.budget-bar-label {
-  font-size: 12px;
-  color: var(--text2);
-  font-weight: 600;
-}
-.budget-bar-amt {
-  font-family: var(--font-head);
-  font-size: 14px;
-  font-weight: 700;
-}
-.budget-progress-bg {
-  height: 8px;
-  background: var(--border);
-  border-radius: 8px;
-  overflow: hidden;
-  margin-bottom: 16px;
-}
-.budget-progress-fill {
-  height: 100%;
-  border-radius: 8px;
-  transition: width 1s ease;
-}
- 
-/* Remaining amount box */
-.budget-remaining {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
-  border-radius: 12px;
-  margin-bottom: 14px;
-  border: 1px solid transparent;
-}
-.budget-remaining.good {
-  background: var(--green-bg);
-  border-color: rgba(0,229,160,.15);
-}
-.budget-remaining.warn {
-  background: var(--orange-bg);
-  border-color: rgba(255,149,0,.15);
-}
-.budget-remaining.bad {
-  background: var(--red-bg);
-  border-color: rgba(255,90,60,.15);
-}
-.budget-remaining-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text2);
-  margin-bottom: 4px;
-}
-.budget-remaining-amt {
-  font-family: var(--font-head);
-  font-size: 28px;
-  font-weight: 800;
-}
-.budget-remaining.good .budget-remaining-amt { color: var(--green); }
-.budget-remaining.warn .budget-remaining-amt { color: var(--orange); }
-.budget-remaining.bad  .budget-remaining-amt { color: var(--red); }
-.budget-verdict {
-  font-size: 13px;
-  color: var(--text2);
-  line-height: 1.5;
-  max-width: 260px;
-  text-align: right;
-}
- 
-/* Savings rate ring */
-.budget-rate-wrap {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 14px 18px;
-  background: var(--bg2);
-  border-radius: 10px;
-  border: 1px solid var(--border);
-}
-.budget-rate-ring {
-  position: relative;
-  width: 60px;
-  height: 60px;
-  flex-shrink: 0;
-}
-.budget-rate-ring svg { transform: rotate(-90deg); }
-.budget-rate-ring circle.track { fill: none; stroke: var(--border2); stroke-width: 6; }
-.budget-rate-ring circle.fill  {
-  fill: none; stroke-width: 6; stroke-linecap: round;
-  stroke-dasharray: 157; stroke-dashoffset: 157;
-  transition: stroke-dashoffset 1s ease, stroke .3s;
-}
-.budget-rate-num {
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%,-50%);
-  font-family: var(--font-head);
-  font-size: 13px; font-weight: 900; line-height: 1;
-}
-.budget-rate-info { flex: 1; }
-.budget-rate-title {
-  font-family: var(--font-head);
-  font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px;
-}
-.budget-rate-sub { font-size: 12px; color: var(--text3); line-height: 1.5; }
- 
-/* Category breakdown */
-.budget-breakdown {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 14px;
-}
-.budget-cat-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.budget-cat-name {
-  font-size: 12px;
-  color: var(--text2);
-  width: 110px;
-  flex-shrink: 0;
-}
-.budget-cat-bar-bg {
-  flex: 1;
-  height: 5px;
-  background: var(--border);
-  border-radius: 3px;
-  overflow: hidden;
-}
-.budget-cat-bar {
-  height: 100%;
-  border-radius: 3px;
-  transition: width .8s ease;
-}
-.budget-cat-amt {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text);
-  width: 70px;
-  text-align: right;
-  flex-shrink: 0;
-}
-.budget-cat-pct {
-  font-size: 11px;
-  color: var(--text3);
-  width: 34px;
-  text-align: right;
-  flex-shrink: 0;
-}
+
+    /* BUDGET TRACKER */
+    .budget-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+    @media(max-width:640px){.budget-grid{grid-template-columns:1fr}}
+    .budget-input-card{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:20px}
+    .budget-input-title{font-family:var(--font-head);font-size:13px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+    .budget-item-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+    .budget-item-name{flex:1;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);background:var(--bg2);outline:none;font-family:var(--font-body);transition:border-color .2s}
+    .budget-item-name:focus{border-color:var(--green)}
+    .budget-item-name::placeholder{color:var(--text3)}
+    .budget-item-amt{width:100px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);background:var(--bg2);outline:none;font-family:var(--font-body);transition:border-color .2s}
+    .budget-item-amt:focus{border-color:var(--green)}
+    .budget-item-amt::placeholder{color:var(--text3)}
+    .budget-del-btn{background:none;border:none;cursor:pointer;font-size:14px;opacity:.3;transition:opacity .2s;color:var(--text);padding:4px;flex-shrink:0}
+    .budget-del-btn:hover{opacity:1}
+    .budget-add-btn{width:100%;padding:8px;border-radius:8px;border:1px dashed var(--border2);background:none;color:var(--text3);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:4px;font-family:var(--font-body)}
+    .budget-add-btn:hover{border-color:var(--green);color:var(--green)}
+    .budget-summary{background:var(--card2);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px}
+    .budget-bar-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    .budget-bar-label{font-size:12px;color:var(--text2);font-weight:600}
+    .budget-bar-amt{font-family:var(--font-head);font-size:14px;font-weight:700}
+    .budget-progress-bg{height:8px;background:var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px}
+    .budget-progress-fill{height:100%;border-radius:8px;transition:width 1s ease}
+    .budget-remaining{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-radius:12px;margin-bottom:14px;border:1px solid transparent}
+    .budget-remaining.good{background:var(--green-bg);border-color:rgba(0,229,160,.15)}
+    .budget-remaining.warn{background:var(--orange-bg);border-color:rgba(255,149,0,.15)}
+    .budget-remaining.bad{background:var(--red-bg);border-color:rgba(255,90,60,.15)}
+    .budget-remaining-label{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:4px}
+    .budget-remaining-amt{font-family:var(--font-head);font-size:28px;font-weight:800}
+    .budget-remaining.good .budget-remaining-amt{color:var(--green)}
+    .budget-remaining.warn .budget-remaining-amt{color:var(--orange)}
+    .budget-remaining.bad  .budget-remaining-amt{color:var(--red)}
+    .budget-verdict{font-size:13px;color:var(--text2);line-height:1.5;max-width:260px;text-align:right}
+    .budget-rate-wrap{display:flex;align-items:center;gap:16px;padding:14px 18px;background:var(--bg2);border-radius:10px;border:1px solid var(--border)}
+    .budget-rate-ring{position:relative;width:60px;height:60px;flex-shrink:0}
+    .budget-rate-ring svg{transform:rotate(-90deg)}
+    .budget-rate-ring circle.track{fill:none;stroke:var(--border2);stroke-width:6}
+    .budget-rate-ring circle.fill{fill:none;stroke-width:6;stroke-linecap:round;stroke-dasharray:157;stroke-dashoffset:157;transition:stroke-dashoffset 1s ease,stroke .3s}
+    .budget-rate-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-head);font-size:13px;font-weight:900;line-height:1}
+    .budget-rate-info{flex:1}
+    .budget-rate-title{font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
+    .budget-rate-sub{font-size:12px;color:var(--text3);line-height:1.5}
+    .budget-breakdown{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+    .budget-cat-row{display:flex;align-items:center;gap:10px}
+    .budget-cat-name{font-size:12px;color:var(--text2);width:110px;flex-shrink:0}
+    .budget-cat-bar-bg{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+    .budget-cat-bar{height:100%;border-radius:3px;transition:width .8s ease}
+    .budget-cat-amt{font-size:12px;font-weight:600;color:var(--text);width:70px;text-align:right;flex-shrink:0}
+    .budget-cat-pct{font-size:11px;color:var(--text3);width:34px;text-align:right;flex-shrink:0}
+
     .hidden{display:none!important}
 
     @media(max-width:640px){
@@ -548,11 +462,43 @@
     <button id="streak-close" onclick="document.getElementById('streak-banner').classList.remove('show')">✕</button>
   </div>
 
+  <!-- MODE SELECTOR SCREEN — shown on first visit only -->
+  <div id="mode-selector">
+    <div class="mode-selector-logo">💸 TrackWise AI</div>
+    <div class="mode-selector-sub">First, tell us who you are 👇</div>
+    <div class="mode-cards">
+      <div class="mode-card student" onclick="selectMode('student')">
+        <span class="mode-card-emoji">🎓</span>
+        <div class="mode-card-title">Student Mode</div>
+        <div class="mode-card-desc">Managing pocket money, tiffin money, or part-time income? Built for students aged 14 and above.</div>
+        <div class="mode-card-tags">
+          <span class="mode-tag">Pocket Money</span>
+          <span class="mode-tag">Finance Lessons</span>
+          <span class="mode-tag">Spend Score</span>
+          <span class="mode-tag">Badges</span>
+        </div>
+      </div>
+      <div class="mode-card pro" onclick="selectMode('pro')">
+        <span class="mode-card-emoji">💼</span>
+        <div class="mode-card-title">Professional Mode</div>
+        <div class="mode-card-desc">Working professional managing salary, subscriptions, EMIs and savings goals? This is your Pocket CA.</div>
+        <div class="mode-card-tags">
+          <span class="mode-tag">Salary</span>
+          <span class="mode-tag">EMI Tracker</span>
+          <span class="mode-tag">Waste Score</span>
+          <span class="mode-tag">SIP Planner</span>
+        </div>
+      </div>
+    </div>
+    <div class="mode-selector-note">You can switch modes anytime from the header.</div>
+  </div>
+
   <header class="header">
     <div class="header-inner">
       <div class="logo"><span class="logo-icon">💸</span><span class="logo-text">TrackWise AI</span></div>
       <div class="header-right">
-        <span class="tagline">Your Pocket CA 🇮🇳</span>
+        <span class="tagline" id="taglineText">Your Pocket CA 🇮🇳</span>
+        <button class="mode-badge" id="modeBadge" onclick="switchMode()">💼 Pro</button>
         <div class="theme-switcher">
           <button class="theme-btn active" id="btnNight" onclick="setTheme('night')">🌙 Night</button>
           <button class="theme-btn" id="btnSunrise" onclick="setTheme('sunrise')">🌅 Sunrise</button>
@@ -566,7 +512,7 @@
     <!-- SCORE + AI -->
     <div class="score-section">
       <div class="card score-card">
-        <div class="score-lbl">Your Waste Score</div>
+        <div class="score-lbl" id="scoreLbl">Your Waste Score</div>
         <div class="score-num" id="scoreNum">0</div>
         <div class="score-grade grade-a" id="scoreGrade">A</div>
         <div class="score-out">out of 100</div>
@@ -585,10 +531,22 @@
       </div>
     </div>
 
+    <!-- FINANCE LESSON (Student Mode only) -->
+    <div id="finance-lesson">
+      <div class="lesson-top">
+        <span class="lesson-icon">🧠</span>
+        <span class="lesson-label">Finance Lesson of the Day</span>
+      </div>
+      <div class="lesson-title" id="lesson-title">Did you know?</div>
+      <div class="lesson-body" id="lesson-body">Loading your lesson...</div>
+      <div class="lesson-highlight" id="lesson-highlight"></div>
+      <button class="lesson-next-btn" onclick="nextLesson()">Next lesson →</button>
+    </div>
+
     <!-- WEEKLY MONEY PULSE -->
     <div id="weekly-pulse-section">
       <div class="pulse-top">
-        <div class="pulse-title">📊 Weekly Money Pulse</div>
+        <div class="pulse-title" id="pulseTitle">📊 Weekly Money Pulse</div>
         <div class="pulse-badge-new" id="pulse-day-badge">Daily Edition</div>
       </div>
       <div class="pulse-grid">
@@ -609,7 +567,10 @@
     <!-- FINANCIAL HEALTH SCORE -->
     <div id="health-score-section">
       <div class="health-top">
-        <div><div class="health-title">💚 Financial Health Score</div><div class="health-sub">Improves when you take good actions</div></div>
+        <div>
+          <div class="health-title" id="healthTitle">💚 Financial Health Score</div>
+          <div class="health-sub" id="healthSub">Improves when you take good actions</div>
+        </div>
         <div class="health-ring-wrap">
           <div class="health-ring">
             <svg viewBox="0 0 86 86" width="86" height="86">
@@ -653,29 +614,19 @@
         💰 Budget Tracker
         <span class="badge badge-green">Monthly Overview</span>
       </div>
- 
       <div class="budget-grid">
- 
-        <!-- INCOME SIDE -->
         <div class="budget-input-card">
-          <div class="budget-input-title">📈 Income Sources</div>
+          <div class="budget-input-title" id="budgetIncomeTitle">📈 Income Sources</div>
           <div id="incomeList"></div>
           <button class="budget-add-btn" onclick="addBudgetItem('income')">+ Add income source</button>
         </div>
- 
-        <!-- EXPENSE SIDE -->
         <div class="budget-input-card">
-          <div class="budget-input-title">📉 Expenses</div>
+          <div class="budget-input-title" id="budgetExpTitle">📉 Expenses</div>
           <div id="expenseList"></div>
           <button class="budget-add-btn" onclick="addBudgetItem('expense')">+ Add expense</button>
         </div>
- 
       </div>
- 
-      <!-- SUMMARY -->
       <div class="budget-summary">
- 
-        <!-- Income bar -->
         <div class="budget-bar-row">
           <div class="budget-bar-label">💚 Total Income</div>
           <div class="budget-bar-amt" id="budgetTotalIncome" style="color:var(--green)">₹0</div>
@@ -683,8 +634,6 @@
         <div class="budget-progress-bg">
           <div class="budget-progress-fill" id="budgetIncomeBar" style="width:100%;background:var(--green)"></div>
         </div>
- 
-        <!-- Expense bar -->
         <div class="budget-bar-row">
           <div class="budget-bar-label">🔴 Total Expenses</div>
           <div class="budget-bar-amt" id="budgetTotalExpense" style="color:var(--red)">₹0</div>
@@ -692,8 +641,6 @@
         <div class="budget-progress-bg">
           <div class="budget-progress-fill" id="budgetExpenseBar" style="width:0%;background:var(--red)"></div>
         </div>
- 
-        <!-- Remaining -->
         <div class="budget-remaining good" id="budgetRemaining">
           <div>
             <div class="budget-remaining-label">Left this month</div>
@@ -701,36 +648,27 @@
           </div>
           <div class="budget-verdict" id="budgetVerdict">Add your income and expenses to see your monthly picture.</div>
         </div>
- 
-        <!-- Savings rate ring -->
         <div class="budget-rate-wrap">
           <div class="budget-rate-ring">
             <svg viewBox="0 0 60 60" width="60" height="60">
               <circle class="track" cx="30" cy="30" r="25"/>
-              <circle class="fill"  cx="30" cy="30" r="25" id="budgetRateRing"/>
+              <circle class="fill" cx="30" cy="30" r="25" id="budgetRateRing"/>
             </svg>
             <div class="budget-rate-num" id="budgetRateNum">0%</div>
           </div>
           <div class="budget-rate-info">
             <div class="budget-rate-title">Savings Rate</div>
-            <div class="budget-rate-sub" id="budgetRateSub">
-              Financial rule of thumb: save at least <strong>20%</strong> of your income every month.
-            </div>
+            <div class="budget-rate-sub" id="budgetRateSub">Financial rule of thumb: save at least <strong>20%</strong> of your income every month.</div>
           </div>
         </div>
- 
-        <!-- Category breakdown -->
         <div style="margin-top:16px">
           <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Expense Breakdown</div>
           <div class="budget-breakdown" id="budgetBreakdown">
             <div style="font-size:13px;color:var(--text3)">Add expenses to see breakdown.</div>
           </div>
         </div>
- 
       </div>
- 
     </div>
-    <!-- END BUDGET TRACKER -->
 
     <!-- SAVINGS GOAL -->
     <div class="card card-pad">
@@ -772,7 +710,7 @@
 
     <!-- ADD SUBSCRIPTION -->
     <div class="card card-pad">
-      <div class="sec-title">➕ Add Subscription</div>
+      <div class="sec-title" id="addSubTitle">➕ Add Subscription</div>
       <div class="form-col">
         <div class="form-group">
           <label class="form-label">Quick add from presets</label>
@@ -846,7 +784,7 @@
 
     <!-- SUBSCRIPTIONS LIST -->
     <div class="card card-pad">
-      <div class="sec-title">📋 My Subscriptions <span class="sub-count" id="subCount">0</span></div>
+      <div class="sec-title" id="subListTitle">📋 My Subscriptions <span class="sub-count" id="subCount">0</span></div>
       <div id="subList"><div class="empty-state"><div class="empty-icon">🎯</div><div class="empty-text">No subscriptions yet.<br>Add one above to get your Waste Score!</div></div></div>
     </div>
 
@@ -862,35 +800,26 @@
   <script>
   // ═══════════════════════════════════════════════════════════
   //  TRACKWISE AI — FULLY OFFLINE, LOCAL-FIRST
-  //  All data lives in localStorage. No backend. No internet needed.
   // ═══════════════════════════════════════════════════════════
 
-  // ── CONSTANTS ────────────────────────────────────────────
   const SUBS_KEY      = 'tw_subscriptions';
   const KEPT_KEY      = 'tw_kept_subs';
   const RETENTION_KEY = 'tw_retention';
   const THEME_KEY     = 'tw_theme';
+  const MODE_KEY      = 'tw_mode';
   const COLORS = ['#00E5A0','#FF5A3C','#FF9500','#4A90FF','#9B59F5','#FF6B9D','#00BFA5','#FFD60A','#FF4081','#7C4DFF'];
 
   let chartInst = null;
 
   // ── STORAGE HELPERS ──────────────────────────────────────
-  // These are the only functions that touch localStorage.
-  // Think of localStorage as a tiny database in your browser.
-  // It stores key-value pairs as strings, so we use JSON.parse/stringify.
-
   function loadSubs() {
     try { return JSON.parse(localStorage.getItem(SUBS_KEY)) || []; } catch(e) { return []; }
   }
-  function saveSubs(subs) {
-    localStorage.setItem(SUBS_KEY, JSON.stringify(subs));
-  }
+  function saveSubs(subs) { localStorage.setItem(SUBS_KEY, JSON.stringify(subs)); }
   function loadKept() {
     try { return JSON.parse(localStorage.getItem(KEPT_KEY)) || []; } catch(e) { return []; }
   }
-  function saveKept(kept) {
-    localStorage.setItem(KEPT_KEY, JSON.stringify(kept));
-  }
+  function saveKept(kept) { localStorage.setItem(KEPT_KEY, JSON.stringify(kept)); }
   function loadRetention() {
     try {
       const r = localStorage.getItem(RETENTION_KEY);
@@ -898,9 +827,7 @@
     } catch(e) {}
     return { healthScore:50, cancelCount:0, freeAltCount:0, goalSet:false, streakDays:0, lastVisitDate:null };
   }
-  function saveRetention(s) {
-    localStorage.setItem(RETENTION_KEY, JSON.stringify(s));
-  }
+  function saveRetention(s) { localStorage.setItem(RETENTION_KEY, JSON.stringify(s)); }
 
   // ── FREE ALTERNATIVES DATA ───────────────────────────────
   const FREE_ALTS = {
@@ -938,7 +865,6 @@
     'AI Tools':     'Only worth it if you use it every single day',
   };
 
-  // ── EMOJI HELPER ─────────────────────────────────────────
   function emo(cat) {
     return {'OTT':'📺','Music':'🎵','Mobile':'📱','Cloud':'☁️','Fitness':'💪',
             'Insurance':'🛡️','SIP':'📈','EMI':'🏦','Productivity':'⚡',
@@ -976,26 +902,17 @@
     const price = parseFloat(document.getElementById('subPrice').value);
     const date  = document.getElementById('subDate').value;
     if (!name || !price) { alert('Please enter a name and price.'); return; }
-
     const subs = loadSubs();
-    subs.push({
-      id:           Date.now(),  // unique ID = current timestamp
-      name, category: cat, price, renewal_date: date || null,
-      created_at:   new Date().toISOString()
-    });
+    subs.push({ id:Date.now(), name, category:cat, price, renewal_date:date||null, created_at:new Date().toISOString() });
     saveSubs(subs);
-
-    // Clear form
     document.getElementById('subName').value  = '';
     document.getElementById('subPrice').value = '';
     document.getElementById('subDate').value  = '';
     document.getElementById('presetSel').value = '';
-
     refreshAll();
     showToast('✅ Subscription added!');
   }
 
-  // ── DELETE SUBSCRIPTION ──────────────────────────────────
   function delSub(id) {
     const subs = loadSubs().filter(s => s.id !== id);
     saveSubs(subs);
@@ -1003,16 +920,12 @@
     refreshAll();
   }
 
-  // ── KEEP SUB (remove from cut plan) ─────────────────────
   function keepSub(name) {
     const kept = loadKept();
     if (!kept.includes(name)) { kept.push(name); saveKept(kept); }
     refreshAll();
   }
 
-  // ── REFRESH ALL ──────────────────────────────────────────
-  // This is the master function that re-renders everything
-  // whenever subscriptions change. One function to rule them all.
   function refreshAll() {
     const subs = loadSubs();
     renderSubs(subs);
@@ -1022,9 +935,9 @@
     renderCal(subs);
     updateScore(subs);
     updatePulse(subs);
+    renderBudget();
   }
 
-  // ── RENDER SUBSCRIPTIONS LIST ────────────────────────────
   function renderSubs(subs) {
     const el = document.getElementById('subList');
     document.getElementById('subCount').textContent = subs.length;
@@ -1049,29 +962,29 @@
       </div>`).join('');
   }
 
-  // ── WASTE SCORE CALCULATION ──────────────────────────────
-  // This is the core algorithm. It calculates waste based on
-  // category and price. No AI needed — pure maths.
+  // ── WASTE SCORE ──────────────────────────────────────────
   function calcWasteScore(subs) {
     if (!subs.length) return { score:0, color:'', verdict:'Add subscriptions to get started', total_monthly:0, wasted_amount:0, breakdown:[] };
-
-    const KEEP_CATS = ['Insurance','SIP','Mobile','EMI'];
     const WASTE_RATES = { 'OTT':0.6,'Music':0.5,'Fitness':0.7,'Cloud':0.4,'Productivity':0.4,'AI Tools':0.5,'Finance':0.2,'Insurance':0,'SIP':0,'Mobile':0,'EMI':0 };
     const total = subs.reduce((a,s) => a+s.price, 0);
-    const breakdown = subs.map(s => ({
-      ...s,
-      waste_contribution: Math.round(s.price * (WASTE_RATES[s.category] || 0.3))
-    }));
+    const breakdown = subs.map(s => ({ ...s, waste_contribution: Math.round(s.price * (WASTE_RATES[s.category] || 0.3)) }));
     const wasted = breakdown.reduce((a,s) => a+s.waste_contribution, 0);
     const score = total > 0 ? Math.min(Math.round((wasted/total)*100), 100) : 0;
-
+    const mode = getMode();
     let color='', verdict='';
-    if (score <= 20)      { color='';       verdict='🌟 Excellent! Your subscriptions are lean and efficient.'; }
-    else if (score <= 40) { color='';       verdict='👍 Good control. A few small tweaks could save more.'; }
-    else if (score <= 60) { color='yellow'; verdict='⚠️ Moderate waste detected. Time to review your subscriptions.'; }
-    else if (score <= 80) { color='orange'; verdict='🚨 High waste! Several subscriptions are draining your money.'; }
-    else                  { color='red';    verdict='💀 Critical waste! You are bleeding money every month.'; }
-
+    if (mode === 'student') {
+      if (score<=20)      { color='';       verdict='🌟 Amazing! You barely spend on subscriptions.'; }
+      else if (score<=40) { color='';       verdict='👍 Not bad! Check if you really use all these apps.'; }
+      else if (score<=60) { color='yellow'; verdict='⚠️ You\'re spending a lot on apps. Time to review!'; }
+      else if (score<=80) { color='orange'; verdict='🚨 Too much spending! Cut some apps now.'; }
+      else                { color:'red';    verdict='💀 Way too much! Your pocket money is disappearing.'; }
+    } else {
+      if (score<=20)      { color='';       verdict='🌟 Excellent! Your subscriptions are lean and efficient.'; }
+      else if (score<=40) { color='';       verdict='👍 Good control. A few small tweaks could save more.'; }
+      else if (score<=60) { color='yellow'; verdict='⚠️ Moderate waste detected. Time to review your subscriptions.'; }
+      else if (score<=80) { color='orange'; verdict='🚨 High waste! Several subscriptions are draining your money.'; }
+      else                { color='red';    verdict='💀 Critical waste! You are bleeding money every month.'; }
+    }
     return { score, color, verdict, total_monthly:total, wasted_amount:wasted, breakdown };
   }
 
@@ -1153,9 +1066,9 @@
     const dups = Object.entries(grouped).filter(([,items]) => items.length>1);
     if (!dups.length) { document.getElementById('dupSection').classList.add('hidden'); return; }
     document.getElementById('dupList').innerHTML = dups.map(([cat,items]) => {
-      const total    = items.reduce((a,b) => a+b.price, 0);
+      const total = items.reduce((a,b) => a+b.price, 0);
       const cheapest = items.reduce((a,b) => a.price<b.price?a:b);
-      const saving   = total-cheapest.price;
+      const saving = total-cheapest.price;
       return `
         <div class="dup-item">
           <div class="dup-top">
@@ -1260,38 +1173,33 @@
   }
 
   // ── AI ADVICE ────────────────────────────────────────────
-  // Uses the Anthropic Claude API directly from the browser.
-  // No backend needed — the API key is passed in the request.
   async function getAIAdvice() {
     const subs = loadSubs();
     if (!subs.length) { alert('Add some subscriptions first!'); return; }
-
     const btn=document.getElementById('adviceBtn');
     const text=document.getElementById('adviceText');
     const empty=document.getElementById('adviceEmpty');
     const loading=document.getElementById('adviceLoading');
-
     btn.textContent='⏳ Thinking...'; btn.classList.add('btn-disabled');
     text.classList.add('hidden'); empty.classList.add('hidden');
     loading.classList.remove('hidden');
-
     const data = calcWasteScore(subs);
     const subList = subs.map(s=>`${s.name} (${s.category}) - ₹${s.price}/mo`).join(', ');
-
-    const prompt = `You are TrackWise AI, a friendly Indian personal finance advisor. 
+    const mode = getMode();
+    const prompt = mode === 'student'
+      ? `You are TrackWise AI, a friendly money coach for Indian students aged 14+.
+The student has these subscriptions: ${subList}.
+Total monthly spend: ₹${data.total_monthly}. Estimated waste: ₹${data.wasted_amount}.
+Give 3 simple, friendly tips to save money. Use easy language, relatable examples (like saving for a phone or trip). Use ₹ symbol. End with one motivating line. Keep it under 100 words.`
+      : `You are TrackWise AI, a friendly Indian personal finance advisor.
 The user has these subscriptions: ${subList}.
 Total monthly spend: ₹${data.total_monthly}. Estimated waste: ₹${data.wasted_amount}. Waste Score: ${data.score}/100.
 Give them 3-4 specific, actionable money-saving tips in 100 words. Be conversational, use ₹ symbol, mention specific subscription names. End with one motivating sentence.`;
-
     try {
       const res = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 300,
-          messages: [{ role:'user', content: prompt }]
-        })
+        body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:300, messages:[{role:'user',content:prompt}] })
       });
       const d = await res.json();
       const advice = d.content?.[0]?.text || 'Could not get advice right now. Try again!';
@@ -1302,7 +1210,122 @@ Give them 3-4 specific, actionable money-saving tips in 100 words. Be conversati
       text.classList.remove('hidden');
     }
     loading.classList.add('hidden');
-    btn.textContent='✨ Get AI Advice'; btn.classList.remove('btn-disabled');
+    btn.textContent = mode === 'student' ? '✨ Get Money Tips' : '✨ Get AI Advice';
+    btn.classList.remove('btn-disabled');
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  //  MODE SYSTEM
+  // ═══════════════════════════════════════════════════════════
+
+  const FINANCE_LESSONS = [
+    { icon:'🪄', title:'The Magic of Compounding', body:'If you invest just ₹500/month starting at age 14, by the time you\'re 40 it could grow to over ₹15 lakhs — without doing anything extra. That\'s the power of compound interest. Money makes more money over time.', highlight:'₹500/month × 26 years = ₹15+ lakhs 🤯' },
+    { icon:'📊', title:'The 50/30/20 Rule', body:'A simple rule for managing your money: spend 50% on needs (food, transport), 30% on wants (games, eating out, subscriptions), and save 20%. If you get ₹2000/month, try saving ₹400 every month without fail.', highlight:'50% Needs · 30% Wants · 20% Savings' },
+    { icon:'📱', title:'The Subscription Trap', body:'Free trials are designed to make you forget to cancel. Apps like Spotify, Netflix, and Hotstar all bank on you forgetting. Set a reminder to cancel before the trial ends — or you\'ll be charged without realising.', highlight:'💡 Tip: Always set a calendar reminder before a free trial ends' },
+    { icon:'🎯', title:'Pay Yourself First', body:'The moment you get money — pocket money, gift money, part-time pay — move 20% to savings immediately. Don\'t wait till the end of the month. By then it\'s already spent. Save first, spend what\'s left.', highlight:'Get money → Save 20% first → Then spend the rest' },
+    { icon:'💳', title:'Why Debt is Dangerous', body:'If you borrow ₹10,000 on a credit card and only pay the minimum each month, you could end up paying back ₹15,000 or more. Interest adds up fast. Never spend money you don\'t have — especially on things that don\'t last.', highlight:'⚠️ Credit card interest in India: 36-42% per year' },
+    { icon:'🏦', title:'Open a Savings Account', body:'A savings account earns 2.5-4% interest per year just for keeping money there. ₹10,000 in a savings account earns ₹300-400 per year doing nothing. Ask your parents to help you open one — you can open a minor\'s account from age 10.', highlight:'₹10,000 saved = ₹300-400 earned per year for free 💰' },
+    { icon:'🛒', title:'Need vs Want', body:'Before buying anything, ask: "Is this a need or a want?" Food, transport to school, medicines = needs. Extra OTT subscription, new phone case, eating out = wants. There\'s nothing wrong with wants — just be honest about what they are.', highlight:'Rule: Wait 24 hours before any purchase over ₹500' },
+    { icon:'📈', title:'Start a SIP Early', body:'A SIP (Systematic Investment Plan) lets you invest as little as ₹100/month in mutual funds. The earlier you start, the more compounding works in your favour. By investing young, you do less work for more money.', highlight:'You can start a SIP at age 18 with just ₹100/month' },
+  ];
+
+  let currentLesson = 0;
+
+  function getMode() { return localStorage.getItem(MODE_KEY) || null; }
+  function saveMode(mode) { localStorage.setItem(MODE_KEY, mode); }
+
+  function selectMode(mode) {
+    saveMode(mode);
+    document.getElementById('mode-selector').classList.add('hidden');
+    applyMode(mode);
+    initApp();
+  }
+
+  function applyMode(mode) {
+    const html = document.documentElement;
+    html.setAttribute('data-mode', mode);
+
+    // Score label
+    document.getElementById('scoreLbl').textContent = mode === 'student' ? 'Your Spend Score' : 'Your Waste Score';
+
+    // Tagline
+    document.getElementById('taglineText').textContent = mode === 'student' ? 'Your Student Money Guide 🎓' : 'Your Pocket CA 🇮🇳';
+
+    // Health section
+    document.getElementById('healthTitle').textContent = mode === 'student' ? '💜 Money Health Score' : '💚 Financial Health Score';
+    document.getElementById('healthSub').textContent   = mode === 'student' ? 'Gets better when you make smart money moves' : 'Improves when you take good actions';
+
+    // Pulse title
+    document.getElementById('pulseTitle').textContent = mode === 'student' ? '📊 Weekly Money Check' : '📊 Weekly Money Pulse';
+
+    // Advice button
+    document.getElementById('adviceBtn').textContent = mode === 'student' ? '✨ Get Money Tips' : '✨ Get AI Advice';
+
+    // Section titles
+    document.getElementById('addSubTitle').textContent   = mode === 'student' ? '➕ Add App / Subscription' : '➕ Add Subscription';
+    document.getElementById('subListTitle').innerHTML    = mode === 'student'
+      ? `📱 My Apps & Subs <span class="sub-count" id="subCount">${loadSubs().length}</span>`
+      : `📋 My Subscriptions <span class="sub-count" id="subCount">${loadSubs().length}</span>`;
+
+    // Budget titles
+    document.getElementById('budgetIncomeTitle').textContent = mode === 'student' ? '💰 Pocket Money / Income' : '📈 Income Sources';
+    document.getElementById('budgetExpTitle').textContent    = mode === 'student' ? '💸 Where I Spend' : '📉 Expenses';
+
+    // Goal placeholder
+    document.getElementById('goalName').placeholder = mode === 'student'
+      ? 'e.g. New phone, Sneakers, Trip with friends'
+      : 'e.g. Trip to Goa, iPhone 16, MacBook';
+
+    // Mode badge
+    document.getElementById('modeBadge').textContent = mode === 'student' ? '🎓 Student' : '💼 Pro';
+
+    // Finance lesson card
+    const lessonEl = document.getElementById('finance-lesson');
+    if (mode === 'student') {
+      lessonEl.classList.add('show');
+      showLesson(currentLesson);
+      hideProPresets();
+    } else {
+      lessonEl.classList.remove('show');
+      showAllPresets();
+    }
+  }
+
+  function hideProPresets() {
+    document.querySelectorAll('#presetSel optgroup').forEach(grp => {
+      if (grp.label === 'Finance') grp.style.display = 'none';
+    });
+    document.querySelectorAll('#subCat option').forEach(opt => {
+      if (['SIP','EMI','Insurance'].includes(opt.value)) opt.style.display = 'none';
+    });
+  }
+
+  function showAllPresets() {
+    document.querySelectorAll('#presetSel optgroup').forEach(grp => { grp.style.display = ''; });
+    document.querySelectorAll('#subCat option').forEach(opt => { opt.style.display = ''; });
+  }
+
+  function showLesson(index) {
+    const lesson = FINANCE_LESSONS[index % FINANCE_LESSONS.length];
+    document.getElementById('lesson-title').textContent     = lesson.icon + ' ' + lesson.title;
+    document.getElementById('lesson-body').textContent      = lesson.body;
+    document.getElementById('lesson-highlight').textContent = lesson.highlight;
+  }
+
+  function nextLesson() {
+    currentLesson = (currentLesson + 1) % FINANCE_LESSONS.length;
+    localStorage.setItem('tw_lesson_index', currentLesson);
+    showLesson(currentLesson);
+    showToast('💜 New lesson loaded!');
+  }
+
+  function switchMode() {
+    const current = getMode();
+    const next = current === 'student' ? 'pro' : 'student';
+    saveMode(next);
+    applyMode(next);
+    refreshAll();
+    showToast(next === 'student' ? '🎓 Student Mode!' : '💼 Professional Mode!');
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -1409,242 +1432,165 @@ Give them 3-4 specific, actionable money-saving tips in 100 words. Be conversati
     toastTimer=setTimeout(()=>t.classList.remove('show'),2500);
   }
 
-  // ── INIT ─────────────────────────────────────────────────
-  function init(){
-    // Restore saved theme
-    const savedTheme=localStorage.getItem(THEME_KEY)||'night';
-    setTheme(savedTheme);
-
-    // Streak & retention
-    const state=loadRetention();
-    const result=updateStreak(state);
-    saveRetention(state);
-    showStreakBanner(state,result);
-    renderHealth(state);
-
-    // Load all data
-    refreshAll();
-  }
-
-   // ═══════════════════════════════════════════════════════════
+  // ═══════════════════════════════════════════════════════════
   //  BUDGET TRACKER
   // ═══════════════════════════════════════════════════════════
- 
+
   const BUDGET_KEY = 'tw_budget';
- 
-  // Default budget items shown on first load
-  const DEFAULT_INCOME = [
-    { id: Date.now()+1, name: 'Salary', amount: 0 },
-  ];
+  const DEFAULT_INCOME   = [{ id: Date.now()+1, name: 'Salary', amount: 0 }];
   const DEFAULT_EXPENSES = [
-    { id: Date.now()+2, name: 'Rent',      amount: 0 },
-    { id: Date.now()+3, name: 'Food',      amount: 0 },
+    { id: Date.now()+2, name: 'Rent', amount: 0 },
+    { id: Date.now()+3, name: 'Food', amount: 0 },
     { id: Date.now()+4, name: 'Transport', amount: 0 },
   ];
- 
-  // Load/save budget from localStorage
+
   function loadBudget() {
-    try {
-      const b = localStorage.getItem(BUDGET_KEY);
-      if (b) return JSON.parse(b);
-    } catch(e) {}
-    // First time — return defaults
-    return { income: DEFAULT_INCOME, expenses: DEFAULT_EXPENSES };
+    try { const b=localStorage.getItem(BUDGET_KEY); if(b)return JSON.parse(b); } catch(e) {}
+    return { income:DEFAULT_INCOME, expenses:DEFAULT_EXPENSES };
   }
-  function saveBudget(b) {
-    localStorage.setItem(BUDGET_KEY, JSON.stringify(b));
-  }
- 
-  // Add a new empty row
+  function saveBudget(b) { localStorage.setItem(BUDGET_KEY, JSON.stringify(b)); }
+
   function addBudgetItem(type) {
-    const b = loadBudget();
-    const newItem = { id: Date.now(), name: '', amount: 0 };
-    if (type === 'income') b.income.push(newItem);
-    else b.expenses.push(newItem);
+    const b=loadBudget();
+    const newItem={id:Date.now(),name:'',amount:0};
+    if(type==='income')b.income.push(newItem); else b.expenses.push(newItem);
     saveBudget(b);
     renderBudget();
-    // Focus the new name input after render
-    setTimeout(() => {
-      const inputs = document.querySelectorAll(`#${type === 'income' ? 'incomeList' : 'expenseList'} .budget-item-name`);
-      if (inputs.length) inputs[inputs.length-1].focus();
-    }, 50);
+    setTimeout(()=>{
+      const inputs=document.querySelectorAll(`#${type==='income'?'incomeList':'expenseList'} .budget-item-name`);
+      if(inputs.length)inputs[inputs.length-1].focus();
+    },50);
   }
- 
-  // Delete a row
-  function deleteBudgetItem(type, id) {
-    const b = loadBudget();
-    if (type === 'income')  b.income   = b.income.filter(i => i.id !== id);
-    else                    b.expenses = b.expenses.filter(i => i.id !== id);
+
+  function deleteBudgetItem(type,id) {
+    const b=loadBudget();
+    if(type==='income') b.income=b.income.filter(i=>i.id!==id);
+    else b.expenses=b.expenses.filter(i=>i.id!==id);
     saveBudget(b);
     renderBudget();
   }
- 
-  // Called whenever a name or amount input changes
-  function onBudgetChange(type, id, field, value) {
-    const b = loadBudget();
-    const list = type === 'income' ? b.income : b.expenses;
-    const item = list.find(i => i.id === id);
-    if (!item) return;
-    if (field === 'name')   item.name   = value;
-    if (field === 'amount') item.amount = parseFloat(value) || 0;
+
+  function onBudgetChange(type,id,field,value) {
+    const b=loadBudget();
+    const list=type==='income'?b.income:b.expenses;
+    const item=list.find(i=>i.id===id);
+    if(!item)return;
+    if(field==='name')item.name=value;
+    if(field==='amount')item.amount=parseFloat(value)||0;
     saveBudget(b);
-    updateBudgetSummary(b);  // live update summary as user types
+    updateBudgetSummary(b);
   }
- 
-  // Render the income and expense lists
+
   function renderBudget() {
-    const b = loadBudget();
- 
-    // Render income rows
-    document.getElementById('incomeList').innerHTML = b.income.map(item => `
+    const b=loadBudget();
+    const mode=getMode();
+    document.getElementById('incomeList').innerHTML=b.income.map(item=>`
       <div class="budget-item-row">
-        <input
-          class="budget-item-name"
-          placeholder="e.g. Salary"
-          value="${item.name}"
-          onchange="onBudgetChange('income', ${item.id}, 'name', this.value)"
-        />
-        <input
-          class="budget-item-amt"
-          type="number"
-          placeholder="₹"
-          value="${item.amount || ''}"
-          onchange="onBudgetChange('income', ${item.id}, 'amount', this.value)"
-        />
-        <button class="budget-del-btn" onclick="deleteBudgetItem('income', ${item.id})">✕</button>
+        <input class="budget-item-name" placeholder="${mode==='student'?'e.g. Pocket Money':'e.g. Salary'}" value="${item.name}" onchange="onBudgetChange('income',${item.id},'name',this.value)"/>
+        <input class="budget-item-amt" type="number" placeholder="₹" value="${item.amount||''}" onchange="onBudgetChange('income',${item.id},'amount',this.value)"/>
+        <button class="budget-del-btn" onclick="deleteBudgetItem('income',${item.id})">✕</button>
       </div>`).join('');
- 
-    // Render expense rows — auto-add subscription total as one row
-    const subs     = loadSubs();
-    const subTotal = subs.reduce((a,s) => a+s.price, 0);
- 
-    // Build expense rows
-    let expenseHTML = b.expenses.map(item => `
+    const subs=loadSubs();
+    const subTotal=subs.reduce((a,s)=>a+s.price,0);
+    let expenseHTML=b.expenses.map(item=>`
       <div class="budget-item-row">
-        <input
-          class="budget-item-name"
-          placeholder="e.g. Rent"
-          value="${item.name}"
-          onchange="onBudgetChange('expense', ${item.id}, 'name', this.value)"
-        />
-        <input
-          class="budget-item-amt"
-          type="number"
-          placeholder="₹"
-          value="${item.amount || ''}"
-          onchange="onBudgetChange('expense', ${item.id}, 'amount', this.value)"
-        />
-        <button class="budget-del-btn" onclick="deleteBudgetItem('expense', ${item.id})">✕</button>
+        <input class="budget-item-name" placeholder="${mode==='student'?'e.g. Food, Recharge':'e.g. Rent'}" value="${item.name}" onchange="onBudgetChange('expense',${item.id},'name',this.value)"/>
+        <input class="budget-item-amt" type="number" placeholder="₹" value="${item.amount||''}" onchange="onBudgetChange('expense',${item.id},'amount',this.value)"/>
+        <button class="budget-del-btn" onclick="deleteBudgetItem('expense',${item.id})">✕</button>
       </div>`).join('');
- 
-    // Add subscriptions as a locked read-only row (auto-synced)
-    if (subTotal > 0) {
-      expenseHTML += `
+    if(subTotal>0){
+      expenseHTML+=`
         <div class="budget-item-row" style="opacity:.7">
           <input class="budget-item-name" value="📱 Subscriptions (auto)" readonly style="cursor:default"/>
           <input class="budget-item-amt" value="${subTotal}" readonly style="cursor:default;color:var(--orange)"/>
           <button class="budget-del-btn" style="opacity:0;pointer-events:none">✕</button>
         </div>`;
     }
- 
-    document.getElementById('expenseList').innerHTML = expenseHTML;
+    document.getElementById('expenseList').innerHTML=expenseHTML;
     updateBudgetSummary(b);
   }
- 
-  // Update the summary section (bars, remaining, savings rate, breakdown)
+
   function updateBudgetSummary(b) {
-    const subs        = loadSubs();
-    const subTotal    = subs.reduce((a,s) => a+s.price, 0);
-    const totalIncome = b.income.reduce((a,i) => a+i.amount, 0);
-    const manualExp   = b.expenses.reduce((a,i) => a+i.amount, 0);
-    const totalExp    = manualExp + subTotal;
-    const remaining   = totalIncome - totalExp;
-    const savingsRate = totalIncome > 0 ? Math.round((remaining/totalIncome)*100) : 0;
-    const expPct      = totalIncome > 0 ? Math.min(Math.round((totalExp/totalIncome)*100), 100) : 0;
- 
-    // Update numbers
-    document.getElementById('budgetTotalIncome').textContent  = '₹'+totalIncome.toLocaleString('en-IN');
-    document.getElementById('budgetTotalExpense').textContent = '₹'+totalExp.toLocaleString('en-IN');
-    document.getElementById('budgetRemainingAmt').textContent = '₹'+Math.abs(remaining).toLocaleString('en-IN');
- 
-    // Expense bar width
-    document.getElementById('budgetExpenseBar').style.width = expPct+'%';
- 
-    // Remaining box color + verdict
-    const box = document.getElementById('budgetRemaining');
-    const verdict = document.getElementById('budgetVerdict');
-    if (totalIncome === 0) {
-      box.className = 'budget-remaining good';
-      verdict.textContent = 'Enter your monthly income above to see your full picture.';
-    } else if (remaining >= 0) {
-      if (savingsRate >= 20) {
-        box.className = 'budget-remaining good';
-        verdict.textContent = `🎉 Amazing! You're saving ${savingsRate}% of your income. You're ahead of most Indians!`;
-      } else if (savingsRate >= 10) {
-        box.className = 'budget-remaining warn';
-        verdict.textContent = `⚠️ You're saving ${savingsRate}%. Try to reach 20% — cut one subscription to get there.`;
-      } else {
-        box.className = 'budget-remaining warn';
-        verdict.textContent = `📈 Only saving ${savingsRate}%. Review your biggest expenses and try to free up more.`;
-      }
+    const subs=loadSubs();
+    const subTotal=subs.reduce((a,s)=>a+s.price,0);
+    const totalIncome=b.income.reduce((a,i)=>a+i.amount,0);
+    const manualExp=b.expenses.reduce((a,i)=>a+i.amount,0);
+    const totalExp=manualExp+subTotal;
+    const remaining=totalIncome-totalExp;
+    const savingsRate=totalIncome>0?Math.round((remaining/totalIncome)*100):0;
+    const expPct=totalIncome>0?Math.min(Math.round((totalExp/totalIncome)*100),100):0;
+    document.getElementById('budgetTotalIncome').textContent='₹'+totalIncome.toLocaleString('en-IN');
+    document.getElementById('budgetTotalExpense').textContent='₹'+totalExp.toLocaleString('en-IN');
+    document.getElementById('budgetRemainingAmt').textContent='₹'+Math.abs(remaining).toLocaleString('en-IN');
+    document.getElementById('budgetExpenseBar').style.width=expPct+'%';
+    const box=document.getElementById('budgetRemaining');
+    const verdict=document.getElementById('budgetVerdict');
+    if(totalIncome===0){
+      box.className='budget-remaining good';
+      verdict.textContent='Enter your monthly income above to see your full picture.';
+    } else if(remaining>=0){
+      if(savingsRate>=20){box.className='budget-remaining good';verdict.textContent=`🎉 Amazing! You're saving ${savingsRate}% of your income. You're ahead of most Indians!`;}
+      else if(savingsRate>=10){box.className='budget-remaining warn';verdict.textContent=`⚠️ You're saving ${savingsRate}%. Try to reach 20% — cut one subscription to get there.`;}
+      else{box.className='budget-remaining warn';verdict.textContent=`📈 Only saving ${savingsRate}%. Review your biggest expenses and try to free up more.`;}
     } else {
-      box.className = 'budget-remaining bad';
-      document.getElementById('budgetRemainingAmt').textContent = '-₹'+Math.abs(remaining).toLocaleString('en-IN');
-      verdict.textContent = `🚨 You're overspending by ₹${Math.abs(remaining).toLocaleString('en-IN')}/mo! Cut expenses immediately.`;
+      box.className='budget-remaining bad';
+      document.getElementById('budgetRemainingAmt').textContent='-₹'+Math.abs(remaining).toLocaleString('en-IN');
+      verdict.textContent=`🚨 You're overspending by ₹${Math.abs(remaining).toLocaleString('en-IN')}/mo! Cut expenses immediately.`;
     }
- 
-    // Savings rate ring
-    // Ring circumference = 2 × π × 25 ≈ 157
-    const clampedRate = Math.max(0, Math.min(savingsRate, 100));
-    const ringFill    = document.getElementById('budgetRateRing');
-    const rateNum     = document.getElementById('budgetRateNum');
-    const rateColor   = savingsRate >= 20 ? 'var(--green)' : savingsRate >= 10 ? 'var(--orange)' : 'var(--red)';
-    setTimeout(() => {
-      ringFill.style.strokeDashoffset = 157 - (clampedRate/100)*157;
-      ringFill.style.stroke = rateColor;
-    }, 300);
-    rateNum.textContent = clampedRate+'%';
-    rateNum.style.color = rateColor;
- 
-    // Expense breakdown by category
-    const categories = {};
-    b.expenses.forEach(i => {
-      if (i.amount > 0) categories[i.name || 'Other'] = (categories[i.name || 'Other']||0)+i.amount;
-    });
-    if (subTotal > 0) categories['Subscriptions'] = (categories['Subscriptions']||0)+subTotal;
- 
-    const catEntries = Object.entries(categories).sort((a,b) => b[1]-a[1]);
-    const maxCat = catEntries.length ? catEntries[0][1] : 1;
-    const catColors = ['#FF5A3C','#FF9500','#FFD60A','#4A90FF','#9B59F5','#00E5A0','#FF6B9D'];
- 
-    if (catEntries.length) {
-      document.getElementById('budgetBreakdown').innerHTML = catEntries.map(([name, amt], i) => {
-        const pct = totalExp > 0 ? Math.round((amt/totalExp)*100) : 0;
-        return `
-          <div class="budget-cat-row">
-            <div class="budget-cat-name">${name}</div>
-            <div class="budget-cat-bar-bg">
-              <div class="budget-cat-bar" style="width:${Math.round((amt/maxCat)*100)}%;background:${catColors[i%catColors.length]}"></div>
-            </div>
-            <div class="budget-cat-amt">₹${amt.toLocaleString('en-IN')}</div>
-            <div class="budget-cat-pct">${pct}%</div>
-          </div>`;
+    const clampedRate=Math.max(0,Math.min(savingsRate,100));
+    const ringFill=document.getElementById('budgetRateRing');
+    const rateNum=document.getElementById('budgetRateNum');
+    const rateColor=savingsRate>=20?'var(--green)':savingsRate>=10?'var(--orange)':'var(--red)';
+    setTimeout(()=>{ringFill.style.strokeDashoffset=157-(clampedRate/100)*157;ringFill.style.stroke=rateColor;},300);
+    rateNum.textContent=clampedRate+'%';
+    rateNum.style.color=rateColor;
+    const categories={};
+    b.expenses.forEach(i=>{if(i.amount>0)categories[i.name||'Other']=(categories[i.name||'Other']||0)+i.amount;});
+    if(subTotal>0)categories['Subscriptions']=(categories['Subscriptions']||0)+subTotal;
+    const catEntries=Object.entries(categories).sort((a,b)=>b[1]-a[1]);
+    const maxCat=catEntries.length?catEntries[0][1]:1;
+    const catColors=['#FF5A3C','#FF9500','#FFD60A','#4A90FF','#9B59F5','#00E5A0','#FF6B9D'];
+    if(catEntries.length){
+      document.getElementById('budgetBreakdown').innerHTML=catEntries.map(([name,amt],i)=>{
+        const pct=totalExp>0?Math.round((amt/totalExp)*100):0;
+        return `<div class="budget-cat-row"><div class="budget-cat-name">${name}</div><div class="budget-cat-bar-bg"><div class="budget-cat-bar" style="width:${Math.round((amt/maxCat)*100)}%;background:${catColors[i%catColors.length]}"></div></div><div class="budget-cat-amt">₹${amt.toLocaleString('en-IN')}</div><div class="budget-cat-pct">${pct}%</div></div>`;
       }).join('');
     } else {
-      document.getElementById('budgetBreakdown').innerHTML = `<div style="font-size:13px;color:var(--text3)">Add expenses to see breakdown.</div>`;
+      document.getElementById('budgetBreakdown').innerHTML=`<div style="font-size:13px;color:var(--text3)">Add expenses to see breakdown.</div>`;
     }
- 
-    // Update savings rate subtitle
-    document.getElementById('budgetRateSub').innerHTML = savingsRate >= 20
-      ? `✅ You're hitting the <strong>20% savings rule</strong>. Great financial discipline!`
-      : `Financial rule of thumb: save at least <strong>20%</strong> of your income every month. You're at ${savingsRate}%.`;
+    document.getElementById('budgetRateSub').innerHTML=savingsRate>=20
+      ?`✅ You're hitting the <strong>20% savings rule</strong>. Great financial discipline!`
+      :`Financial rule of thumb: save at least <strong>20%</strong> of your income every month. You're at ${savingsRate}%.`;
   }
- 
-  // Initialize budget on page load (call this inside your init() function)
-  // ADD THIS LINE inside your existing init() function:
-  // renderBudget();
- 
-  // Run when page loads
+
+  // ── INIT ─────────────────────────────────────────────────
+  function init() {
+    currentLesson = parseInt(localStorage.getItem('tw_lesson_index') || '0');
+    const savedTheme = localStorage.getItem(THEME_KEY) || 'night';
+    setTheme(savedTheme);
+    const savedMode = getMode();
+    if (!savedMode) {
+      // First time — show mode selector
+      document.getElementById('mode-selector').classList.remove('hidden');
+      return;
+    }
+    document.getElementById('mode-selector').classList.add('hidden');
+    initApp();
+  }
+
+  function initApp() {
+    const savedTheme = localStorage.getItem(THEME_KEY) || 'night';
+    setTheme(savedTheme);
+    const mode = getMode() || 'pro';
+    applyMode(mode);
+    const state = loadRetention();
+    const result = updateStreak(state);
+    saveRetention(state);
+    showStreakBanner(state, result);
+    renderHealth(state);
+    refreshAll();
+  }
+
   init();
   </script>
 </body>
