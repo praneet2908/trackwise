@@ -668,6 +668,22 @@
           </div>
         </div>
       </div>
+      <!-- RBI EMI WARNING -->
+        <div id="rbi-emi-warning" style="display:none;margin-top:14px;padding:14px 18px;
+          background:var(--red-bg);border:1.5px solid var(--red);border-radius:12px;
+          align-items:flex-start;gap:12px;">
+          <div style="font-size:22px;flex-shrink:0">⚠️</div>
+          <div>
+            <div style="font-family:var(--font-head);font-size:14px;font-weight:700;
+              color:var(--red);margin-bottom:4px">RBI Caution Zone</div>
+            <div style="font-size:13px;color:var(--text2);line-height:1.6">
+              Your EMIs + SIP + Insurance = <strong id="rbi-emi-amt">₹0</strong> 
+              which is <strong id="rbi-emi-pct">0%</strong> of your income.<br/>
+              RBI recommends total EMIs should not exceed <strong>50% of monthly income</strong> 
+              to stay financially healthy.
+            </div>
+          </div>
+        </div>
     </div>
 
     <!-- SAVINGS GOAL -->
@@ -795,6 +811,9 @@
     <div class="footer-tagline">Stop wasting money. Start living better.</div>
     <div class="footer-made">Made with <span>❤️</span> in India 🇮🇳</div>
     <div class="footer-copy">© 2026 TrackWise AI. Built for Bharat. Running 100% offline.</div>
+    <div class="footer-copy" style="margin-top:8px;font-size:11px;color:var(--text3);max-width:600px;margin-left:auto;margin-right:auto;line-height:1.6">
+  ⚠️ TrackWise AI is a personal finance awareness tool, not a SEBI-registered investment advisor or RBI-regulated entity. All suggestions are for educational purposes only. Please consult a certified financial advisor before making investment or financial decisions.
+</div>
   </footer>
 
   <script>
@@ -802,32 +821,62 @@
   //  TRACKWISE AI — FULLY OFFLINE, LOCAL-FIRST
   // ═══════════════════════════════════════════════════════════
 
-  const SUBS_KEY      = 'tw_subscriptions';
-  const KEPT_KEY      = 'tw_kept_subs';
-  const RETENTION_KEY = 'tw_retention';
-  const THEME_KEY     = 'tw_theme';
-  const MODE_KEY      = 'tw_mode';
-  const COLORS = ['#00E5A0','#FF5A3C','#FF9500','#4A90FF','#9B59F5','#FF6B9D','#00BFA5','#FFD60A','#FF4081','#7C4DFF'];
+  const THEME_KEY = 'tw_theme';
+const MODE_KEY  = 'tw_mode';
 
+function getModePrefix() {
+  return (localStorage.getItem(MODE_KEY) || 'pro') + '_';
+}
+function SUBS_KEY()      { return getModePrefix() + 'subscriptions'; }
+function KEPT_KEY()      { return getModePrefix() + 'kept_subs'; }
+function RETENTION_KEY() { return getModePrefix() + 'retention'; }
+function BUDGET_KEY()    { return getModePrefix() + 'budget'; }
   let chartInst = null;
 
   // ── STORAGE HELPERS ──────────────────────────────────────
-  function loadSubs() {
-    try { return JSON.parse(localStorage.getItem(SUBS_KEY)) || []; } catch(e) { return []; }
-  }
-  function saveSubs(subs) { localStorage.setItem(SUBS_KEY, JSON.stringify(subs)); }
-  function loadKept() {
-    try { return JSON.parse(localStorage.getItem(KEPT_KEY)) || []; } catch(e) { return []; }
-  }
-  function saveKept(kept) { localStorage.setItem(KEPT_KEY, JSON.stringify(kept)); }
-  function loadRetention() {
-    try {
-      const r = localStorage.getItem(RETENTION_KEY);
-      if (r) return JSON.parse(r);
-    } catch(e) {}
-    return { healthScore:50, cancelCount:0, freeAltCount:0, goalSet:false, streakDays:0, lastVisitDate:null };
-  }
-  function saveRetention(s) { localStorage.setItem(RETENTION_KEY, JSON.stringify(s)); }
+// Each mode (student/pro) gets its own separate data.
+// Dad's data = pro_subscriptions, Son's data = student_subscriptions
+
+function getModePrefix() {
+  return (localStorage.getItem(MODE_KEY) || 'pro') + '_';
+}
+function SUBS_KEY()      { return getModePrefix() + 'subscriptions'; }
+function KEPT_KEY()      { return getModePrefix() + 'kept_subs'; }
+function RETENTION_KEY() { return getModePrefix() + 'retention'; }
+function BUDGET_KEY()    { return getModePrefix() + 'budget'; }
+
+function loadSubs() {
+  try { return JSON.parse(localStorage.getItem(SUBS_KEY())) || []; } catch(e) { return []; }
+}
+function saveSubs(subs) {
+  localStorage.setItem(SUBS_KEY(), JSON.stringify(subs));
+}
+function loadKept() {
+  try { return JSON.parse(localStorage.getItem(KEPT_KEY())) || []; } catch(e) { return []; }
+}
+function saveKept(kept) {
+  localStorage.setItem(KEPT_KEY(), JSON.stringify(kept));
+}
+function loadRetention() {
+  try {
+    const r = localStorage.getItem(RETENTION_KEY());
+    if (r) return JSON.parse(r);
+  } catch(e) {}
+  return { healthScore:50, cancelCount:0, freeAltCount:0, goalSet:false, streakDays:0, lastVisitDate:null };
+}
+function saveRetention(s) {
+  localStorage.setItem(RETENTION_KEY(), JSON.stringify(s));
+}
+function loadBudget() {
+  try {
+    const b = localStorage.getItem(BUDGET_KEY());
+    if (b) return JSON.parse(b);
+  } catch(e) {}
+  return { income: DEFAULT_INCOME, expenses: DEFAULT_EXPENSES };
+}
+function saveBudget(b) {
+  localStorage.setItem(BUDGET_KEY(), JSON.stringify(b));
+}
 
   // ── FREE ALTERNATIVES DATA ───────────────────────────────
   const FREE_ALTS = {
@@ -1519,6 +1568,19 @@ Give them 3-4 specific, actionable money-saving tips in 100 words. Be conversati
     const remaining=totalIncome-totalExp;
     const savingsRate=totalIncome>0?Math.round((remaining/totalIncome)*100):0;
     const expPct=totalIncome>0?Math.min(Math.round((totalExp/totalIncome)*100),100):0;
+    // ── RBI EMI RULE ─────────────────────────────────────────
+// RBI says total EMIs should not exceed 50% of monthly income
+const emiTotal = loadSubs()
+  .filter(s => ['EMI', 'Insurance', 'SIP'].includes(s.category))
+  .reduce((a, s) => a + s.price, 0);
+const emiPct = totalIncome > 0 ? Math.round((emiTotal / totalIncome) * 100) : 0;
+if (emiPct > 50 && totalIncome > 0) {
+  document.getElementById('rbi-emi-warning').style.display = 'flex';
+  document.getElementById('rbi-emi-pct').textContent = emiPct + '%';
+  document.getElementById('rbi-emi-amt').textContent = '₹' + emiTotal.toLocaleString('en-IN');
+} else {
+  document.getElementById('rbi-emi-warning').style.display = 'none';
+}
     document.getElementById('budgetTotalIncome').textContent='₹'+totalIncome.toLocaleString('en-IN');
     document.getElementById('budgetTotalExpense').textContent='₹'+totalExp.toLocaleString('en-IN');
     document.getElementById('budgetRemainingAmt').textContent='₹'+Math.abs(remaining).toLocaleString('en-IN');
