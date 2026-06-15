@@ -1283,12 +1283,16 @@ Give them 3-4 specific, actionable money-saving tips in 100 words. Be conversati
   function getMode() { return localStorage.getItem(MODE_KEY) || null; }
   function saveMode(mode) { localStorage.setItem(MODE_KEY, mode); }
 
-  function selectMode(mode) {
-    saveMode(mode);
-    document.getElementById('mode-selector').classList.add('hidden');
+ function selectMode(mode) {
+  saveMode(mode);
+  document.getElementById('mode-selector').classList.add('hidden');
+  
+  // Small delay to let the DOM settle before initialising
+  setTimeout(() => {
     applyMode(mode);
     initApp();
-  }
+  }, 50);
+}
 
   function applyMode(mode) {
     const html = document.documentElement;
