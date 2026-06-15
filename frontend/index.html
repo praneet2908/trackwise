@@ -1245,13 +1245,13 @@ The user has these subscriptions: ${subList}.
 Total monthly spend: ₹${data.total_monthly}. Estimated waste: ₹${data.wasted_amount}. Waste Score: ${data.score}/100.
 Give them 3-4 specific, actionable money-saving tips in 100 words. Be conversational, use ₹ symbol, mention specific subscription names. End with one motivating sentence.`;
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:300, messages:[{role:'user',content:prompt}] })
-      });
-      const d = await res.json();
-      const advice = d.content?.[0]?.text || 'Could not get advice right now. Try again!';
+      const res = await fetch('/api/ai-advice', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ prompt })
+});
+const d = await res.json();
+const advice = d.advice || 'Could not get advice right now. Try again!';
       text.textContent = advice;
       text.classList.remove('hidden');
     } catch(e) {
@@ -1498,10 +1498,10 @@ Give them 3-4 specific, actionable money-saving tips in 100 words. Be conversati
   ];
 
   function loadBudget() {
-    try { const b=localStorage.getItem(BUDGET_KEY); if(b)return JSON.parse(b); } catch(e) {}
+    try { const b=localStorage.getItem(BUDGET_KEY()); if(b)return JSON.parse(b); } catch(e) {}
     return { income:DEFAULT_INCOME, expenses:DEFAULT_EXPENSES };
   }
-  function saveBudget(b) { localStorage.setItem(BUDGET_KEY, JSON.stringify(b)); }
+  function saveBudget(b) { localStorage.setItem(BUDGET_KEY(), JSON.stringify(b)); }
 
   function addBudgetItem(type) {
     const b=loadBudget();
