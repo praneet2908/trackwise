@@ -817,6 +817,7 @@
   </footer>
 
   <script>
+    const COLORS = ['#00E5A0','#FF5A3C','#FF9500','#4A90FF','#9B59F5','#FF6B9D','#00BFA5','#FFD60A','#FF4081','#7C4DFF'];
   // ═══════════════════════════════════════════════════════════
   //  TRACKWISE AI — FULLY OFFLINE, LOCAL-FIRST
   // ═══════════════════════════════════════════════════════════
@@ -1187,7 +1188,7 @@ function saveBudget(b) {
           <div class="cat-amt">₹${values[i]}</div>
         </div>`).join('');
     }
-    const ctx=document.getElementById('catChart').getContext('2d');
+      const ctx=document.getElementById('catChart').getContext('2d');
     if (chartInst) chartInst.destroy();
     chartInst=new Chart(ctx,{
       type:'doughnut',
