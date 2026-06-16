@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="night">
 <head>
+  <!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/auth.js" defer></script>
   <link rel="manifest" href="/manifest.json"/>
   <meta name="theme-color" content="#00E5A0"/>
   <meta name="mobile-web-app-capable" content="yes"/>
@@ -468,6 +471,36 @@
     <button id="streak-close" onclick="document.getElementById('streak-banner').classList.remove('show')">✕</button>
   </div>
 
+  <!-- LOGIN SCREEN -->
+<div id="login-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;
+  background:var(--bg);z-index:6000;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:24px;text-align:center;">
+  <div style="font-size:40px;margin-bottom:16px">💸</div>
+  <div style="font-family:var(--font-head);font-size:28px;font-weight:800;
+    color:var(--green);margin-bottom:8px">TrackWise</div>
+  <div style="font-size:14px;color:var(--text3);margin-bottom:40px">
+    Your Money Co-Pilot 🇮🇳
+  </div>
+  <div style="background:var(--card);border:1px solid var(--border);
+    border-radius:20px;padding:32px;width:100%;max-width:400px;">
+    <div style="font-family:var(--font-head);font-size:18px;font-weight:700;
+      color:var(--text);margin-bottom:8px">Welcome back 👋</div>
+    <div style="font-size:13px;color:var(--text3);margin-bottom:24px">
+      Enter your email — we'll send you a magic link. No password needed.
+    </div>
+    <input type="email" id="loginEmail" class="form-input w-full"
+      placeholder="your@email.com" style="margin-bottom:12px"/>
+    <button id="loginBtn" class="btn btn-green w-full"
+      onclick="loginWithEmail(document.getElementById('loginEmail').value)">
+      ✨ Send Magic Link
+    </button>
+    <div id="loginMsg" style="font-size:13px;margin-top:12px;min-height:20px"></div>
+  </div>
+  <div style="font-size:11px;color:var(--text3);margin-top:24px;max-width:320px;line-height:1.6">
+    🔒 No password. No tracking. Your data syncs securely to the cloud.
+  </div>
+</div>
+
   <!-- MODE SELECTOR SCREEN — shown on first visit only -->
   <div id="mode-selector">
     <div class="mode-selector-logo">💸 TrackWise AI</div>
@@ -504,6 +537,7 @@
       <div class="logo"><span class="logo-icon">💸</span><span class="logo-text">TrackWise AI</span></div>
       <div class="header-right">
         <span class="tagline" id="taglineText">Your Pocket CA 🇮🇳</span>
+        <button class="mode-badge" id="authBtn" onclick="">🔑 Login</button>
         <button class="mode-badge" id="modeBadge" onclick="switchMode()">💼 Pro</button>
         <div class="theme-switcher">
           <button class="theme-btn active" id="btnNight" onclick="setTheme('night')">🌙 Night</button>
@@ -1637,19 +1671,23 @@ if (emiPct > 50 && totalIncome > 0) {
   }
 
   // ── INIT ─────────────────────────────────────────────────
-  function init() {
-    currentLesson = parseInt(localStorage.getItem('tw_lesson_index') || '0');
-    const savedTheme = localStorage.getItem(THEME_KEY) || 'night';
-    setTheme(savedTheme);
-    const savedMode = getMode();
-    if (!savedMode) {
-      // First time — show mode selector
-      document.getElementById('mode-selector').classList.remove('hidden');
+ function init() {
+  // Check if user is already logged in
+  sb.auth.getSession().then(({ data: { session } }) => {
+    if (!session) {
+      // Not logged in — show login screen
+      document.getElementById('login-screen').classList.remove('hidden');
+      const savedTheme = localStorage.getItem(THEME_KEY) || 'night';
+      setTheme(savedTheme);
       return;
     }
-    document.getElementById('mode-selector').classList.add('hidden');
-    initApp();
-  }
+    // Already logged in
+    currentUser = session.user;
+    document.getElementById('login-screen').classList.add('hidden');
+    updateAuthHeader();
+    onUserLoggedIn();
+  });
+}
 
   function initApp() {
     const savedTheme = localStorage.getItem(THEME_KEY) || 'night';
