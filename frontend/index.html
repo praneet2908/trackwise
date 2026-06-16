@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="night">
 <head>
+  <link rel="manifest" href="/manifest.json"/>
+  <meta name="theme-color" content="#00E5A0"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="TrackWise"/>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TrackWise AI — Stop Wasting Money</title>
@@ -1660,5 +1666,12 @@ if (emiPct > 50 && totalIncome > 0) {
 
   init();
   </script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+      .then(() => console.log('TrackWise SW registered'))
+      .catch(e => console.log('SW error:', e));
+  }
+</script>
 </body>
 </html>
