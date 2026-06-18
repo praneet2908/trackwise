@@ -1,5 +1,5 @@
 {
-  "name": "TrackWise",
+  "name": "TrackWise AI",
   "short_name": "TrackWise",
   "description": "Your Money Co-Pilot. Stop wasting money on subscriptions.",
   "start_url": "/",
@@ -7,5 +7,4 @@
   "background_color": "#080810",
   "theme_color": "#00E5A0",
   "orientation": "portrait"
-  
-}
+  }

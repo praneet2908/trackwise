@@ -1,183 +1,68 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="night">
 <head>
-  <!-- Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="/auth.js" defer></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TrackWise AI — Stop Wasting Money</title>
   <link rel="manifest" href="/manifest.json"/>
   <meta name="theme-color" content="#00E5A0"/>
   <meta name="mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
   <meta name="apple-mobile-web-app-title" content="TrackWise"/>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TrackWise AI — Stop Wasting Money</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
-    [data-theme="night"] {
-      --bg: #080810; --bg2: #0D0D1A; --card: #111122; --card2: #161628;
-      --border: #1E1E35; --border2: #252540; --text: #F0F0FF; --text2: #A0A0C0;
-      --text3: #606080; --green: #00E5A0; --green2: #00B87A;
-      --green-bg: rgba(0,229,160,0.08); --red: #FF5A3C;
-      --red-bg: rgba(255,90,60,0.1); --orange: #FF9500;
-      --orange-bg: rgba(255,149,0,0.1); --yellow: #FFD60A;
-      --blue: #4A90FF; --purple: #9B59F5; --health: #10b981;
-      --health-bg: rgba(16,185,129,0.08); --pulse: #f7c948;
-      --pulse-bg: rgba(247,201,72,0.08);
-      --glow: 0 0 40px rgba(0,229,160,0.15);
-      --shadow: 0 4px 24px rgba(0,0,0,0.4);
-      --radius: 16px; --font-head: 'Syne',sans-serif; --font-body: 'DM Sans',sans-serif;
-    }
-    [data-theme="sunrise"] {
-      --bg: #FFF8F0; --bg2: #FFF3E8; --card: #FFFFFF; --card2: #FFF8F2;
-      --border: #F0E8DC; --border2: #E8DDD0; --text: #1A1206; --text2: #6B5A45;
-      --text3: #A08060; --green: #00875A; --green2: #006644;
-      --green-bg: rgba(0,135,90,0.08); --red: #C93B1A;
-      --red-bg: rgba(201,59,26,0.08); --orange: #E06000;
-      --orange-bg: rgba(224,96,0,0.08); --yellow: #C07A00;
-      --blue: #1A5FCC; --purple: #6B35CC; --health: #059669;
-      --health-bg: rgba(5,150,105,0.08); --pulse: #b45309;
-      --pulse-bg: rgba(180,83,9,0.08);
-      --glow: 0 0 40px rgba(0,135,90,0.1);
-      --shadow: 0 4px 24px rgba(100,60,0,0.12);
-      --radius: 16px; --font-head: 'Syne',sans-serif; --font-body: 'DM Sans',sans-serif;
-    }
-
-    /* ── STUDENT THEME VARS ── */
-    [data-mode="student"][data-theme="night"] {
-      --green:    #9B59F5;
-      --green2:   #7D3FD4;
-      --green-bg: rgba(155,89,245,0.08);
-      --glow:     0 0 40px rgba(155,89,245,0.15);
-      --health:   #9B59F5;
-      --health-bg:rgba(155,89,245,0.08);
-      --pulse:    #FF6B9D;
-      --pulse-bg: rgba(255,107,157,0.08);
-    }
-    [data-mode="student"][data-theme="sunrise"] {
-      --green:    #6B35CC;
-      --green2:   #5025A8;
-      --green-bg: rgba(107,53,204,0.08);
-      --glow:     0 0 40px rgba(107,53,204,0.1);
-      --health:   #6B35CC;
-      --health-bg:rgba(107,53,204,0.08);
-      --pulse:    #C93B7A;
-      --pulse-bg: rgba(201,59,122,0.08);
-    }
-
+    [data-theme="night"]{--bg:#080810;--bg2:#0D0D1A;--card:#111122;--card2:#161628;--border:#1E1E35;--border2:#252540;--text:#F0F0FF;--text2:#A0A0C0;--text3:#606080;--green:#00E5A0;--green2:#00B87A;--green-bg:rgba(0,229,160,0.08);--red:#FF5A3C;--red-bg:rgba(255,90,60,0.1);--orange:#FF9500;--orange-bg:rgba(255,149,0,0.1);--yellow:#FFD60A;--blue:#4A90FF;--purple:#9B59F5;--health:#10b981;--health-bg:rgba(16,185,129,0.08);--pulse:#f7c948;--pulse-bg:rgba(247,201,72,0.08);--glow:0 0 40px rgba(0,229,160,0.15);--shadow:0 4px 24px rgba(0,0,0,0.4);--radius:16px;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
+    [data-theme="sunrise"]{--bg:#FFF8F0;--bg2:#FFF3E8;--card:#FFFFFF;--card2:#FFF8F2;--border:#F0E8DC;--border2:#E8DDD0;--text:#1A1206;--text2:#6B5A45;--text3:#A08060;--green:#00875A;--green2:#006644;--green-bg:rgba(0,135,90,0.08);--red:#C93B1A;--red-bg:rgba(201,59,26,0.08);--orange:#E06000;--orange-bg:rgba(224,96,0,0.08);--yellow:#C07A00;--blue:#1A5FCC;--purple:#6B35CC;--health:#059669;--health-bg:rgba(5,150,105,0.08);--pulse:#b45309;--pulse-bg:rgba(180,83,9,0.08);--glow:0 0 40px rgba(0,135,90,0.1);--shadow:0 4px 24px rgba(100,60,0,0.12);--radius:16px;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
+    [data-mode="student"][data-theme="night"]{--green:#9B59F5;--green2:#7D3FD4;--green-bg:rgba(155,89,245,0.08);--glow:0 0 40px rgba(155,89,245,0.15);--health:#9B59F5;--health-bg:rgba(155,89,245,0.08);--pulse:#FF6B9D;--pulse-bg:rgba(255,107,157,0.08)}
+    [data-mode="student"][data-theme="sunrise"]{--green:#6B35CC;--green2:#5025A8;--green-bg:rgba(107,53,204,0.08);--glow:0 0 40px rgba(107,53,204,0.1);--health:#6B35CC;--health-bg:rgba(107,53,204,0.08);--pulse:#C93B7A;--pulse-bg:rgba(201,59,122,0.08)}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;transition:background 0.4s,color 0.4s;overflow-x:hidden}
-
-    /* ── MODE SELECTOR SCREEN ── */
-    #mode-selector {
-      position: fixed; top:0; left:0; width:100%; height:100%;
-      background: var(--bg); z-index: 5000;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 24px; text-align: center;
-    }
-    #mode-selector.hidden { display: none !important; }
-    .mode-selector-logo {
-      font-family: var(--font-head); font-size: 28px; font-weight: 800;
-      color: var(--green); margin-bottom: 8px;
-    }
-    .mode-selector-sub {
-      font-size: 14px; color: var(--text3); margin-bottom: 40px;
-    }
-    .mode-cards {
-      display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
-      max-width: 700px; width: 100%;
-    }
-    .mode-card {
-      flex: 1; min-width: 260px; max-width: 320px;
-      background: var(--card); border: 2px solid var(--border);
-      border-radius: 20px; padding: 32px 24px;
-      cursor: pointer; transition: all 0.25s;
-      position: relative; overflow: hidden;
-    }
-    .mode-card:hover { transform: translateY(-4px); }
-    .mode-card.student:hover { border-color: #9B59F5; box-shadow: 0 20px 60px rgba(155,89,245,0.15); }
-    .mode-card.pro:hover     { border-color: var(--green); box-shadow: 0 20px 60px rgba(0,229,160,0.15); }
-    .mode-card-emoji { font-size: 52px; margin-bottom: 16px; display: block; }
-    .mode-card-title {
-      font-family: var(--font-head); font-size: 22px; font-weight: 800;
-      margin-bottom: 8px;
-    }
-    .mode-card.student .mode-card-title { color: #9B59F5; }
-    .mode-card.pro     .mode-card-title { color: var(--green); }
-    .mode-card-desc { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 20px; }
-    .mode-card-tags { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
-    .mode-tag {
-      font-size: 11px; font-weight: 600; padding: 3px 10px;
-      border-radius: 20px; background: var(--card2);
-      border: 1px solid var(--border); color: var(--text3);
-    }
-    .mode-card.student .mode-tag { background: rgba(155,89,245,0.1); border-color: rgba(155,89,245,0.2); color: #9B59F5; }
-    .mode-card.pro .mode-tag     { background: var(--green-bg); border-color: rgba(0,229,160,0.2); color: var(--green); }
-    .mode-selector-note { font-size: 12px; color: var(--text3); margin-top: 24px; }
-
-    /* ── MODE BADGE in header ── */
-    .mode-badge {
-      font-size: 11px; font-weight: 700; padding: 4px 12px;
-      border-radius: 20px; cursor: pointer; transition: all 0.2s;
-      border: 1.5px solid var(--border); color: var(--text2);
-      background: transparent; font-family: var(--font-body);
-    }
-    .mode-badge:hover { border-color: var(--green); color: var(--green); }
-
-    /* ── FINANCE LESSON CARD ── */
-    #finance-lesson {
-      display: none;
-      background: var(--card);
-      border: 1.5px solid #9B59F5;
-      border-radius: var(--radius);
-      padding: 20px 24px;
-      position: relative; overflow: hidden;
-    }
-    #finance-lesson.show { display: block; animation: pulseIn 0.5s ease; }
-    #finance-lesson::before {
-      content: ''; position: absolute; top: -30px; right: -30px;
-      width: 100px; height: 100px;
-      background: radial-gradient(circle, rgba(155,89,245,0.12), transparent 70%);
-      border-radius: 50%; pointer-events: none;
-    }
-    .lesson-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-    .lesson-icon { font-size: 24px; }
-    .lesson-label {
-      font-size: 10px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.1em; color: #9B59F5;
-    }
-    .lesson-title {
-      font-family: var(--font-head); font-size: 16px; font-weight: 700;
-      color: var(--text); margin-bottom: 6px;
-    }
-    .lesson-body { font-size: 13px; color: var(--text2); line-height: 1.65; margin-bottom: 12px; }
-    .lesson-highlight {
-      background: rgba(155,89,245,0.1); border: 1px solid rgba(155,89,245,0.2);
-      border-radius: 8px; padding: 10px 14px;
-      font-size: 13px; font-weight: 600; color: #9B59F5;
-    }
-    .lesson-next-btn {
-      background: none; border: none; cursor: pointer;
-      font-size: 12px; color: var(--text3); margin-top: 10px;
-      text-decoration: underline; font-family: var(--font-body);
-      transition: color 0.2s; display: block;
-    }
-    .lesson-next-btn:hover { color: #9B59F5; }
-
-    /* STREAK BANNER */
+    #pwa-banner{display:none;background:linear-gradient(135deg,#00E5A0,#00B87A);color:#000;padding:12px 20px;position:relative;z-index:200;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    #pwa-banner.show{display:flex}
+    .pwa-banner-text{font-size:13px;font-weight:600;flex:1}
+    .pwa-banner-btn{background:#000;color:#00E5A0;border:none;border-radius:20px;padding:6px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-body)}
+    .pwa-banner-close{background:none;border:none;cursor:pointer;font-size:18px;color:#000;opacity:.6;padding:0 4px}
+    #mode-selector{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);z-index:5000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
+    #mode-selector.hidden{display:none!important}
+    .mode-selector-logo{font-family:var(--font-head);font-size:28px;font-weight:800;color:var(--green);margin-bottom:8px}
+    .mode-selector-sub{font-size:14px;color:var(--text3);margin-bottom:40px}
+    .mode-cards{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;max-width:700px;width:100%}
+    .mode-card{flex:1;min-width:260px;max-width:320px;background:var(--card);border:2px solid var(--border);border-radius:20px;padding:32px 24px;cursor:pointer;transition:all 0.25s}
+    .mode-card:hover{transform:translateY(-4px)}
+    .mode-card.student:hover{border-color:#9B59F5;box-shadow:0 20px 60px rgba(155,89,245,0.15)}
+    .mode-card.pro:hover{border-color:var(--green);box-shadow:0 20px 60px rgba(0,229,160,0.15)}
+    .mode-card-emoji{font-size:52px;margin-bottom:16px;display:block}
+    .mode-card-title{font-family:var(--font-head);font-size:22px;font-weight:800;margin-bottom:8px}
+    .mode-card.student .mode-card-title{color:#9B59F5}
+    .mode-card.pro .mode-card-title{color:var(--green)}
+    .mode-card-desc{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:20px}
+    .mode-card-tags{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+    .mode-tag{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;background:var(--card2);border:1px solid var(--border);color:var(--text3)}
+    .mode-card.student .mode-tag{background:rgba(155,89,245,0.1);border-color:rgba(155,89,245,0.2);color:#9B59F5}
+    .mode-card.pro .mode-tag{background:var(--green-bg);border-color:rgba(0,229,160,0.2);color:var(--green)}
+    .mode-selector-note{font-size:12px;color:var(--text3);margin-top:24px}
+    .mode-badge{font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;cursor:pointer;transition:all 0.2s;border:1.5px solid var(--border);color:var(--text2);background:transparent;font-family:var(--font-body)}
+    .mode-badge:hover{border-color:var(--green);color:var(--green)}
+    #finance-lesson{display:none;background:var(--card);border:1.5px solid #9B59F5;border-radius:var(--radius);padding:20px 24px;position:relative;overflow:hidden}
+    #finance-lesson.show{display:block;animation:pulseIn 0.5s ease}
+    #finance-lesson::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:radial-gradient(circle,rgba(155,89,245,0.12),transparent 70%);border-radius:50%;pointer-events:none}
+    .lesson-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .lesson-icon{font-size:24px}
+    .lesson-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#9B59F5}
+    .lesson-title{font-family:var(--font-head);font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px}
+    .lesson-body{font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:12px}
+    .lesson-highlight{background:rgba(155,89,245,0.1);border:1px solid rgba(155,89,245,0.2);border-radius:8px;padding:10px 14px;font-size:13px;font-weight:600;color:#9B59F5}
+    .lesson-next-btn{background:none;border:none;cursor:pointer;font-size:12px;color:var(--text3);margin-top:10px;text-decoration:underline;font-family:var(--font-body);transition:color 0.2s;display:block}
+    .lesson-next-btn:hover{color:#9B59F5}
     #streak-banner{display:none;background:linear-gradient(135deg,#ff6b35,#f7c948);color:#1a1206;text-align:center;padding:11px 16px;font-weight:700;font-size:.9rem;position:relative;z-index:50}
     #streak-banner.show{display:block;animation:slideDown .5s ease}
     @keyframes slideDown{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}
     #streak-close{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:#1a1206;opacity:.6}
-
-    /* TOAST */
     #tw-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--health);color:#fff;padding:10px 22px;border-radius:30px;font-weight:700;font-size:14px;z-index:9999;opacity:0;transition:all .35s ease;pointer-events:none;white-space:nowrap}
     #tw-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-    /* HEADER */
     .header{background:var(--card);border-bottom:1px solid var(--border);padding:0 28px;height:68px;position:sticky;top:0;z-index:100}
     .header-inner{max-width:1000px;margin:0 auto;height:100%;display:flex;align-items:center;justify-content:space-between}
     .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
@@ -189,11 +74,7 @@
     .theme-btn{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:transparent;color:var(--text2);transition:all .2s;font-family:var(--font-body)}
     .theme-btn.active{background:var(--green);color:#000;border-color:var(--green)}
     .theme-btn:hover:not(.active){border-color:var(--green);color:var(--green)}
-
-    /* MAIN */
     .main{max-width:1000px;margin:0 auto;padding:32px 28px;display:flex;flex-direction:column;gap:20px}
-
-    /* CARDS */
     .card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);transition:background .4s,border-color .4s}
     .card-pad{padding:28px}
     .sec-title{font-family:var(--font-head);font-size:15px;font-weight:700;display:flex;align-items:center;gap:10px;color:var(--text);flex-wrap:wrap;margin-bottom:20px}
@@ -201,8 +82,6 @@
     .badge-red{background:var(--red-bg);color:var(--red)}
     .badge-orange{background:var(--orange-bg);color:var(--orange)}
     .badge-green{background:var(--green-bg);color:var(--green)}
-
-    /* SCORE */
     .score-section{display:grid;grid-template-columns:1fr 1fr;gap:20px}
     .score-card{display:flex;flex-direction:column;align-items:center;text-align:center;padding:36px 28px;position:relative;overflow:hidden}
     .score-card::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(0,229,160,.06),transparent 70%);pointer-events:none}
@@ -210,11 +89,7 @@
     .score-num{font-family:var(--font-head);font-size:100px;font-weight:800;line-height:1;color:var(--green);transition:color .4s}
     .score-num.yellow{color:var(--yellow)}.score-num.orange{color:var(--orange)}.score-num.red{color:var(--red)}
     .score-grade{font-family:var(--font-head);font-size:18px;font-weight:800;padding:4px 18px;border-radius:8px;margin:8px 0 4px}
-    .grade-a{background:var(--green-bg);color:var(--green)}
-    .grade-b{background:rgba(74,144,255,.1);color:var(--blue)}
-    .grade-c{background:rgba(255,214,10,.1);color:var(--yellow)}
-    .grade-d{background:var(--orange-bg);color:var(--orange)}
-    .grade-f{background:var(--red-bg);color:var(--red)}
+    .grade-a{background:var(--green-bg);color:var(--green)}.grade-b{background:rgba(74,144,255,.1);color:var(--blue)}.grade-c{background:rgba(255,214,10,.1);color:var(--yellow)}.grade-d{background:var(--orange-bg);color:var(--orange)}.grade-f{background:var(--red-bg);color:var(--red)}
     .score-out{font-size:11px;color:var(--text3)}
     .score-verdict{font-size:13px;color:var(--text2);margin:10px 0;line-height:1.5}
     .score-stats{display:flex;gap:28px;margin:14px 0}
@@ -222,15 +97,11 @@
     .stat-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
     .stat-val{font-family:var(--font-head);font-size:20px;font-weight:700;color:var(--text)}
     .stat-val.danger{color:var(--red)}
-
-    /* AI CARD */
     .ai-card{background:linear-gradient(135deg,#003D2A 0%,#001A12 100%);border:1px solid rgba(0,229,160,.2);border-radius:var(--radius);padding:28px;display:flex;flex-direction:column;gap:14px;min-height:200px}
     .ai-header{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(0,229,160,.6)}
     .ai-text{font-size:14px;line-height:1.75;color:rgba(255,255,255,.85);flex:1}
     .ai-empty{font-size:13px;color:rgba(255,255,255,.4);line-height:1.7;flex:1}
     .ai-loading{font-size:13px;color:rgba(0,229,160,.7);line-height:1.7;flex:1;font-style:italic}
-
-    /* BUTTONS */
     .btn{padding:13px 24px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-family:var(--font-body)}
     .btn-green{background:var(--green);color:#000}
     .btn-green:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:var(--glow)}
@@ -238,8 +109,6 @@
     .btn-ghost:hover{background:var(--green);color:#000}
     .btn-disabled{opacity:.5;pointer-events:none}
     .w-full{width:100%}
-
-    /* WEEKLY PULSE */
     #weekly-pulse-section{display:none;background:var(--card);border:1.5px solid var(--pulse);border-radius:var(--radius);padding:24px;position:relative;overflow:hidden}
     #weekly-pulse-section.show{display:block;animation:pulseIn .6s ease}
     @keyframes pulseIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
@@ -257,8 +126,6 @@
     .streak-fire{font-size:1.2rem;animation:flicker 1.5s infinite alternate}
     @keyframes flicker{from{filter:brightness(1)}to{filter:brightness(1.4)}}
     .streak-num{font-family:var(--font-head);font-size:1rem;font-weight:800;color:#ff6b35}
-
-    /* HEALTH SCORE */
     #health-score-section{background:var(--card);border:1.5px solid var(--health);border-radius:var(--radius);padding:24px;position:relative;overflow:hidden}
     #health-score-section::before{content:'';position:absolute;bottom:-40px;left:-40px;width:150px;height:150px;background:radial-gradient(circle,var(--health-bg),transparent 70%);border-radius:50%;pointer-events:none}
     .health-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;gap:16px}
@@ -283,8 +150,6 @@
     .health-bar-wrap{height:5px;background:var(--border);border-radius:5px;margin-top:16px;overflow:hidden}
     .health-bar-fill{height:100%;background:linear-gradient(90deg,var(--health),#34d399);border-radius:5px;transition:width 1.2s cubic-bezier(.4,0,.2,1);width:0%}
     .health-tip{margin-top:11px;font-size:12px;color:var(--health);text-align:center;font-style:italic;min-height:16px}
-
-    /* CUT PLAN */
     .cut-item{border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px}
     .cut-top{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;background:var(--card2)}
     .cut-icon{width:38px;height:38px;border-radius:10px;background:var(--red-bg);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
@@ -302,8 +167,6 @@
     .savings-banner{padding:18px 20px;background:var(--green-bg);border-radius:12px;display:flex;justify-content:space-between;align-items:center;border:1px solid rgba(0,229,160,.15);margin-top:4px}
     .savings-lbl{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-bottom:4px}
     .savings-amt{font-family:var(--font-head);font-size:24px;font-weight:800;color:var(--green)}
-
-    /* DUPLICATE */
     .dup-item{border:1.5px solid var(--orange);border-radius:12px;overflow:hidden;margin-bottom:12px}
     .dup-top{padding:14px 18px;background:var(--orange-bg);display:flex;justify-content:space-between;align-items:center}
     .dup-title{font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--text)}
@@ -313,11 +176,8 @@
     .dup-advice{font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.6}
     .dup-tags{display:flex;gap:8px;flex-wrap:wrap}
     .dup-tag{padding:5px 12px;border-radius:8px;background:var(--card2);border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text)}
-    .dup-keep{color:var(--green);margin-left:4px}
-    .dup-cut{color:var(--red);margin-left:4px}
+    .dup-keep{color:var(--green);margin-left:4px}.dup-cut{color:var(--red);margin-left:4px}
     .dup-save{margin-top:12px;padding:10px 14px;background:var(--green-bg);border-radius:8px;font-size:13px;font-weight:600;color:var(--green);border:1px solid rgba(0,229,160,.15)}
-
-    /* CHARTS */
     .chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
     .chart-wrap{position:relative;height:220px}
     .cat-list{display:flex;flex-direction:column;gap:12px}
@@ -326,15 +186,11 @@
     .cat-bar-bg{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
     .cat-bar{height:100%;border-radius:3px;transition:width .8s ease}
     .cat-amt{font-size:12px;font-weight:600;color:var(--text);width:60px;text-align:right;flex-shrink:0}
-
-    /* GOAL */
     .goal-form{display:flex;flex-direction:column;gap:14px}
     .goal-result{padding:18px;background:var(--green-bg);border-radius:12px;display:none;border:1px solid rgba(0,229,160,.15)}
     .goal-result.show{display:block}
     .goal-result-title{font-family:var(--font-head);font-size:16px;font-weight:700;color:var(--green);margin-bottom:8px}
     .goal-result-text{font-size:13px;color:var(--text2);line-height:1.7}
-
-    /* ALTERNATIVES */
     .alt-item{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border:1px solid var(--border);border-radius:12px;background:var(--card2);flex-wrap:wrap;gap:10px;margin-bottom:10px}
     .alt-left{display:flex;align-items:center;gap:12px}
     .alt-icon{width:36px;height:36px;border-radius:8px;background:var(--green-bg);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
@@ -343,8 +199,6 @@
     .alt-tip{font-size:11px;color:var(--text3);margin-top:2px}
     .alt-free-badge{font-family:var(--font-head);font-size:12px;font-weight:700;color:var(--green);padding:4px 12px;background:var(--green-bg);border-radius:20px;border:1px solid rgba(0,229,160,.2);cursor:pointer;transition:all .2s}
     .alt-free-badge:hover{background:var(--green);color:#000}
-
-    /* CALENDAR */
     .cal-item{display:flex;align-items:center;gap:14px;padding:12px 16px;border:1px solid var(--border);border-radius:12px;background:var(--card2);margin-bottom:8px;transition:border-color .2s}
     .cal-day{width:48px;height:48px;border-radius:10px;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--border)}
     .cal-day-num{font-family:var(--font-head);font-size:20px;font-weight:800;line-height:1}
@@ -354,10 +208,7 @@
     .cal-cat{font-size:11px;color:var(--text3);margin-top:2px}
     .cal-price{font-family:var(--font-head);font-size:15px;font-weight:700;flex-shrink:0}
     .cal-total{padding:14px 18px;background:var(--red-bg);border-radius:12px;display:flex;justify-content:space-between;align-items:center;margin-top:8px;border:1px solid rgba(255,90,60,.15)}
-    .cal-today{border-color:var(--red)!important}
-    .cal-soon{border-color:var(--orange)!important}
-
-    /* FORM */
+    .cal-today{border-color:var(--red)!important}.cal-soon{border-color:var(--orange)!important}
     .form-col{display:flex;flex-direction:column;gap:14px}
     .form-row{display:flex;gap:14px;flex-wrap:wrap}
     .form-group{display:flex;flex-direction:column;gap:6px;flex:1;min-width:180px}
@@ -368,8 +219,6 @@
     .form-divider{text-align:center;font-size:12px;color:var(--text3);font-weight:500;position:relative}
     .form-divider::before,.form-divider::after{content:'';position:absolute;top:50%;width:44%;height:1px;background:var(--border)}
     .form-divider::before{left:0}.form-divider::after{right:0}
-
-    /* SUBSCRIPTIONS */
     .sub-card{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border:1px solid var(--border);border-radius:12px;background:var(--card2);transition:border-color .2s;margin-bottom:8px}
     .sub-card:hover{border-color:var(--green)}
     .sub-left{display:flex;align-items:center;gap:12px}
@@ -385,19 +234,12 @@
     .empty-state{display:flex;flex-direction:column;align-items:center;gap:12px;padding:48px;color:var(--text3)}
     .empty-icon{font-size:44px}
     .empty-text{font-size:13px;text-align:center;line-height:1.6}
-
-    /* FOOTER */
     .footer{text-align:center;padding:40px 28px 32px;border-top:1px solid var(--border);margin-top:20px}
     .footer-logo{font-family:var(--font-head);font-size:20px;font-weight:800;color:var(--green);margin-bottom:8px}
     .footer-tagline{font-size:13px;color:var(--text3);margin-bottom:16px}
     .footer-made{font-size:13px;color:var(--text2);font-weight:500}
     .footer-made span{color:var(--red)}
-    .footer-links{display:flex;gap:20px;justify-content:center;margin-top:16px}
-    .footer-link{font-size:12px;color:var(--text3);text-decoration:none;transition:color .2s}
-    .footer-link:hover{color:var(--green)}
     .footer-copy{font-size:11px;color:var(--text3);margin-top:16px}
-
-    /* BUDGET TRACKER */
     .budget-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
     @media(max-width:640px){.budget-grid{grid-template-columns:1fr}}
     .budget-input-card{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:20px}
@@ -408,7 +250,6 @@
     .budget-item-name::placeholder{color:var(--text3)}
     .budget-item-amt{width:100px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);background:var(--bg2);outline:none;font-family:var(--font-body);transition:border-color .2s}
     .budget-item-amt:focus{border-color:var(--green)}
-    .budget-item-amt::placeholder{color:var(--text3)}
     .budget-del-btn{background:none;border:none;cursor:pointer;font-size:14px;opacity:.3;transition:opacity .2s;color:var(--text);padding:4px;flex-shrink:0}
     .budget-del-btn:hover{opacity:1}
     .budget-add-btn{width:100%;padding:8px;border-radius:8px;border:1px dashed var(--border2);background:none;color:var(--text3);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:4px;font-family:var(--font-body)}
@@ -427,7 +268,7 @@
     .budget-remaining-amt{font-family:var(--font-head);font-size:28px;font-weight:800}
     .budget-remaining.good .budget-remaining-amt{color:var(--green)}
     .budget-remaining.warn .budget-remaining-amt{color:var(--orange)}
-    .budget-remaining.bad  .budget-remaining-amt{color:var(--red)}
+    .budget-remaining.bad .budget-remaining-amt{color:var(--red)}
     .budget-verdict{font-size:13px;color:var(--text2);line-height:1.5;max-width:260px;text-align:right}
     .budget-rate-wrap{display:flex;align-items:center;gap:16px;padding:14px 18px;background:var(--bg2);border-radius:10px;border:1px solid var(--border)}
     .budget-rate-ring{position:relative;width:60px;height:60px;flex-shrink:0}
@@ -445,64 +286,35 @@
     .budget-cat-bar{height:100%;border-radius:3px;transition:width .8s ease}
     .budget-cat-amt{font-size:12px;font-weight:600;color:var(--text);width:70px;text-align:right;flex-shrink:0}
     .budget-cat-pct{font-size:11px;color:var(--text3);width:34px;text-align:right;flex-shrink:0}
-
     .hidden{display:none!important}
-
-    @media(max-width:640px){
-      .score-section{grid-template-columns:1fr}
-      .chart-grid{grid-template-columns:1fr}
-      .pulse-grid{grid-template-columns:repeat(2,1fr)}
-      .score-num{font-size:72px}
-      .main{padding:16px;gap:16px}
-      .tagline{display:none}
-      .sub-badge{display:none}
-      .form-row{flex-direction:column}
-      .card-pad{padding:20px}
-      .header{padding:0 16px}
-      .health-top{flex-direction:column}
-    }
+    @media(max-width:640px){.score-section{grid-template-columns:1fr}.chart-grid{grid-template-columns:1fr}.pulse-grid{grid-template-columns:repeat(2,1fr)}.score-num{font-size:72px}.main{padding:16px;gap:16px}.tagline{display:none}.sub-badge{display:none}.form-row{flex-direction:column}.card-pad{padding:20px}.header{padding:0 16px}.health-top{flex-direction:column}.header-right{gap:8px}.mode-badge{font-size:10px;padding:3px 8px}}
   </style>
 </head>
 <body>
-
   <div id="tw-toast"></div>
+  <div id="pwa-banner">
+    <div class="pwa-banner-text">📱 Add TrackWise to your home screen for the best experience!</div>
+    <button class="pwa-banner-btn" id="pwa-install-btn">Install App</button>
+    <button class="pwa-banner-close" onclick="document.getElementById('pwa-banner').classList.remove('show');localStorage.setItem('pwa-dismissed','1')">✕</button>
+  </div>
   <div id="streak-banner">
     <span id="streak-text">👋 Welcome back! You're on a streak!</span>
     <button id="streak-close" onclick="document.getElementById('streak-banner').classList.remove('show')">✕</button>
   </div>
-
-  <!-- LOGIN SCREEN -->
-<div id="login-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;
-  background:var(--bg);z-index:6000;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;padding:24px;text-align:center;">
-  <div style="font-size:40px;margin-bottom:16px">💸</div>
-  <div style="font-family:var(--font-head);font-size:28px;font-weight:800;
-    color:var(--green);margin-bottom:8px">TrackWise</div>
-  <div style="font-size:14px;color:var(--text3);margin-bottom:40px">
-    Your Money Co-Pilot 🇮🇳
-  </div>
-  <div style="background:var(--card);border:1px solid var(--border);
-    border-radius:20px;padding:32px;width:100%;max-width:400px;">
-    <div style="font-family:var(--font-head);font-size:18px;font-weight:700;
-      color:var(--text);margin-bottom:8px">Welcome back 👋</div>
-    <div style="font-size:13px;color:var(--text3);margin-bottom:24px">
-      Enter your email — we'll send you a magic link. No password needed.
+  <div id="login-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);z-index:6000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;">
+    <div style="font-size:40px;margin-bottom:16px">💸</div>
+    <div style="font-family:var(--font-head);font-size:28px;font-weight:800;color:var(--green);margin-bottom:8px">TrackWise</div>
+    <div style="font-size:14px;color:var(--text3);margin-bottom:40px">Your Money Co-Pilot 🇮🇳</div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;width:100%;max-width:400px;">
+      <div style="font-family:var(--font-head);font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">Welcome back 👋</div>
+      <div style="font-size:13px;color:var(--text3);margin-bottom:24px">Enter your email — we'll send you a magic link. No password needed.</div>
+      <input type="email" id="loginEmail" class="form-input w-full" placeholder="your@email.com" style="margin-bottom:12px"/>
+      <button id="loginBtn" class="btn btn-green w-full" onclick="loginWithEmail(document.getElementById('loginEmail').value)">✨ Send Magic Link</button>
+      <div id="loginMsg" style="font-size:13px;margin-top:12px;min-height:20px"></div>
     </div>
-    <input type="email" id="loginEmail" class="form-input w-full"
-      placeholder="your@email.com" style="margin-bottom:12px"/>
-    <button id="loginBtn" class="btn btn-green w-full"
-      onclick="loginWithEmail(document.getElementById('loginEmail').value)">
-      ✨ Send Magic Link
-    </button>
-    <div id="loginMsg" style="font-size:13px;margin-top:12px;min-height:20px"></div>
+    <div style="font-size:11px;color:var(--text3);margin-top:24px;max-width:320px;line-height:1.6">🔒 No password. No tracking. Your data syncs securely to the cloud.</div>
   </div>
-  <div style="font-size:11px;color:var(--text3);margin-top:24px;max-width:320px;line-height:1.6">
-    🔒 No password. No tracking. Your data syncs securely to the cloud.
-  </div>
-</div>
-
-  <!-- MODE SELECTOR SCREEN — shown on first visit only -->
-  <div id="mode-selector">
+  <div id="mode-selector" class="hidden">
     <div class="mode-selector-logo">💸 TrackWise AI</div>
     <div class="mode-selector-sub">First, tell us who you are 👇</div>
     <div class="mode-cards">
@@ -510,34 +322,23 @@
         <span class="mode-card-emoji">🎓</span>
         <div class="mode-card-title">Student Mode</div>
         <div class="mode-card-desc">Managing pocket money, tiffin money, or part-time income? Built for students aged 14 and above.</div>
-        <div class="mode-card-tags">
-          <span class="mode-tag">Pocket Money</span>
-          <span class="mode-tag">Finance Lessons</span>
-          <span class="mode-tag">Spend Score</span>
-          <span class="mode-tag">Badges</span>
-        </div>
+        <div class="mode-card-tags"><span class="mode-tag">Pocket Money</span><span class="mode-tag">Finance Lessons</span><span class="mode-tag">Spend Score</span><span class="mode-tag">Badges</span></div>
       </div>
       <div class="mode-card pro" onclick="selectMode('pro')">
         <span class="mode-card-emoji">💼</span>
         <div class="mode-card-title">Professional Mode</div>
         <div class="mode-card-desc">Working professional managing salary, subscriptions, EMIs and savings goals? This is your Pocket CA.</div>
-        <div class="mode-card-tags">
-          <span class="mode-tag">Salary</span>
-          <span class="mode-tag">EMI Tracker</span>
-          <span class="mode-tag">Waste Score</span>
-          <span class="mode-tag">SIP Planner</span>
-        </div>
+        <div class="mode-card-tags"><span class="mode-tag">Salary</span><span class="mode-tag">EMI Tracker</span><span class="mode-tag">Waste Score</span><span class="mode-tag">SIP Planner</span></div>
       </div>
     </div>
     <div class="mode-selector-note">You can switch modes anytime from the header.</div>
   </div>
-
   <header class="header">
     <div class="header-inner">
       <div class="logo"><span class="logo-icon">💸</span><span class="logo-text">TrackWise AI</span></div>
       <div class="header-right">
         <span class="tagline" id="taglineText">Your Pocket CA 🇮🇳</span>
-        <button class="mode-badge" id="authBtn" onclick="">🔑 Login</button>
+        <button class="mode-badge" id="authBtn">🔑 Login</button>
         <button class="mode-badge" id="modeBadge" onclick="switchMode()">💼 Pro</button>
         <div class="theme-switcher">
           <button class="theme-btn active" id="btnNight" onclick="setTheme('night')">🌙 Night</button>
@@ -546,10 +347,7 @@
       </div>
     </div>
   </header>
-
   <main class="main">
-
-    <!-- SCORE + AI -->
     <div class="score-section">
       <div class="card score-card">
         <div class="score-lbl" id="scoreLbl">Your Waste Score</div>
@@ -570,20 +368,13 @@
         <div class="ai-loading hidden" id="adviceLoading">⏳ Thinking about your finances...</div>
       </div>
     </div>
-
-    <!-- FINANCE LESSON (Student Mode only) -->
     <div id="finance-lesson">
-      <div class="lesson-top">
-        <span class="lesson-icon">🧠</span>
-        <span class="lesson-label">Finance Lesson of the Day</span>
-      </div>
+      <div class="lesson-top"><span class="lesson-icon">🧠</span><span class="lesson-label">Finance Lesson of the Day</span></div>
       <div class="lesson-title" id="lesson-title">Did you know?</div>
       <div class="lesson-body" id="lesson-body">Loading your lesson...</div>
       <div class="lesson-highlight" id="lesson-highlight"></div>
       <button class="lesson-next-btn" onclick="nextLesson()">Next lesson →</button>
     </div>
-
-    <!-- WEEKLY MONEY PULSE -->
     <div id="weekly-pulse-section">
       <div class="pulse-top">
         <div class="pulse-title" id="pulseTitle">📊 Weekly Money Pulse</div>
@@ -596,27 +387,14 @@
         <div class="pulse-stat"><span class="pulse-stat-val" id="pulse-pct">0%</span><div class="pulse-stat-lbl">Waste %</div></div>
       </div>
       <div class="pulse-insight" id="pulse-insight">Add subscriptions to unlock your Money Pulse!</div>
-      <div class="pulse-streak">
-        <span class="streak-fire">🔥</span>
-        <span>App streak:</span>
-        <span class="streak-num" id="pulse-streak">0</span>
-        <span style="color:var(--text3)">days in a row</span>
-      </div>
+      <div class="pulse-streak"><span class="streak-fire">🔥</span><span>App streak:</span><span class="streak-num" id="pulse-streak">0</span><span style="color:var(--text3)">days in a row</span></div>
     </div>
-
-    <!-- FINANCIAL HEALTH SCORE -->
     <div id="health-score-section">
       <div class="health-top">
-        <div>
-          <div class="health-title" id="healthTitle">💚 Financial Health Score</div>
-          <div class="health-sub" id="healthSub">Improves when you take good actions</div>
-        </div>
+        <div><div class="health-title" id="healthTitle">💚 Financial Health Score</div><div class="health-sub" id="healthSub">Improves when you take good actions</div></div>
         <div class="health-ring-wrap">
           <div class="health-ring">
-            <svg viewBox="0 0 86 86" width="86" height="86">
-              <circle class="track" cx="43" cy="43" r="36"/>
-              <circle class="fill" cx="43" cy="43" r="36" id="health-ring-fill"/>
-            </svg>
+            <svg viewBox="0 0 86 86" width="86" height="86"><circle class="track" cx="43" cy="43" r="36"/><circle class="fill" cx="43" cy="43" r="36" id="health-ring-fill"/></svg>
             <div class="health-ring-num" id="health-num">50</div>
           </div>
           <div class="health-grade-lbl" id="health-grade-lbl">Grade: C</div>
@@ -631,102 +409,41 @@
       <div class="health-bar-wrap"><div class="health-bar-fill" id="health-bar"></div></div>
       <div class="health-tip" id="health-tip">Take an action above to improve your score! 🚀</div>
     </div>
-
-    <!-- CUT PLAN -->
     <div class="card card-pad hidden" id="cutSection">
       <div class="sec-title">✂️ Your Cut Plan <span class="badge badge-red">Save money now</span></div>
       <div id="cutList"></div>
-      <div class="savings-banner">
-        <div><div class="savings-lbl">If you cancel these</div><div class="savings-amt" id="totalSavings">₹0 saved/year</div></div>
-        <div style="font-size:32px">🎯</div>
-      </div>
+      <div class="savings-banner"><div><div class="savings-lbl">If you cancel these</div><div class="savings-amt" id="totalSavings">₹0 saved/year</div></div><div style="font-size:32px">🎯</div></div>
     </div>
-
-    <!-- DUPLICATE DETECTOR -->
     <div class="card card-pad hidden" id="dupSection">
       <div class="sec-title">🔍 Duplicate Detector <span class="badge badge-orange">Overlapping subscriptions</span></div>
       <div id="dupList"></div>
     </div>
-
-    <!-- BUDGET TRACKER -->
     <div class="card card-pad" id="budgetSection">
-      <div class="sec-title">
-        💰 Budget Tracker
-        <span class="badge badge-green">Monthly Overview</span>
-      </div>
+      <div class="sec-title">💰 Budget Tracker <span class="badge badge-green">Monthly Overview</span></div>
       <div class="budget-grid">
-        <div class="budget-input-card">
-          <div class="budget-input-title" id="budgetIncomeTitle">📈 Income Sources</div>
-          <div id="incomeList"></div>
-          <button class="budget-add-btn" onclick="addBudgetItem('income')">+ Add income source</button>
-        </div>
-        <div class="budget-input-card">
-          <div class="budget-input-title" id="budgetExpTitle">📉 Expenses</div>
-          <div id="expenseList"></div>
-          <button class="budget-add-btn" onclick="addBudgetItem('expense')">+ Add expense</button>
-        </div>
+        <div class="budget-input-card"><div class="budget-input-title" id="budgetIncomeTitle">📈 Income Sources</div><div id="incomeList"></div><button class="budget-add-btn" onclick="addBudgetItem('income')">+ Add income source</button></div>
+        <div class="budget-input-card"><div class="budget-input-title" id="budgetExpTitle">📉 Expenses</div><div id="expenseList"></div><button class="budget-add-btn" onclick="addBudgetItem('expense')">+ Add expense</button></div>
       </div>
       <div class="budget-summary">
-        <div class="budget-bar-row">
-          <div class="budget-bar-label">💚 Total Income</div>
-          <div class="budget-bar-amt" id="budgetTotalIncome" style="color:var(--green)">₹0</div>
-        </div>
-        <div class="budget-progress-bg">
-          <div class="budget-progress-fill" id="budgetIncomeBar" style="width:100%;background:var(--green)"></div>
-        </div>
-        <div class="budget-bar-row">
-          <div class="budget-bar-label">🔴 Total Expenses</div>
-          <div class="budget-bar-amt" id="budgetTotalExpense" style="color:var(--red)">₹0</div>
-        </div>
-        <div class="budget-progress-bg">
-          <div class="budget-progress-fill" id="budgetExpenseBar" style="width:0%;background:var(--red)"></div>
-        </div>
+        <div class="budget-bar-row"><div class="budget-bar-label">💚 Total Income</div><div class="budget-bar-amt" id="budgetTotalIncome" style="color:var(--green)">₹0</div></div>
+        <div class="budget-progress-bg"><div class="budget-progress-fill" id="budgetIncomeBar" style="width:100%;background:var(--green)"></div></div>
+        <div class="budget-bar-row"><div class="budget-bar-label">🔴 Total Expenses</div><div class="budget-bar-amt" id="budgetTotalExpense" style="color:var(--red)">₹0</div></div>
+        <div class="budget-progress-bg"><div class="budget-progress-fill" id="budgetExpenseBar" style="width:0%;background:var(--red)"></div></div>
         <div class="budget-remaining good" id="budgetRemaining">
-          <div>
-            <div class="budget-remaining-label">Left this month</div>
-            <div class="budget-remaining-amt" id="budgetRemainingAmt">₹0</div>
-          </div>
+          <div><div class="budget-remaining-label">Left this month</div><div class="budget-remaining-amt" id="budgetRemainingAmt">₹0</div></div>
           <div class="budget-verdict" id="budgetVerdict">Add your income and expenses to see your monthly picture.</div>
         </div>
         <div class="budget-rate-wrap">
-          <div class="budget-rate-ring">
-            <svg viewBox="0 0 60 60" width="60" height="60">
-              <circle class="track" cx="30" cy="30" r="25"/>
-              <circle class="fill" cx="30" cy="30" r="25" id="budgetRateRing"/>
-            </svg>
-            <div class="budget-rate-num" id="budgetRateNum">0%</div>
-          </div>
-          <div class="budget-rate-info">
-            <div class="budget-rate-title">Savings Rate</div>
-            <div class="budget-rate-sub" id="budgetRateSub">Financial rule of thumb: save at least <strong>20%</strong> of your income every month.</div>
-          </div>
+          <div class="budget-rate-ring"><svg viewBox="0 0 60 60" width="60" height="60"><circle class="track" cx="30" cy="30" r="25"/><circle class="fill" cx="30" cy="30" r="25" id="budgetRateRing"/></svg><div class="budget-rate-num" id="budgetRateNum">0%</div></div>
+          <div class="budget-rate-info"><div class="budget-rate-title">Savings Rate</div><div class="budget-rate-sub" id="budgetRateSub">Financial rule of thumb: save at least <strong>20%</strong> of your income every month.</div></div>
         </div>
-        <div style="margin-top:16px">
-          <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Expense Breakdown</div>
-          <div class="budget-breakdown" id="budgetBreakdown">
-            <div style="font-size:13px;color:var(--text3)">Add expenses to see breakdown.</div>
-          </div>
-        </div>
+        <div style="margin-top:16px"><div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Expense Breakdown</div><div class="budget-breakdown" id="budgetBreakdown"><div style="font-size:13px;color:var(--text3)">Add expenses to see breakdown.</div></div></div>
       </div>
-      <!-- RBI EMI WARNING -->
-        <div id="rbi-emi-warning" style="display:none;margin-top:14px;padding:14px 18px;
-          background:var(--red-bg);border:1.5px solid var(--red);border-radius:12px;
-          align-items:flex-start;gap:12px;">
-          <div style="font-size:22px;flex-shrink:0">⚠️</div>
-          <div>
-            <div style="font-family:var(--font-head);font-size:14px;font-weight:700;
-              color:var(--red);margin-bottom:4px">RBI Caution Zone</div>
-            <div style="font-size:13px;color:var(--text2);line-height:1.6">
-              Your EMIs + SIP + Insurance = <strong id="rbi-emi-amt">₹0</strong> 
-              which is <strong id="rbi-emi-pct">0%</strong> of your income.<br/>
-              RBI recommends total EMIs should not exceed <strong>50% of monthly income</strong> 
-              to stay financially healthy.
-            </div>
-          </div>
-        </div>
+      <div id="rbi-emi-warning" style="display:none;margin-top:14px;padding:14px 18px;background:var(--red-bg);border:1.5px solid var(--red);border-radius:12px;align-items:flex-start;gap:12px;">
+        <div style="font-size:22px;flex-shrink:0">⚠️</div>
+        <div><div style="font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--red);margin-bottom:4px">RBI Caution Zone</div><div style="font-size:13px;color:var(--text2);line-height:1.6">Your EMIs + SIP + Insurance = <strong id="rbi-emi-amt">₹0</strong> which is <strong id="rbi-emi-pct">0%</strong> of your income.<br/>RBI recommends total EMIs should not exceed <strong>50% of monthly income</strong> to stay financially healthy.</div></div>
+      </div>
     </div>
-
-    <!-- SAVINGS GOAL -->
     <div class="card card-pad">
       <div class="sec-title">🎯 Savings Goal Calculator</div>
       <div class="goal-form">
@@ -735,41 +452,26 @@
           <div class="form-group"><label class="form-label">How much does it cost? (₹)</label><input class="form-input" type="number" id="goalAmt" placeholder="e.g. 50000"/></div>
         </div>
         <button class="btn btn-ghost" onclick="calcGoal()">Calculate how fast I can save 💰</button>
-        <div class="goal-result" id="goalResult">
-          <div class="goal-result-title" id="goalResultTitle"></div>
-          <div class="goal-result-text" id="goalResultText"></div>
-        </div>
+        <div class="goal-result" id="goalResult"><div class="goal-result-title" id="goalResultTitle"></div><div class="goal-result-text" id="goalResultText"></div></div>
       </div>
     </div>
-
-    <!-- CHARTS -->
     <div class="chart-grid">
       <div class="card card-pad"><div class="sec-title">📊 Spend by Category</div><div class="chart-wrap"><canvas id="catChart"></canvas></div></div>
       <div class="card card-pad"><div class="sec-title">💸 Category Breakdown</div><div class="cat-list" id="catList"><div style="color:var(--text3);font-size:13px">No subscriptions yet.</div></div></div>
     </div>
-
-    <!-- FREE ALTERNATIVES -->
     <div class="card card-pad hidden" id="altSection">
       <div class="sec-title">💡 Free Alternatives <span class="badge badge-green">Save without missing out</span></div>
       <div id="altList"></div>
     </div>
-
-    <!-- RENEWAL CALENDAR -->
     <div class="card card-pad hidden" id="calSection">
       <div class="sec-title">🗓️ Renewal Calendar <span class="badge badge-green" id="calMonth"></span></div>
       <div id="calList"></div>
-      <div class="cal-total">
-        <div style="font-size:13px;color:var(--text3);font-weight:500">Total leaving this month</div>
-        <div style="font-family:var(--font-head);font-size:18px;font-weight:800;color:var(--red)" id="calTotal">₹0</div>
-      </div>
+      <div class="cal-total"><div style="font-size:13px;color:var(--text3);font-weight:500">Total leaving this month</div><div style="font-family:var(--font-head);font-size:18px;font-weight:800;color:var(--red)" id="calTotal">₹0</div></div>
     </div>
-
-    <!-- ADD SUBSCRIPTION -->
     <div class="card card-pad">
       <div class="sec-title" id="addSubTitle">➕ Add Subscription</div>
       <div class="form-col">
-        <div class="form-group">
-          <label class="form-label">Quick add from presets</label>
+        <div class="form-group"><label class="form-label">Quick add from presets</label>
           <select class="form-select" id="presetSel" onchange="fillPreset()">
             <option value="">-- Select a subscription --</option>
             <optgroup label="OTT">
@@ -821,12 +523,7 @@
           <div class="form-group"><label class="form-label">Name</label><input class="form-input" type="text" id="subName" placeholder="e.g. Netflix"/></div>
           <div class="form-group"><label class="form-label">Category</label>
             <select class="form-select" id="subCat">
-              <option value="OTT">OTT</option><option value="Music">Music</option>
-              <option value="Mobile">Mobile</option><option value="Cloud">Cloud</option>
-              <option value="Fitness">Fitness</option><option value="Insurance">Insurance</option>
-              <option value="SIP">SIP</option><option value="EMI">EMI</option>
-              <option value="Productivity">Productivity</option><option value="AI Tools">AI Tools</option>
-              <option value="Finance">Finance</option>
+              <option value="OTT">OTT</option><option value="Music">Music</option><option value="Mobile">Mobile</option><option value="Cloud">Cloud</option><option value="Fitness">Fitness</option><option value="Insurance">Insurance</option><option value="SIP">SIP</option><option value="EMI">EMI</option><option value="Productivity">Productivity</option><option value="AI Tools">AI Tools</option><option value="Finance">Finance</option>
             </select>
           </div>
         </div>
@@ -837,879 +534,291 @@
         <button class="btn btn-green w-full" onclick="addSub()">Add Subscription</button>
       </div>
     </div>
-
-    <!-- SUBSCRIPTIONS LIST -->
     <div class="card card-pad">
       <div class="sec-title" id="subListTitle">📋 My Subscriptions <span class="sub-count" id="subCount">0</span></div>
       <div id="subList"><div class="empty-state"><div class="empty-icon">🎯</div><div class="empty-text">No subscriptions yet.<br>Add one above to get your Waste Score!</div></div></div>
     </div>
-
   </main>
-
   <footer class="footer">
     <div class="footer-logo">💸 TrackWise AI</div>
     <div class="footer-tagline">Stop wasting money. Start living better.</div>
     <div class="footer-made">Made with <span>❤️</span> in India 🇮🇳</div>
-    <div class="footer-copy">© 2026 TrackWise AI. Built for Bharat. Running 100% offline.</div>
-    <div class="footer-copy" style="margin-top:8px;font-size:11px;color:var(--text3);max-width:600px;margin-left:auto;margin-right:auto;line-height:1.6">
-  ⚠️ TrackWise AI is a personal finance awareness tool, not a SEBI-registered investment advisor or RBI-regulated entity. All suggestions are for educational purposes only. Please consult a certified financial advisor before making investment or financial decisions.
-</div>
+    <div class="footer-copy">© 2026 TrackWise AI. Built for Bharat.</div>
+    <div class="footer-copy" style="margin-top:8px;max-width:600px;margin-left:auto;margin-right:auto;line-height:1.6">⚠️ TrackWise AI is a personal finance awareness tool, not a SEBI-registered investment advisor or RBI-regulated entity. All suggestions are for educational purposes only.</div>
   </footer>
-
   <script>
-    const COLORS = ['#00E5A0','#FF5A3C','#FF9500','#4A90FF','#9B59F5','#FF6B9D','#00BFA5','#FFD60A','#FF4081','#7C4DFF'];
-  // ═══════════════════════════════════════════════════════════
-  //  TRACKWISE AI — FULLY OFFLINE, LOCAL-FIRST
-  // ═══════════════════════════════════════════════════════════
-
-  const THEME_KEY = 'tw_theme';
-const MODE_KEY  = 'tw_mode';
-
-function getModePrefix() {
-  return (localStorage.getItem(MODE_KEY) || 'pro') + '_';
-}
-function SUBS_KEY()      { return getModePrefix() + 'subscriptions'; }
-function KEPT_KEY()      { return getModePrefix() + 'kept_subs'; }
-function RETENTION_KEY() { return getModePrefix() + 'retention'; }
-function BUDGET_KEY()    { return getModePrefix() + 'budget'; }
-  let chartInst = null;
-
-  // ── STORAGE HELPERS ──────────────────────────────────────
-// Each mode (student/pro) gets its own separate data.
-// Dad's data = pro_subscriptions, Son's data = student_subscriptions
-
-function getModePrefix() {
-  return (localStorage.getItem(MODE_KEY) || 'pro') + '_';
-}
-function SUBS_KEY()      { return getModePrefix() + 'subscriptions'; }
-function KEPT_KEY()      { return getModePrefix() + 'kept_subs'; }
-function RETENTION_KEY() { return getModePrefix() + 'retention'; }
-function BUDGET_KEY()    { return getModePrefix() + 'budget'; }
-
-function loadSubs() {
-  try { return JSON.parse(localStorage.getItem(SUBS_KEY())) || []; } catch(e) { return []; }
-}
-function saveSubs(subs) {
-  localStorage.setItem(SUBS_KEY(), JSON.stringify(subs));
-}
-function loadKept() {
-  try { return JSON.parse(localStorage.getItem(KEPT_KEY())) || []; } catch(e) { return []; }
-}
-function saveKept(kept) {
-  localStorage.setItem(KEPT_KEY(), JSON.stringify(kept));
-}
-function loadRetention() {
-  try {
-    const r = localStorage.getItem(RETENTION_KEY());
-    if (r) return JSON.parse(r);
-  } catch(e) {}
-  return { healthScore:50, cancelCount:0, freeAltCount:0, goalSet:false, streakDays:0, lastVisitDate:null };
-}
-function saveRetention(s) {
-  localStorage.setItem(RETENTION_KEY(), JSON.stringify(s));
-}
-function loadBudget() {
-  try {
-    const b = localStorage.getItem(BUDGET_KEY());
-    if (b) return JSON.parse(b);
-  } catch(e) {}
-  return { income: DEFAULT_INCOME, expenses: DEFAULT_EXPENSES };
-}
-function saveBudget(b) {
-  localStorage.setItem(BUDGET_KEY(), JSON.stringify(b));
-}
-
-  // ── FREE ALTERNATIVES DATA ───────────────────────────────
-  const FREE_ALTS = {
-    'Netflix':         { free:'JioCinema Free / YouTube',       tip:'JioCinema has thousands of free movies' },
-    'Spotify':         { free:'JioSaavn Free / YouTube Music',  tip:'JioSaavn free tier has most Indian music' },
-    'YouTube Premium': { free:'YouTube + uBlock Origin',        tip:'Free ad blocking on desktop browser' },
-    'Canva Pro':       { free:'Canva Free / Adobe Express',     tip:'Canva free tier covers 90% of personal use' },
-    'ChatGPT Plus':    { free:'Claude Free / Gemini Free',      tip:'Both have generous free tiers' },
-    'Microsoft 365':   { free:'Google Docs / LibreOffice',      tip:'Google Docs is completely free' },
-    'iCloud 50GB':     { free:'Google Photos Free 15GB',        tip:'Google gives 15GB free — enough for most' },
-    'Google One':      { free:'Compress photos to free tier',   tip:'Google Photos storage saver mode helps' },
-    'Cult.fit':        { free:'YouTube Workout Channels',       tip:'MadFit, Chloe Ting — completely free' },
-  };
-
-  const CANCEL_GUIDES = {
-    'Netflix':         'netflix.com → Account → Cancel Membership',
-    'Hotstar':         'hotstar.com → Profile → Subscription → Cancel',
-    'Amazon Prime':    'amazon.in → Account → Prime → End Membership',
-    'Spotify':         'spotify.com → Account → Subscription → Cancel',
-    'YouTube Premium': 'youtube.com → Paid Memberships → Cancel',
-    'SonyLIV':         'sonyliv.com → Profile → Subscription → Cancel',
-    'Zee5':            'zee5.com → Profile → My Subscription → Cancel',
-    'Gym':             'Visit gym directly — request cancellation in writing',
-    'iCloud 50GB':     'iPhone → Settings → Apple ID → iCloud → Manage → Downgrade',
-    'ChatGPT Plus':    'chat.openai.com → Settings → My Plan → Cancel',
-    'Canva Pro':       'canva.com → Account → Billing → Cancel',
-  };
-
-  const WASTE_REASONS = {
-    'OTT':          'Multiple OTTs overlap — you likely watch one more than others',
-    'Music':        'Music apps have similar libraries — one is enough',
-    'Fitness':      "Unused gym memberships are India's #1 forgotten subscription",
-    'Cloud':        'Check actual storage usage — you might not need this tier',
-    'Productivity': 'Free tier usually covers personal use',
-    'AI Tools':     'Only worth it if you use it every single day',
-  };
-
-  function emo(cat) {
-    return {'OTT':'📺','Music':'🎵','Mobile':'📱','Cloud':'☁️','Fitness':'💪',
-            'Insurance':'🛡️','SIP':'📈','EMI':'🏦','Productivity':'⚡',
-            'AI Tools':'🤖','Finance':'💰'}[cat] || '📦';
+  const COLORS=['#00E5A0','#FF5A3C','#FF9500','#4A90FF','#9B59F5','#FF6B9D','#00BFA5','#FFD60A','#FF4081','#7C4DFF'];
+  const THEME_KEY='tw_theme',MODE_KEY='tw_mode';
+  const{createClient}=supabase;
+  const sb=createClient('https://aekvhxvlbfvboywyhorm.supabase.co','sb_publishable_1apOlOaRY0DZoTLGi8ja0Q_ntJacVua');
+  let currentUser=null,chartInst=null;
+  function getModePrefix(){return(localStorage.getItem(MODE_KEY)||'pro')+'_';}
+  function SUBS_KEY(){return getModePrefix()+'subscriptions';}
+  function KEPT_KEY(){return getModePrefix()+'kept_subs';}
+  function RETENTION_KEY(){return getModePrefix()+'retention';}
+  function BUDGET_KEY(){return getModePrefix()+'budget';}
+  function loadSubs(){try{return JSON.parse(localStorage.getItem(SUBS_KEY()))||[];}catch(e){return[];}}
+  function saveSubs(s){localStorage.setItem(SUBS_KEY(),JSON.stringify(s));syncToCloud();}
+  function loadKept(){try{return JSON.parse(localStorage.getItem(KEPT_KEY()))||[];}catch(e){return[];}}
+  function saveKept(k){localStorage.setItem(KEPT_KEY(),JSON.stringify(k));}
+  function loadRetention(){try{const r=localStorage.getItem(RETENTION_KEY());if(r)return JSON.parse(r);}catch(e){}return{healthScore:50,cancelCount:0,freeAltCount:0,goalSet:false,streakDays:0,lastVisitDate:null};}
+  function saveRetention(s){localStorage.setItem(RETENTION_KEY(),JSON.stringify(s));syncToCloud();}
+  const DEFAULT_INCOME=[{id:Date.now()+1,name:'Salary',amount:0}];
+  const DEFAULT_EXPENSES=[{id:Date.now()+2,name:'Rent',amount:0},{id:Date.now()+3,name:'Food',amount:0},{id:Date.now()+4,name:'Transport',amount:0}];
+  function loadBudget(){try{const b=localStorage.getItem(BUDGET_KEY());if(b)return JSON.parse(b);}catch(e){}return{income:DEFAULT_INCOME,expenses:DEFAULT_EXPENSES};}
+  function saveBudget(b){localStorage.setItem(BUDGET_KEY(),JSON.stringify(b));syncToCloud();}
+  async function loginWithEmail(email){
+    const btn=document.getElementById('loginBtn'),msg=document.getElementById('loginMsg');
+    if(!email){msg.textContent='❌ Please enter your email.';msg.style.color='var(--red)';return;}
+    btn.textContent='⏳ Sending...';btn.disabled=true;
+    const{error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:'https://trackwise-in.netlify.app'}});
+    if(error){msg.textContent='❌ '+error.message;msg.style.color='var(--red)';}
+    else{msg.textContent='✅ Magic link sent! Check your email.';msg.style.color='var(--green)';}
+    btn.textContent='✨ Send Magic Link';btn.disabled=false;
   }
-
-  // ── THEME ────────────────────────────────────────────────
-  function setTheme(t) {
-    document.documentElement.setAttribute('data-theme', t);
-    document.getElementById('btnNight').classList.toggle('active', t==='night');
-    document.getElementById('btnSunrise').classList.toggle('active', t==='sunrise');
-    localStorage.setItem(THEME_KEY, t);
-    if (chartInst) updateChartTheme();
+  async function logout(){await sb.auth.signOut();currentUser=null;updateAuthHeader();document.getElementById('login-screen').classList.remove('hidden');showToast('👋 Logged out');}
+  function updateAuthHeader(){
+    const btn=document.getElementById('authBtn');if(!btn)return;
+    if(currentUser){btn.textContent='👤 '+currentUser.email.split('@')[0];btn.onclick=()=>{if(confirm('Log out?'))logout();};}
+    else{btn.textContent='🔑 Login';btn.onclick=()=>document.getElementById('login-screen').classList.remove('hidden');}
   }
-  function updateChartTheme() {
-    const c = getComputedStyle(document.documentElement).getPropertyValue('--text2').trim();
-    chartInst.options.plugins.legend.labels.color = c;
-    chartInst.update();
+  let syncTimeout=null;
+  async function syncToCloud(){
+    if(!currentUser)return;
+    clearTimeout(syncTimeout);
+    syncTimeout=setTimeout(async()=>{
+      const data={subscriptions:loadSubs(),budget:loadBudget(),retention:loadRetention(),kept:loadKept(),mode:getMode(),theme:localStorage.getItem(THEME_KEY),lesson_index:localStorage.getItem('tw_lesson_index'),updated_at:new Date().toISOString()};
+      await sb.from('user_data').upsert({user_id:currentUser.id,email:currentUser.email,data},{onConflict:'user_id'});
+    },1000);
   }
-
-  // ── PRESET FILL ──────────────────────────────────────────
-  function fillPreset() {
-    const v = document.getElementById('presetSel').value;
-    if (!v) return;
-    const s = JSON.parse(v);
-    document.getElementById('subName').value  = s.name;
-    document.getElementById('subCat').value   = s.category;
-    document.getElementById('subPrice').value = s.price;
+  async function loadFromCloud(){
+    if(!currentUser)return;
+    const{data,error}=await sb.from('user_data').select('data').eq('user_id',currentUser.id).single();
+    if(error||!data)return;
+    const d=data.data;
+    if(d.subscriptions)localStorage.setItem(SUBS_KEY(),JSON.stringify(d.subscriptions));
+    if(d.budget)localStorage.setItem(BUDGET_KEY(),JSON.stringify(d.budget));
+    if(d.retention)localStorage.setItem(RETENTION_KEY(),JSON.stringify(d.retention));
+    if(d.kept)localStorage.setItem(KEPT_KEY(),JSON.stringify(d.kept));
+    if(d.mode)saveMode(d.mode);
+    if(d.theme)localStorage.setItem(THEME_KEY,d.theme);
+    if(d.lesson_index)localStorage.setItem('tw_lesson_index',d.lesson_index);
+    showToast('✅ Data restored!');
   }
-
-  // ── ADD SUBSCRIPTION ─────────────────────────────────────
-  function addSub() {
-    const name  = document.getElementById('subName').value.trim();
-    const cat   = document.getElementById('subCat').value;
-    const price = parseFloat(document.getElementById('subPrice').value);
-    const date  = document.getElementById('subDate').value;
-    if (!name || !price) { alert('Please enter a name and price.'); return; }
-    const subs = loadSubs();
-    subs.push({ id:Date.now(), name, category:cat, price, renewal_date:date||null, created_at:new Date().toISOString() });
-    saveSubs(subs);
-    document.getElementById('subName').value  = '';
-    document.getElementById('subPrice').value = '';
-    document.getElementById('subDate').value  = '';
-    document.getElementById('presetSel').value = '';
-    refreshAll();
-    showToast('✅ Subscription added!');
+  async function onUserLoggedIn(){
+    document.getElementById('login-screen').classList.add('hidden');
+    updateAuthHeader();
+    await loadFromCloud();
+    const savedMode=getMode();
+    if(!savedMode){document.getElementById('mode-selector').classList.remove('hidden');}
+    else{document.getElementById('mode-selector').classList.add('hidden');initApp();}
   }
-
-  function delSub(id) {
-    const subs = loadSubs().filter(s => s.id !== id);
-    saveSubs(subs);
-    tw_onCancelSubscription();
-    refreshAll();
+  const FREE_ALTS={'Netflix':{free:'JioCinema Free / YouTube',tip:'JioCinema has thousands of free movies'},'Spotify':{free:'JioSaavn Free / YouTube Music',tip:'JioSaavn free tier has most Indian music'},'YouTube Premium':{free:'YouTube + uBlock Origin',tip:'Free ad blocking on desktop browser'},'Canva Pro':{free:'Canva Free / Adobe Express',tip:'Canva free tier covers 90% of personal use'},'ChatGPT Plus':{free:'Claude Free / Gemini Free',tip:'Both have generous free tiers'},'Microsoft 365':{free:'Google Docs / LibreOffice',tip:'Google Docs is completely free'},'iCloud 50GB':{free:'Google Photos Free 15GB',tip:'Google gives 15GB free — enough for most'},'Google One':{free:'Compress photos to free tier',tip:'Google Photos storage saver mode helps'},'Cult.fit':{free:'YouTube Workout Channels',tip:'MadFit, Chloe Ting — completely free'}};
+  const CANCEL_GUIDES={'Netflix':'netflix.com → Account → Cancel Membership','Hotstar':'hotstar.com → Profile → Subscription → Cancel','Amazon Prime':'amazon.in → Account → Prime → End Membership','Spotify':'spotify.com → Account → Subscription → Cancel','YouTube Premium':'youtube.com → Paid Memberships → Cancel','SonyLIV':'sonyliv.com → Profile → Subscription → Cancel','Zee5':'zee5.com → Profile → My Subscription → Cancel','Gym':'Visit gym directly — request cancellation in writing','iCloud 50GB':'iPhone → Settings → Apple ID → iCloud → Manage → Downgrade','ChatGPT Plus':'chat.openai.com → Settings → My Plan → Cancel','Canva Pro':'canva.com → Account → Billing → Cancel'};
+  const WASTE_REASONS={'OTT':'Multiple OTTs overlap — you likely watch one more than others','Music':'Music apps have similar libraries — one is enough','Fitness':"Unused gym memberships are India's #1 forgotten subscription",'Cloud':'Check actual storage usage — you might not need this tier','Productivity':'Free tier usually covers personal use','AI Tools':'Only worth it if you use it every single day'};
+  function emo(cat){return{'OTT':'📺','Music':'🎵','Mobile':'📱','Cloud':'☁️','Fitness':'💪','Insurance':'🛡️','SIP':'📈','EMI':'🏦','Productivity':'⚡','AI Tools':'🤖','Finance':'💰'}[cat]||'📦';}
+  function setTheme(t){document.documentElement.setAttribute('data-theme',t);document.getElementById('btnNight').classList.toggle('active',t==='night');document.getElementById('btnSunrise').classList.toggle('active',t==='sunrise');localStorage.setItem(THEME_KEY,t);if(chartInst){const c=getComputedStyle(document.documentElement).getPropertyValue('--text2').trim();chartInst.options.plugins.legend.labels.color=c;chartInst.update();}}
+  function fillPreset(){const v=document.getElementById('presetSel').value;if(!v)return;const s=JSON.parse(v);document.getElementById('subName').value=s.name;document.getElementById('subCat').value=s.category;document.getElementById('subPrice').value=s.price;}
+  function addSub(){
+    const name=document.getElementById('subName').value.trim(),cat=document.getElementById('subCat').value,price=parseFloat(document.getElementById('subPrice').value),date=document.getElementById('subDate').value;
+    if(!name||!price){alert('Please enter a name and price.');return;}
+    const subs=loadSubs();subs.push({id:Date.now(),name,category:cat,price,renewal_date:date||null,created_at:new Date().toISOString()});saveSubs(subs);
+    document.getElementById('subName').value='';document.getElementById('subPrice').value='';document.getElementById('subDate').value='';document.getElementById('presetSel').value='';
+    refreshAll();showToast('✅ Subscription added!');
   }
-
-  function keepSub(name) {
-    const kept = loadKept();
-    if (!kept.includes(name)) { kept.push(name); saveKept(kept); }
-    refreshAll();
+  function delSub(id){saveSubs(loadSubs().filter(s=>s.id!==id));tw_onCancelSubscription();refreshAll();}
+  function keepSub(name){const kept=loadKept();if(!kept.includes(name)){kept.push(name);saveKept(kept);}refreshAll();}
+  function refreshAll(){const subs=loadSubs();renderSubs(subs);renderChart(subs);renderDups(subs);renderAlts(subs);renderCal(subs);updateScore(subs);updatePulse(subs);renderBudget();}
+  function renderSubs(subs){
+    const el=document.getElementById('subList');document.getElementById('subCount').textContent=subs.length;
+    if(!subs.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">🎯</div><div class="empty-text">No subscriptions yet.<br>Add one above to get your Waste Score!</div></div>';return;}
+    el.innerHTML=subs.map(s=>`<div class="sub-card"><div class="sub-left"><div class="sub-icon">${emo(s.category)}</div><div><div class="sub-name">${s.name}</div><div class="sub-meta">${s.category} · ${s.renewal_date?'Renews '+s.renewal_date:'No renewal date'}</div></div></div><div class="sub-right"><div class="sub-price">₹${s.price}/mo</div><div class="sub-badge">${s.category}</div><button class="sub-del" onclick="delSub(${s.id})">🗑️</button></div></div>`).join('');
   }
-
-  function refreshAll() {
-    const subs = loadSubs();
-    renderSubs(subs);
-    renderChart(subs);
-    renderDups(subs);
-    renderAlts(subs);
-    renderCal(subs);
-    updateScore(subs);
-    updatePulse(subs);
-    renderBudget();
+  function calcWasteScore(subs){
+    if(!subs.length)return{score:0,color:'',verdict:'Add subscriptions to get started',total_monthly:0,wasted_amount:0,breakdown:[]};
+    const RATES={'OTT':0.6,'Music':0.5,'Fitness':0.7,'Cloud':0.4,'Productivity':0.4,'AI Tools':0.5,'Finance':0.2,'Insurance':0,'SIP':0,'Mobile':0,'EMI':0};
+    const total=subs.reduce((a,s)=>a+s.price,0);
+    const breakdown=subs.map(s=>({...s,waste_contribution:Math.round(s.price*(RATES[s.category]||0.3))}));
+    const wasted=breakdown.reduce((a,s)=>a+s.waste_contribution,0);
+    const score=total>0?Math.min(Math.round((wasted/total)*100),100):0;
+    const mode=getMode();let color='',verdict='';
+    if(mode==='student'){if(score<=20){color='';verdict='🌟 Amazing! You barely spend on subscriptions.';}else if(score<=40){color='';verdict='👍 Not bad! Check if you really use all these apps.';}else if(score<=60){color='yellow';verdict="⚠️ You're spending a lot on apps. Time to review!";}else if(score<=80){color='orange';verdict='🚨 Too much spending! Cut some apps now.';}else{color='red';verdict='💀 Way too much! Your pocket money is disappearing.';}}
+    else{if(score<=20){color='';verdict='🌟 Excellent! Your subscriptions are lean and efficient.';}else if(score<=40){color='';verdict='👍 Good control. A few small tweaks could save more.';}else if(score<=60){color='yellow';verdict='⚠️ Moderate waste detected. Time to review your subscriptions.';}else if(score<=80){color='orange';verdict='🚨 High waste! Several subscriptions are draining your money.';}else{color='red';verdict='💀 Critical waste! You are bleeding money every month.';}}
+    return{score,color,verdict,total_monthly:total,wasted_amount:wasted,breakdown};
   }
-
-  function renderSubs(subs) {
-    const el = document.getElementById('subList');
-    document.getElementById('subCount').textContent = subs.length;
-    if (!subs.length) {
-      el.innerHTML = `<div class="empty-state"><div class="empty-icon">🎯</div><div class="empty-text">No subscriptions yet.<br>Add one above to get your Waste Score!</div></div>`;
-      return;
-    }
-    el.innerHTML = subs.map(s => `
-      <div class="sub-card">
-        <div class="sub-left">
-          <div class="sub-icon">${emo(s.category)}</div>
-          <div>
-            <div class="sub-name">${s.name}</div>
-            <div class="sub-meta">${s.category} · ${s.renewal_date ? 'Renews '+s.renewal_date : 'No renewal date'}</div>
-          </div>
-        </div>
-        <div class="sub-right">
-          <div class="sub-price">₹${s.price}/mo</div>
-          <div class="sub-badge">${s.category}</div>
-          <button class="sub-del" onclick="delSub(${s.id})">🗑️</button>
-        </div>
-      </div>`).join('');
-  }
-
-  // ── WASTE SCORE ──────────────────────────────────────────
-  function calcWasteScore(subs) {
-    if (!subs.length) return { score:0, color:'', verdict:'Add subscriptions to get started', total_monthly:0, wasted_amount:0, breakdown:[] };
-    const WASTE_RATES = { 'OTT':0.6,'Music':0.5,'Fitness':0.7,'Cloud':0.4,'Productivity':0.4,'AI Tools':0.5,'Finance':0.2,'Insurance':0,'SIP':0,'Mobile':0,'EMI':0 };
-    const total = subs.reduce((a,s) => a+s.price, 0);
-    const breakdown = subs.map(s => ({ ...s, waste_contribution: Math.round(s.price * (WASTE_RATES[s.category] || 0.3)) }));
-    const wasted = breakdown.reduce((a,s) => a+s.waste_contribution, 0);
-    const score = total > 0 ? Math.min(Math.round((wasted/total)*100), 100) : 0;
-    const mode = getMode();
-    let color='', verdict='';
-    if (mode === 'student') {
-      if (score<=20)      { color='';       verdict='🌟 Amazing! You barely spend on subscriptions.'; }
-      else if (score<=40) { color='';       verdict='👍 Not bad! Check if you really use all these apps.'; }
-      else if (score<=60) { color='yellow'; verdict='⚠️ You\'re spending a lot on apps. Time to review!'; }
-      else if (score<=80) { color='orange'; verdict='🚨 Too much spending! Cut some apps now.'; }
-      else                { color:'red';    verdict='💀 Way too much! Your pocket money is disappearing.'; }
-    } else {
-      if (score<=20)      { color='';       verdict='🌟 Excellent! Your subscriptions are lean and efficient.'; }
-      else if (score<=40) { color='';       verdict='👍 Good control. A few small tweaks could save more.'; }
-      else if (score<=60) { color='yellow'; verdict='⚠️ Moderate waste detected. Time to review your subscriptions.'; }
-      else if (score<=80) { color='orange'; verdict='🚨 High waste! Several subscriptions are draining your money.'; }
-      else                { color='red';    verdict='💀 Critical waste! You are bleeding money every month.'; }
-    }
-    return { score, color, verdict, total_monthly:total, wasted_amount:wasted, breakdown };
-  }
-
-  function updateScore(subs) {
-    const data = calcWasteScore(subs);
-    animScore(data.score, data.color);
-    updateGrade(data.score);
-    document.getElementById('scoreVerdict').textContent  = data.verdict;
-    document.getElementById('totalMonthly').textContent  = '₹'+data.total_monthly.toLocaleString('en-IN');
-    document.getElementById('wastedAmt').textContent     = '₹'+data.wasted_amount.toLocaleString('en-IN');
-    if (data.breakdown.length) renderCutPlan(data.breakdown);
-    else document.getElementById('cutSection').classList.add('hidden');
-  }
-
-  function updateGrade(score) {
-    const el = document.getElementById('scoreGrade');
-    let g, c;
-    if (score<=20)      { g='A'; c='grade-a'; }
-    else if (score<=40) { g='B'; c='grade-b'; }
-    else if (score<=60) { g='C'; c='grade-c'; }
-    else if (score<=80) { g='D'; c='grade-d'; }
-    else                { g='F'; c='grade-f'; }
-    el.textContent = g; el.className = `score-grade ${c}`;
-  }
-
-  function animScore(target, color) {
-    const el = document.getElementById('scoreNum');
-    const start = parseInt(el.textContent) || 0;
-    const t0 = performance.now();
-    function tick(now) {
-      const p = Math.min((now-t0)/1000, 1);
-      const e = 1-Math.pow(1-p, 3);
-      el.textContent = Math.round(start+(target-start)*e);
-      if (p<1) requestAnimationFrame(tick);
-      else { el.textContent=target; el.className=`score-num ${color}`; }
-    }
-    requestAnimationFrame(tick);
-  }
-
-  // ── CUT PLAN ─────────────────────────────────────────────
-  function renderCutPlan(breakdown) {
-    const kept = loadKept();
-    const KEEP = ['Insurance','SIP','Mobile','EMI'];
-    const cands = breakdown
-      .filter(i => !KEEP.includes(i.category) && i.waste_contribution>0 && !kept.includes(i.name))
-      .sort((a,b) => b.waste_contribution-a.waste_contribution)
-      .slice(0,3);
-    if (!cands.length) { document.getElementById('cutSection').classList.add('hidden'); return; }
-    const yr = cands.reduce((a,b) => a+b.price, 0)*12;
-    document.getElementById('totalSavings').textContent = '₹'+yr.toLocaleString('en-IN')+' saved/year';
-    document.getElementById('cutList').innerHTML = cands.map(item => `
-      <div class="cut-item">
-        <div class="cut-top">
-          <div class="cut-icon">${emo(item.category)}</div>
-          <div class="cut-info"><div class="cut-name">${item.name}</div><div class="cut-reason">${WASTE_REASONS[item.category]||'High waste potential'}</div></div>
-          <div class="cut-price"><div class="cut-price-main">₹${item.price}/mo</div><div class="cut-price-yr">₹${(item.price*12).toLocaleString('en-IN')}/yr</div></div>
-        </div>
-        <div class="cut-bottom">
-          <div class="cut-guide"><div class="cut-guide-lbl">How to cancel</div>${CANCEL_GUIDES[item.name]||`Search "${item.name} cancel" on Google`}</div>
-          <button class="keep-btn" onclick="keepSub('${item.name}')">👍 I use this, keep it</button>
-        </div>
-      </div>`).join('');
+  function updateScore(subs){const data=calcWasteScore(subs);animScore(data.score,data.color);updateGrade(data.score);document.getElementById('scoreVerdict').textContent=data.verdict;document.getElementById('totalMonthly').textContent='₹'+data.total_monthly.toLocaleString('en-IN');document.getElementById('wastedAmt').textContent='₹'+data.wasted_amount.toLocaleString('en-IN');if(data.breakdown.length)renderCutPlan(data.breakdown);else document.getElementById('cutSection').classList.add('hidden');}
+  function updateGrade(score){const el=document.getElementById('scoreGrade');let g,c;if(score<=20){g='A';c='grade-a';}else if(score<=40){g='B';c='grade-b';}else if(score<=60){g='C';c='grade-c';}else if(score<=80){g='D';c='grade-d';}else{g='F';c='grade-f';}el.textContent=g;el.className=`score-grade ${c}`;}
+  function animScore(target,color){const el=document.getElementById('scoreNum');const start=parseInt(el.textContent)||0;const t0=performance.now();function tick(now){const p=Math.min((now-t0)/1000,1);const e=1-Math.pow(1-p,3);el.textContent=Math.round(start+(target-start)*e);if(p<1)requestAnimationFrame(tick);else{el.textContent=target;el.className=`score-num ${color}`;}}requestAnimationFrame(tick);}
+  function renderCutPlan(breakdown){
+    const kept=loadKept();const KEEP=['Insurance','SIP','Mobile','EMI'];
+    const cands=breakdown.filter(i=>!KEEP.includes(i.category)&&i.waste_contribution>0&&!kept.includes(i.name)).sort((a,b)=>b.waste_contribution-a.waste_contribution).slice(0,3);
+    if(!cands.length){document.getElementById('cutSection').classList.add('hidden');return;}
+    const yr=cands.reduce((a,b)=>a+b.price,0)*12;
+    document.getElementById('totalSavings').textContent='₹'+yr.toLocaleString('en-IN')+' saved/year';
+    document.getElementById('cutList').innerHTML=cands.map(item=>`<div class="cut-item"><div class="cut-top"><div class="cut-icon">${emo(item.category)}</div><div class="cut-info"><div class="cut-name">${item.name}</div><div class="cut-reason">${WASTE_REASONS[item.category]||'High waste potential'}</div></div><div class="cut-price"><div class="cut-price-main">₹${item.price}/mo</div><div class="cut-price-yr">₹${(item.price*12).toLocaleString('en-IN')}/yr</div></div></div><div class="cut-bottom"><div class="cut-guide"><div class="cut-guide-lbl">How to cancel</div>${CANCEL_GUIDES[item.name]||`Search "${item.name} cancel" on Google`}</div><button class="keep-btn" onclick="keepSub('${item.name}')">👍 I use this, keep it</button></div></div>`).join('');
     document.getElementById('cutSection').classList.remove('hidden');
   }
-
-  // ── DUPLICATES ───────────────────────────────────────────
-  function renderDups(subs) {
-    const DUP_CATS = ['OTT','Music','Cloud','Fitness','Productivity','AI Tools'];
-    const ADVICE = {
-      'OTT':'Most people actively watch only 1 OTT. Keep your favourite and cancel the rest.',
-      'Music':'All music apps have similar libraries. You only need one.',
-      'Cloud':'Consolidate storage into one provider and save money.',
-      'Fitness':"Multiple fitness subs usually means you're not using all of them.",
-      'Productivity':'Check if the free tier of one covers everything you need.',
-      'AI Tools':'Pick the one AI tool you actually use daily.',
-    };
-    const grouped = {};
-    subs.forEach(s => { if (DUP_CATS.includes(s.category)) { grouped[s.category] = grouped[s.category]||[]; grouped[s.category].push(s); } });
-    const dups = Object.entries(grouped).filter(([,items]) => items.length>1);
-    if (!dups.length) { document.getElementById('dupSection').classList.add('hidden'); return; }
-    document.getElementById('dupList').innerHTML = dups.map(([cat,items]) => {
-      const total = items.reduce((a,b) => a+b.price, 0);
-      const cheapest = items.reduce((a,b) => a.price<b.price?a:b);
-      const saving = total-cheapest.price;
-      return `
-        <div class="dup-item">
-          <div class="dup-top">
-            <div><div class="dup-title">${emo(cat)} You have ${items.length} ${cat} subscriptions</div><div class="dup-names">${items.map(i=>i.name).join(' + ')}</div></div>
-            <div class="dup-total">₹${total}/mo<br><span style="font-size:11px;color:var(--text3);font-weight:400">combined</span></div>
-          </div>
-          <div class="dup-body">
-            <div class="dup-advice">${ADVICE[cat]||'Consider which one you use most.'}</div>
-            <div class="dup-tags">${items.map(i=>`<div class="dup-tag">${i.name} · ₹${i.price}/mo${i.name===cheapest.name?'<span class="dup-keep">← keep</span>':'<span class="dup-cut">← cut</span>'}</div>`).join('')}</div>
-            <div class="dup-save">💡 Cancel the others and save ₹${saving}/mo · ₹${(saving*12).toLocaleString('en-IN')}/year</div>
-          </div>
-        </div>`;
-    }).join('');
+  function renderDups(subs){
+    const DUP_CATS=['OTT','Music','Cloud','Fitness','Productivity','AI Tools'];
+    const ADVICE={'OTT':'Most people actively watch only 1 OTT. Keep your favourite and cancel the rest.','Music':'All music apps have similar libraries. You only need one.','Cloud':'Consolidate storage into one provider and save money.','Fitness':"Multiple fitness subs usually means you're not using all of them.",'Productivity':'Check if the free tier of one covers everything you need.','AI Tools':'Pick the one AI tool you actually use daily.'};
+    const grouped={};subs.forEach(s=>{if(DUP_CATS.includes(s.category)){grouped[s.category]=grouped[s.category]||[];grouped[s.category].push(s);}});
+    const dups=Object.entries(grouped).filter(([,items])=>items.length>1);
+    if(!dups.length){document.getElementById('dupSection').classList.add('hidden');return;}
+    document.getElementById('dupList').innerHTML=dups.map(([cat,items])=>{const total=items.reduce((a,b)=>a+b.price,0);const cheapest=items.reduce((a,b)=>a.price<b.price?a:b);const saving=total-cheapest.price;return`<div class="dup-item"><div class="dup-top"><div><div class="dup-title">${emo(cat)} You have ${items.length} ${cat} subscriptions</div><div class="dup-names">${items.map(i=>i.name).join(' + ')}</div></div><div class="dup-total">₹${total}/mo<br><span style="font-size:11px;color:var(--text3);font-weight:400">combined</span></div></div><div class="dup-body"><div class="dup-advice">${ADVICE[cat]||'Consider which one you use most.'}</div><div class="dup-tags">${items.map(i=>`<div class="dup-tag">${i.name} · ₹${i.price}/mo${i.name===cheapest.name?'<span class="dup-keep">← keep</span>':'<span class="dup-cut">← cut</span>'}</div>`).join('')}</div><div class="dup-save">💡 Cancel the others and save ₹${saving}/mo · ₹${(saving*12).toLocaleString('en-IN')}/year</div></div></div>`;}).join('');
     document.getElementById('dupSection').classList.remove('hidden');
   }
-
-  // ── GOAL CALCULATOR ──────────────────────────────────────
-  function calcGoal() {
-    const name   = document.getElementById('goalName').value.trim();
-    const amt    = parseFloat(document.getElementById('goalAmt').value);
-    const wasted = parseFloat(document.getElementById('wastedAmt').textContent.replace('₹','').replace(/,/g,'')) || 0;
-    if (!name||!amt) { alert('Please enter a goal name and amount.'); return; }
-    if (!wasted)     { alert('Add subscriptions first to see your savings potential.'); return; }
-    const months = Math.ceil(amt/wasted);
-    document.getElementById('goalResultTitle').textContent = `🎯 ${name} in ${months} month${months>1?'s':''}!`;
-    document.getElementById('goalResultText').innerHTML = `You waste <strong>₹${wasted}/month</strong> on subscriptions. Cancel the ones in your Cut Plan and you could afford <strong>${name}</strong> in just <strong>${months} month${months>1?'s':''}</strong>.`;
-    document.getElementById('goalResult').classList.add('show');
-    tw_onSetSavingsGoal();
+  function calcGoal(){
+    const name=document.getElementById('goalName').value.trim(),amt=parseFloat(document.getElementById('goalAmt').value),wasted=parseFloat(document.getElementById('wastedAmt').textContent.replace('₹','').replace(/,/g,''))||0;
+    if(!name||!amt){alert('Please enter a goal name and amount.');return;}
+    if(!wasted){alert('Add subscriptions first to see your savings potential.');return;}
+    const months=Math.ceil(amt/wasted);
+    document.getElementById('goalResultTitle').textContent=`🎯 ${name} in ${months} month${months>1?'s':''  }!`;
+    document.getElementById('goalResultText').innerHTML=`You waste <strong>₹${wasted}/month</strong> on subscriptions. Cancel the ones in your Cut Plan and you could afford <strong>${name}</strong> in just <strong>${months} month${months>1?'s':''}</strong>.`;
+    document.getElementById('goalResult').classList.add('show');tw_onSetSavingsGoal();
   }
-
-  // ── ALTERNATIVES ─────────────────────────────────────────
-  function renderAlts(subs) {
-    const found = subs.filter(s => FREE_ALTS[s.name]);
-    if (!found.length) { document.getElementById('altSection').classList.add('hidden'); return; }
-    document.getElementById('altList').innerHTML = found.map(sub => {
-      const alt = FREE_ALTS[sub.name];
-      return `
-        <div class="alt-item">
-          <div class="alt-left">
-            <div class="alt-icon">${emo(sub.category)}</div>
-            <div>
-              <div class="alt-name">Instead of ${sub.name} (₹${sub.price}/mo)</div>
-              <div class="alt-free-name">Try: ${alt.free}</div>
-              <div class="alt-tip">${alt.tip}</div>
-            </div>
-          </div>
-          <div class="alt-free-badge" onclick="tw_onPickFreeAlternative()">FREE ✓</div>
-        </div>`;
-    }).join('');
+  function renderAlts(subs){
+    const found=subs.filter(s=>FREE_ALTS[s.name]);if(!found.length){document.getElementById('altSection').classList.add('hidden');return;}
+    document.getElementById('altList').innerHTML=found.map(sub=>{const alt=FREE_ALTS[sub.name];return`<div class="alt-item"><div class="alt-left"><div class="alt-icon">${emo(sub.category)}</div><div><div class="alt-name">Instead of ${sub.name} (₹${sub.price}/mo)</div><div class="alt-free-name">Try: ${alt.free}</div><div class="alt-tip">${alt.tip}</div></div></div><div class="alt-free-badge" onclick="tw_onPickFreeAlternative()">FREE ✓</div></div>`;}).join('');
     document.getElementById('altSection').classList.remove('hidden');
   }
-
-  // ── CHART ────────────────────────────────────────────────
-  function renderChart(subs) {
-    const grouped = {};
-    subs.forEach(s => { grouped[s.category]=(grouped[s.category]||0)+s.price; });
-    const labels=Object.keys(grouped), values=Object.values(grouped);
+  function renderChart(subs){
+    const grouped={};subs.forEach(s=>{grouped[s.category]=(grouped[s.category]||0)+s.price;});
+    const labels=Object.keys(grouped),values=Object.values(grouped);
     const textColor=getComputedStyle(document.documentElement).getPropertyValue('--text2').trim();
     const catList=document.getElementById('catList');
-    if (!labels.length) { catList.innerHTML=`<div style="color:var(--text3);font-size:13px">No subscriptions yet.</div>`; }
-    else {
-      const max=Math.max(...values);
-      catList.innerHTML=labels.map((l,i)=>`
-        <div class="cat-item">
-          <div class="cat-name">${l}</div>
-          <div class="cat-bar-bg"><div class="cat-bar" style="width:${Math.round(values[i]/max*100)}%;background:${COLORS[i%COLORS.length]}"></div></div>
-          <div class="cat-amt">₹${values[i]}</div>
-        </div>`).join('');
-    }
-      const ctx=document.getElementById('catChart').getContext('2d');
-    if (chartInst) chartInst.destroy();
-    chartInst=new Chart(ctx,{
-      type:'doughnut',
-      data:{labels:labels.length?labels:['No data'],datasets:[{data:values.length?values:[1],backgroundColor:values.length?COLORS.slice(0,labels.length):['#1E1E35'],borderWidth:0,hoverOffset:8}]},
-      options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'bottom',labels:{color:textColor,font:{size:11,family:'DM Sans'},padding:10,boxWidth:10,boxHeight:10}},tooltip:{callbacks:{label:c=>` ₹${c.raw}/mo`}}}}
-    });
+    if(!labels.length){catList.innerHTML='<div style="color:var(--text3);font-size:13px">No subscriptions yet.</div>';}
+    else{const max=Math.max(...values);catList.innerHTML=labels.map((l,i)=>`<div class="cat-item"><div class="cat-name">${l}</div><div class="cat-bar-bg"><div class="cat-bar" style="width:${Math.round(values[i]/max*100)}%;background:${COLORS[i%COLORS.length]}"></div></div><div class="cat-amt">₹${values[i]}</div></div>`).join('');}
+    const ctx=document.getElementById('catChart').getContext('2d');if(chartInst)chartInst.destroy();
+    chartInst=new Chart(ctx,{type:'doughnut',data:{labels:labels.length?labels:['No data'],datasets:[{data:values.length?values:[1],backgroundColor:values.length?COLORS.slice(0,labels.length):['#1E1E35'],borderWidth:0,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'bottom',labels:{color:textColor,font:{size:11,family:'DM Sans'},padding:10,boxWidth:10,boxHeight:10}},tooltip:{callbacks:{label:c=>` ₹${c.raw}/mo`}}}}});
   }
-
-  // ── CALENDAR ─────────────────────────────────────────────
-  function renderCal(subs) {
-    const withDates = subs.filter(s => s.renewal_date);
-    if (!withDates.length) { document.getElementById('calSection').classList.add('hidden'); return; }
+  function renderCal(subs){
+    const withDates=subs.filter(s=>s.renewal_date);if(!withDates.length){document.getElementById('calSection').classList.add('hidden');return;}
     document.getElementById('calSection').classList.remove('hidden');
-    const now=new Date(), today=now.getDate();
+    const now=new Date(),today=now.getDate();
     document.getElementById('calMonth').textContent=now.toLocaleString('en-IN',{month:'long',year:'numeric'});
     document.getElementById('calTotal').textContent='₹'+withDates.reduce((a,s)=>a+s.price,0).toLocaleString('en-IN');
     const sorted=[...withDates].sort((a,b)=>new Date(a.renewal_date).getDate()-new Date(b.renewal_date).getDate());
     document.getElementById('calList').innerHTML=sorted.map(sub=>{
-      const day=new Date(sub.renewal_date).getDate();
-      const isPast=day<today,isToday=day===today,isSoon=day>today&&day<=today+3;
+      const day=new Date(sub.renewal_date).getDate();const isPast=day<today,isToday=day===today,isSoon=day>today&&day<=today+3;
       let dayColor='var(--text)',extra='',badge='';
-      if(isToday){dayColor='var(--red)';extra='cal-today';badge=`<span style="font-size:10px;background:var(--red-bg);color:var(--red);padding:2px 8px;border-radius:20px;font-weight:700">TODAY</span>`;}
-      else if(isSoon){dayColor='var(--orange)';extra='cal-soon';badge=`<span style="font-size:10px;background:var(--orange-bg);color:var(--orange);padding:2px 8px;border-radius:20px;font-weight:700">SOON</span>`;}
-      else if(isPast){dayColor='var(--text3)';badge=`<span style="font-size:10px;background:var(--border);color:var(--text3);padding:2px 8px;border-radius:20px;font-weight:700">DONE</span>`;}
-      return `
-        <div class="cal-item ${extra}">
-          <div class="cal-day"><div class="cal-day-num" style="color:${dayColor}">${day}</div><div class="cal-day-mon">${now.toLocaleString('en-IN',{month:'short'})}</div></div>
-          <div class="cal-info"><div class="cal-name">${sub.name} ${badge}</div><div class="cal-cat">${sub.category} · auto debit</div></div>
-          <div class="cal-price" style="color:${isPast?'var(--text3)':isToday||isSoon?'var(--red)':'var(--text)'}">₹${sub.price}</div>
-        </div>`;
+      if(isToday){dayColor='var(--red)';extra='cal-today';badge='<span style="font-size:10px;background:var(--red-bg);color:var(--red);padding:2px 8px;border-radius:20px;font-weight:700">TODAY</span>';}
+      else if(isSoon){dayColor='var(--orange)';extra='cal-soon';badge='<span style="font-size:10px;background:var(--orange-bg);color:var(--orange);padding:2px 8px;border-radius:20px;font-weight:700">SOON</span>';}
+      else if(isPast){dayColor='var(--text3)';badge='<span style="font-size:10px;background:var(--border);color:var(--text3);padding:2px 8px;border-radius:20px;font-weight:700">DONE</span>';}
+      return`<div class="cal-item ${extra}"><div class="cal-day"><div class="cal-day-num" style="color:${dayColor}">${day}</div><div class="cal-day-mon">${now.toLocaleString('en-IN',{month:'short'})}</div></div><div class="cal-info"><div class="cal-name">${sub.name} ${badge}</div><div class="cal-cat">${sub.category} · auto debit</div></div><div class="cal-price" style="color:${isPast?'var(--text3)':isToday||isSoon?'var(--red)':'var(--text)'}">₹${sub.price}</div></div>`;
     }).join('');
   }
-
-  // ── AI ADVICE ────────────────────────────────────────────
-  async function getAIAdvice() {
-    const subs = loadSubs();
-    if (!subs.length) { alert('Add some subscriptions first!'); return; }
-    const btn=document.getElementById('adviceBtn');
-    const text=document.getElementById('adviceText');
-    const empty=document.getElementById('adviceEmpty');
-    const loading=document.getElementById('adviceLoading');
-    btn.textContent='⏳ Thinking...'; btn.classList.add('btn-disabled');
-    text.classList.add('hidden'); empty.classList.add('hidden');
-    loading.classList.remove('hidden');
-    const data = calcWasteScore(subs);
-    const subList = subs.map(s=>`${s.name} (${s.category}) - ₹${s.price}/mo`).join(', ');
-    const mode = getMode();
-    const prompt = mode === 'student'
-      ? `You are TrackWise AI, a friendly money coach for Indian students aged 14+.
-The student has these subscriptions: ${subList}.
-Total monthly spend: ₹${data.total_monthly}. Estimated waste: ₹${data.wasted_amount}.
-Give 3 simple, friendly tips to save money. Use easy language, relatable examples (like saving for a phone or trip). Use ₹ symbol. End with one motivating line. Keep it under 100 words.`
-      : `You are TrackWise AI, a friendly Indian personal finance advisor.
-The user has these subscriptions: ${subList}.
-Total monthly spend: ₹${data.total_monthly}. Estimated waste: ₹${data.wasted_amount}. Waste Score: ${data.score}/100.
-Give them 3-4 specific, actionable money-saving tips in 100 words. Be conversational, use ₹ symbol, mention specific subscription names. End with one motivating sentence.`;
-    try {
-      const res = await fetch('/api/ai-advice', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ prompt })
-});
-const d = await res.json();
-const advice = d.advice || 'Could not get advice right now. Try again!';
-      text.textContent = advice;
-      text.classList.remove('hidden');
-    } catch(e) {
-      text.textContent = 'AI advice unavailable right now. Check your internet connection and try again!';
-      text.classList.remove('hidden');
-    }
-    loading.classList.add('hidden');
-    btn.textContent = mode === 'student' ? '✨ Get Money Tips' : '✨ Get AI Advice';
-    btn.classList.remove('btn-disabled');
+  async function getAIAdvice(){
+    const subs=loadSubs();if(!subs.length){alert('Add some subscriptions first!');return;}
+    const btn=document.getElementById('adviceBtn'),text=document.getElementById('adviceText'),empty=document.getElementById('adviceEmpty'),loading=document.getElementById('adviceLoading');
+    btn.textContent='⏳ Thinking...';btn.classList.add('btn-disabled');text.classList.add('hidden');empty.classList.add('hidden');loading.classList.remove('hidden');
+    const data=calcWasteScore(subs);const subList=subs.map(s=>`${s.name} (${s.category}) - ₹${s.price}/mo`).join(', ');const mode=getMode();
+    const prompt=mode==='student'?`You are TrackWise AI, a friendly money coach for Indian students aged 14+. The student has these subscriptions: ${subList}. Total monthly spend: ₹${data.total_monthly}. Estimated waste: ₹${data.wasted_amount}. Give 3 simple, friendly tips to save money. Use easy language, relatable examples (like saving for a phone or trip). Use ₹ symbol. End with one motivating line. Keep it under 100 words.`:`You are TrackWise AI, a friendly Indian personal finance advisor. The user has these subscriptions: ${subList}. Total monthly spend: ₹${data.total_monthly}. Estimated waste: ₹${data.wasted_amount}. Waste Score: ${data.score}/100. Give them 3-4 specific, actionable money-saving tips in 100 words. Be conversational, use ₹ symbol, mention specific subscription names. End with one motivating sentence.`;
+    try{const res=await fetch('/api/ai-advice',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});const d=await res.json();const advice=d.advice||'Could not get advice right now. Try again!';text.textContent=advice;text.classList.remove('hidden');}
+    catch(e){text.textContent='AI advice unavailable right now. Check your internet connection and try again!';text.classList.remove('hidden');}
+    loading.classList.add('hidden');btn.textContent=mode==='student'?'✨ Get Money Tips':'✨ Get AI Advice';btn.classList.remove('btn-disabled');
   }
-
-  // ═══════════════════════════════════════════════════════════
-  //  MODE SYSTEM
-  // ═══════════════════════════════════════════════════════════
-
-  const FINANCE_LESSONS = [
-    { icon:'🪄', title:'The Magic of Compounding', body:'If you invest just ₹500/month starting at age 14, by the time you\'re 40 it could grow to over ₹15 lakhs — without doing anything extra. That\'s the power of compound interest. Money makes more money over time.', highlight:'₹500/month × 26 years = ₹15+ lakhs 🤯' },
-    { icon:'📊', title:'The 50/30/20 Rule', body:'A simple rule for managing your money: spend 50% on needs (food, transport), 30% on wants (games, eating out, subscriptions), and save 20%. If you get ₹2000/month, try saving ₹400 every month without fail.', highlight:'50% Needs · 30% Wants · 20% Savings' },
-    { icon:'📱', title:'The Subscription Trap', body:'Free trials are designed to make you forget to cancel. Apps like Spotify, Netflix, and Hotstar all bank on you forgetting. Set a reminder to cancel before the trial ends — or you\'ll be charged without realising.', highlight:'💡 Tip: Always set a calendar reminder before a free trial ends' },
-    { icon:'🎯', title:'Pay Yourself First', body:'The moment you get money — pocket money, gift money, part-time pay — move 20% to savings immediately. Don\'t wait till the end of the month. By then it\'s already spent. Save first, spend what\'s left.', highlight:'Get money → Save 20% first → Then spend the rest' },
-    { icon:'💳', title:'Why Debt is Dangerous', body:'If you borrow ₹10,000 on a credit card and only pay the minimum each month, you could end up paying back ₹15,000 or more. Interest adds up fast. Never spend money you don\'t have — especially on things that don\'t last.', highlight:'⚠️ Credit card interest in India: 36-42% per year' },
-    { icon:'🏦', title:'Open a Savings Account', body:'A savings account earns 2.5-4% interest per year just for keeping money there. ₹10,000 in a savings account earns ₹300-400 per year doing nothing. Ask your parents to help you open one — you can open a minor\'s account from age 10.', highlight:'₹10,000 saved = ₹300-400 earned per year for free 💰' },
-    { icon:'🛒', title:'Need vs Want', body:'Before buying anything, ask: "Is this a need or a want?" Food, transport to school, medicines = needs. Extra OTT subscription, new phone case, eating out = wants. There\'s nothing wrong with wants — just be honest about what they are.', highlight:'Rule: Wait 24 hours before any purchase over ₹500' },
-    { icon:'📈', title:'Start a SIP Early', body:'A SIP (Systematic Investment Plan) lets you invest as little as ₹100/month in mutual funds. The earlier you start, the more compounding works in your favour. By investing young, you do less work for more money.', highlight:'You can start a SIP at age 18 with just ₹100/month' },
+  const FINANCE_LESSONS=[
+    {icon:'🪄',title:'The Magic of Compounding',body:"If you invest just ₹500/month starting at age 14, by the time you're 40 it could grow to over ₹15 lakhs — without doing anything extra. That's the power of compound interest. Money makes more money over time.",highlight:'₹500/month × 26 years = ₹15+ lakhs 🤯'},
+    {icon:'📊',title:'The 50/30/20 Rule',body:'A simple rule for managing your money: spend 50% on needs (food, transport), 30% on wants (games, eating out, subscriptions), and save 20%. If you get ₹2000/month, try saving ₹400 every month without fail.',highlight:'50% Needs · 30% Wants · 20% Savings'},
+    {icon:'📱',title:'The Subscription Trap',body:"Free trials are designed to make you forget to cancel. Apps like Spotify, Netflix, and Hotstar all bank on you forgetting. Set a reminder to cancel before the trial ends — or you'll be charged without realising.",highlight:'💡 Tip: Always set a calendar reminder before a free trial ends'},
+    {icon:'🎯',title:'Pay Yourself First',body:"The moment you get money — pocket money, gift money, part-time pay — move 20% to savings immediately. Don't wait till the end of the month. By then it's already spent. Save first, spend what's left.",highlight:'Get money → Save 20% first → Then spend the rest'},
+    {icon:'💳',title:'Why Debt is Dangerous',body:"If you borrow ₹10,000 on a credit card and only pay the minimum each month, you could end up paying back ₹15,000 or more. Interest adds up fast. Never spend money you don't have — especially on things that don't last.",highlight:'⚠️ Credit card interest in India: 36-42% per year'},
+    {icon:'🏦',title:'Open a Savings Account',body:"A savings account earns 2.5-4% interest per year just for keeping money there. ₹10,000 in a savings account earns ₹300-400 per year doing nothing. Ask your parents to help you open one — you can open a minor's account from age 10.",highlight:'₹10,000 saved = ₹300-400 earned per year for free 💰'},
+    {icon:'🛒',title:'Need vs Want',body:'Before buying anything, ask: "Is this a need or a want?" Food, transport to school, medicines = needs. Extra OTT subscription, new phone case, eating out = wants. There\'s nothing wrong with wants — just be honest about what they are.',highlight:'Rule: Wait 24 hours before any purchase over ₹500'},
+    {icon:'📈',title:'Start a SIP Early',body:'A SIP (Systematic Investment Plan) lets you invest as little as ₹100/month in mutual funds. The earlier you start, the more compounding works in your favour. By investing young, you do less work for more money.',highlight:'You can start a SIP at age 18 with just ₹100/month'},
   ];
-
-  let currentLesson = 0;
-
-  function getMode() { return localStorage.getItem(MODE_KEY) || null; }
-  function saveMode(mode) { localStorage.setItem(MODE_KEY, mode); }
-
- function selectMode(mode) {
-  saveMode(mode);
-  document.getElementById('mode-selector').classList.add('hidden');
-  
-  // Small delay to let the DOM settle before initialising
-  setTimeout(() => {
-    applyMode(mode);
-    initApp();
-  }, 50);
-}
-
-  function applyMode(mode) {
-    const html = document.documentElement;
-    html.setAttribute('data-mode', mode);
-
-    // Score label
-    document.getElementById('scoreLbl').textContent = mode === 'student' ? 'Your Spend Score' : 'Your Waste Score';
-
-    // Tagline
-    document.getElementById('taglineText').textContent = mode === 'student' ? 'Your Student Money Guide 🎓' : 'Your Pocket CA 🇮🇳';
-
-    // Health section
-    document.getElementById('healthTitle').textContent = mode === 'student' ? '💜 Money Health Score' : '💚 Financial Health Score';
-    document.getElementById('healthSub').textContent   = mode === 'student' ? 'Gets better when you make smart money moves' : 'Improves when you take good actions';
-
-    // Pulse title
-    document.getElementById('pulseTitle').textContent = mode === 'student' ? '📊 Weekly Money Check' : '📊 Weekly Money Pulse';
-
-    // Advice button
-    document.getElementById('adviceBtn').textContent = mode === 'student' ? '✨ Get Money Tips' : '✨ Get AI Advice';
-
-    // Section titles
-    document.getElementById('addSubTitle').textContent   = mode === 'student' ? '➕ Add App / Subscription' : '➕ Add Subscription';
-    document.getElementById('subListTitle').innerHTML    = mode === 'student'
-      ? `📱 My Apps & Subs <span class="sub-count" id="subCount">${loadSubs().length}</span>`
-      : `📋 My Subscriptions <span class="sub-count" id="subCount">${loadSubs().length}</span>`;
-
-    // Budget titles
-    document.getElementById('budgetIncomeTitle').textContent = mode === 'student' ? '💰 Pocket Money / Income' : '📈 Income Sources';
-    document.getElementById('budgetExpTitle').textContent    = mode === 'student' ? '💸 Where I Spend' : '📉 Expenses';
-
-    // Goal placeholder
-    document.getElementById('goalName').placeholder = mode === 'student'
-      ? 'e.g. New phone, Sneakers, Trip with friends'
-      : 'e.g. Trip to Goa, iPhone 16, MacBook';
-
-    // Mode badge
-    document.getElementById('modeBadge').textContent = mode === 'student' ? '🎓 Student' : '💼 Pro';
-
-    // Finance lesson card
-    const lessonEl = document.getElementById('finance-lesson');
-    if (mode === 'student') {
-      lessonEl.classList.add('show');
-      showLesson(currentLesson);
-      hideProPresets();
-    } else {
-      lessonEl.classList.remove('show');
-      showAllPresets();
-    }
+  let currentLesson=0;
+  function getMode(){return localStorage.getItem(MODE_KEY)||null;}
+  function saveMode(mode){localStorage.setItem(MODE_KEY,mode);}
+  function selectMode(mode){saveMode(mode);document.getElementById('mode-selector').classList.add('hidden');setTimeout(()=>{applyMode(mode);initApp();},50);}
+  function applyMode(mode){
+    document.documentElement.setAttribute('data-mode',mode);
+    document.getElementById('scoreLbl').textContent=mode==='student'?'Your Spend Score':'Your Waste Score';
+    document.getElementById('taglineText').textContent=mode==='student'?'Your Student Money Guide 🎓':'Your Pocket CA 🇮🇳';
+    document.getElementById('healthTitle').textContent=mode==='student'?'💜 Money Health Score':'💚 Financial Health Score';
+    document.getElementById('healthSub').textContent=mode==='student'?'Gets better when you make smart money moves':'Improves when you take good actions';
+    document.getElementById('pulseTitle').textContent=mode==='student'?'📊 Weekly Money Check':'📊 Weekly Money Pulse';
+    document.getElementById('adviceBtn').textContent=mode==='student'?'✨ Get Money Tips':'✨ Get AI Advice';
+    document.getElementById('addSubTitle').textContent=mode==='student'?'➕ Add App / Subscription':'➕ Add Subscription';
+    document.getElementById('subListTitle').innerHTML=mode==='student'?`📱 My Apps & Subs <span class="sub-count" id="subCount">${loadSubs().length}</span>`:`📋 My Subscriptions <span class="sub-count" id="subCount">${loadSubs().length}</span>`;
+    document.getElementById('budgetIncomeTitle').textContent=mode==='student'?'💰 Pocket Money / Income':'📈 Income Sources';
+    document.getElementById('budgetExpTitle').textContent=mode==='student'?'💸 Where I Spend':'📉 Expenses';
+    document.getElementById('goalName').placeholder=mode==='student'?'e.g. New phone, Sneakers, Trip with friends':'e.g. Trip to Goa, iPhone 16, MacBook';
+    document.getElementById('modeBadge').textContent=mode==='student'?'🎓 Student':'💼 Pro';
+    const lessonEl=document.getElementById('finance-lesson');
+    if(mode==='student'){lessonEl.classList.add('show');showLesson(currentLesson);hideProPresets();}
+    else{lessonEl.classList.remove('show');showAllPresets();}
   }
-
-  function hideProPresets() {
-    document.querySelectorAll('#presetSel optgroup').forEach(grp => {
-      if (grp.label === 'Finance') grp.style.display = 'none';
-    });
-    document.querySelectorAll('#subCat option').forEach(opt => {
-      if (['SIP','EMI','Insurance'].includes(opt.value)) opt.style.display = 'none';
-    });
-  }
-
-  function showAllPresets() {
-    document.querySelectorAll('#presetSel optgroup').forEach(grp => { grp.style.display = ''; });
-    document.querySelectorAll('#subCat option').forEach(opt => { opt.style.display = ''; });
-  }
-
-  function showLesson(index) {
-    const lesson = FINANCE_LESSONS[index % FINANCE_LESSONS.length];
-    document.getElementById('lesson-title').textContent     = lesson.icon + ' ' + lesson.title;
-    document.getElementById('lesson-body').textContent      = lesson.body;
-    document.getElementById('lesson-highlight').textContent = lesson.highlight;
-  }
-
-  function nextLesson() {
-    currentLesson = (currentLesson + 1) % FINANCE_LESSONS.length;
-    localStorage.setItem('tw_lesson_index', currentLesson);
-    showLesson(currentLesson);
-    showToast('💜 New lesson loaded!');
-  }
-
-  function switchMode() {
-    const current = getMode();
-    const next = current === 'student' ? 'pro' : 'student';
-    saveMode(next);
-    applyMode(next);
-    refreshAll();
-    showToast(next === 'student' ? '🎓 Student Mode!' : '💼 Professional Mode!');
-  }
-
-  // ═══════════════════════════════════════════════════════════
-  //  RETENTION SYSTEM
-  // ═══════════════════════════════════════════════════════════
-
-  function updateStreak(state) {
-    const today=new Date().toISOString().slice(0,10);
-    if(!state.lastVisitDate){state.lastVisitDate=today;state.streakDays=1;return{isNew:true,isFirst:true};}
-    if(state.lastVisitDate===today)return{isNew:false,isFirst:false};
-    const diff=Math.floor((new Date(today)-new Date(state.lastVisitDate))/86400000);
-    if(diff===1){state.streakDays+=1;state.healthScore=Math.min(state.healthScore+3,100);}
-    else{state.streakDays=1;}
-    state.lastVisitDate=today;
-    return{isNew:true,isFirst:false};
-  }
-
-  function showStreakBanner(state,result){
-    if(!result.isNew||result.isFirst)return;
-    const banner=document.getElementById('streak-banner');
-    const text=document.getElementById('streak-text');
-    if(state.streakDays>=7)text.textContent=`🏆 ${state.streakDays}-day streak! You're a financial warrior!`;
-    else if(state.streakDays>=3)text.textContent=`🔥 ${state.streakDays} days in a row! +3 Health Points earned!`;
-    else text.textContent=`👋 Welcome back! ${state.streakDays}-day streak! +3 Health Points earned.`;
-    banner.classList.add('show');
-    setTimeout(()=>{banner.style.transition='opacity .5s';banner.style.opacity='0';setTimeout(()=>{banner.classList.remove('show');banner.style.opacity='';banner.style.transition='';},500);},5000);
-  }
-
-  function updatePulse(subs){
-    const state=loadRetention();
-    const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    document.getElementById('pulse-day-badge').textContent=days[new Date().getDay()]+' Edition';
-    document.getElementById('weekly-pulse-section').classList.add('show');
-    const total=subs.reduce((s,x)=>s+x.price,0);
-    const waste=Math.round(total*.35);
-    const pct=total>0?Math.round((waste/total)*100):0;
-    document.getElementById('pulse-spend').textContent='₹'+total.toLocaleString('en-IN');
-    document.getElementById('pulse-waste').textContent='₹'+waste.toLocaleString('en-IN');
-    document.getElementById('pulse-count').textContent=subs.length;
-    document.getElementById('pulse-pct').textContent=pct+'%';
-    document.getElementById('pulse-streak').textContent=state.streakDays;
-    let insight='';
-    if(!subs.length)insight='👋 Add your subscriptions to unlock Money Pulse insights!';
-    else if(pct>=40)insight=`⚠️ You're wasting <strong>${pct}%</strong> of your spend. That's ₹${waste}/mo going nowhere!`;
-    else{const big=subs.reduce((a,b)=>b.price>a.price?b:a,subs[0]);insight=`💡 Biggest sub: <strong>${big.name} at ₹${big.price}/mo</strong>. Still worth it?`;}
-    document.getElementById('pulse-insight').innerHTML=insight;
-  }
-
-  function getHealthGrade(s){
-    if(s>=90)return{g:'A',l:'Excellent 🏆'};if(s>=75)return{g:'B',l:'Good 👍'};
-    if(s>=60)return{g:'C',l:'Average 🤔'};if(s>=45)return{g:'D',l:'Needs Work ⚠️'};
-    return{g:'F',l:'Critical 🚨'};
-  }
-  function getHealthTip(s){
-    if(s>=90)return"🏆 Outstanding! You're a subscription minimalist.";
-    if(s>=75)return'💪 Great habits! Cancel one more to reach grade A.';
-    if(s>=60)return'📈 Progress! Switch one subscription to a free alternative.';
-    if(s>=45)return'🎯 Set a savings goal to earn +5 points right now!';
-    return'🚀 Start by cancelling your most wasteful subscription!';
-  }
-
-  function renderHealth(state){
-    const score=Math.round(Math.min(Math.max(state.healthScore,0),100));
-    const{g,l}=getHealthGrade(score);
-    document.getElementById('health-num').textContent=score;
-    document.getElementById('health-grade-lbl').textContent=`Grade: ${g} — ${l}`;
-    const fill=document.getElementById('health-ring-fill');
-    if(fill)setTimeout(()=>{fill.style.strokeDashoffset=226-(score/100)*226;},300);
-    const bar=document.getElementById('health-bar');
-    if(bar)setTimeout(()=>{bar.style.width=score+'%';},300);
-    document.getElementById('health-tip').textContent=getHealthTip(score);
-    const cb=document.getElementById('ha-cancel-badge');
-    cb.textContent=state.cancelCount>0?state.cancelCount+' done':'0 done';
-    cb.className='ha-badge '+(state.cancelCount>0?'done':'todo');
-    const fb=document.getElementById('ha-free-badge');
-    fb.textContent=state.freeAltCount>0?state.freeAltCount+' done':'0 done';
-    fb.className='ha-badge '+(state.freeAltCount>0?'done':'todo');
-    const gb=document.getElementById('ha-goal-badge');
-    gb.textContent=state.goalSet?'✅ Done':'Not done';
-    gb.className='ha-badge '+(state.goalSet?'done':'todo');
-    const sb=document.getElementById('ha-streak-badge');
-    sb.textContent=state.streakDays+' day'+(state.streakDays!==1?'s':'');
-    sb.className='ha-badge '+(state.streakDays>1?'done':'todo');
-  }
-
-  function tw_onCancelSubscription(){
-    const s=loadRetention();s.cancelCount+=1;s.healthScore=Math.min(s.healthScore+10,100);
-    saveRetention(s);renderHealth(s);showToast('+10 Health Points! ✂️');
-  }
-  function tw_onPickFreeAlternative(){
-    const s=loadRetention();s.freeAltCount+=1;s.healthScore=Math.min(s.healthScore+8,100);
-    saveRetention(s);renderHealth(s);showToast('+8 Health Points! 🆓');
-  }
-  function tw_onSetSavingsGoal(){
-    const s=loadRetention();
-    if(!s.goalSet){s.goalSet=true;s.healthScore=Math.min(s.healthScore+5,100);saveRetention(s);renderHealth(s);showToast('+5 Health Points! 🎯');}
-  }
-
+  function hideProPresets(){document.querySelectorAll('#presetSel optgroup').forEach(g=>{if(g.label==='Finance')g.style.display='none';});document.querySelectorAll('#subCat option').forEach(o=>{if(['SIP','EMI','Insurance'].includes(o.value))o.style.display='none';});}
+  function showAllPresets(){document.querySelectorAll('#presetSel optgroup').forEach(g=>{g.style.display='';});document.querySelectorAll('#subCat option').forEach(o=>{o.style.display='';});}
+  function showLesson(index){const l=FINANCE_LESSONS[index%FINANCE_LESSONS.length];document.getElementById('lesson-title').textContent=l.icon+' '+l.title;document.getElementById('lesson-body').textContent=l.body;document.getElementById('lesson-highlight').textContent=l.highlight;}
+  function nextLesson(){currentLesson=(currentLesson+1)%FINANCE_LESSONS.length;localStorage.setItem('tw_lesson_index',currentLesson);showLesson(currentLesson);showToast('💜 New lesson loaded!');}
+  function switchMode(){const next=getMode()==='student'?'pro':'student';saveMode(next);applyMode(next);refreshAll();showToast(next==='student'?'🎓 Student Mode!':'💼 Professional Mode!');}
+  function updateStreak(state){const today=new Date().toISOString().slice(0,10);if(!state.lastVisitDate){state.lastVisitDate=today;state.streakDays=1;return{isNew:true,isFirst:true};}if(state.lastVisitDate===today)return{isNew:false,isFirst:false};const diff=Math.floor((new Date(today)-new Date(state.lastVisitDate))/86400000);if(diff===1){state.streakDays+=1;state.healthScore=Math.min(state.healthScore+3,100);}else{state.streakDays=1;}state.lastVisitDate=today;return{isNew:true,isFirst:false};}
+  function showStreakBanner(state,result){if(!result.isNew||result.isFirst)return;const banner=document.getElementById('streak-banner');const text=document.getElementById('streak-text');if(state.streakDays>=7)text.textContent=`🏆 ${state.streakDays}-day streak! You're a financial warrior!`;else if(state.streakDays>=3)text.textContent=`🔥 ${state.streakDays} days in a row! +3 Health Points earned!`;else text.textContent=`👋 Welcome back! ${state.streakDays}-day streak! +3 Health Points earned.`;banner.classList.add('show');setTimeout(()=>{banner.style.transition='opacity .5s';banner.style.opacity='0';setTimeout(()=>{banner.classList.remove('show');banner.style.opacity='';banner.style.transition='';},500);},5000);}
+  function updatePulse(subs){const state=loadRetention();const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];document.getElementById('pulse-day-badge').textContent=days[new Date().getDay()]+' Edition';document.getElementById('weekly-pulse-section').classList.add('show');const total=subs.reduce((s,x)=>s+x.price,0);const waste=Math.round(total*.35);const pct=total>0?Math.round((waste/total)*100):0;document.getElementById('pulse-spend').textContent='₹'+total.toLocaleString('en-IN');document.getElementById('pulse-waste').textContent='₹'+waste.toLocaleString('en-IN');document.getElementById('pulse-count').textContent=subs.length;document.getElementById('pulse-pct').textContent=pct+'%';document.getElementById('pulse-streak').textContent=state.streakDays;let insight='';if(!subs.length)insight='👋 Add your subscriptions to unlock Money Pulse insights!';else if(pct>=40)insight=`⚠️ You're wasting <strong>${pct}%</strong> of your spend. That's ₹${waste}/mo going nowhere!`;else{const big=subs.reduce((a,b)=>b.price>a.price?b:a,subs[0]);insight=`💡 Biggest sub: <strong>${big.name} at ₹${big.price}/mo</strong>. Still worth it?`;}document.getElementById('pulse-insight').innerHTML=insight;}
+  function getHealthGrade(s){if(s>=90)return{g:'A',l:'Excellent 🏆'};if(s>=75)return{g:'B',l:'Good 👍'};if(s>=60)return{g:'C',l:'Average 🤔'};if(s>=45)return{g:'D',l:'Needs Work ⚠️'};return{g:'F',l:'Critical 🚨'};}
+  function getHealthTip(s){if(s>=90)return"🏆 Outstanding! You're a subscription minimalist.";if(s>=75)return'💪 Great habits! Cancel one more to reach grade A.';if(s>=60)return'📈 Progress! Switch one subscription to a free alternative.';if(s>=45)return'🎯 Set a savings goal to earn +5 points right now!';return'🚀 Start by cancelling your most wasteful subscription!';}
+  function renderHealth(state){const score=Math.round(Math.min(Math.max(state.healthScore,0),100));const{g,l}=getHealthGrade(score);document.getElementById('health-num').textContent=score;document.getElementById('health-grade-lbl').textContent=`Grade: ${g} — ${l}`;const fill=document.getElementById('health-ring-fill');if(fill)setTimeout(()=>{fill.style.strokeDashoffset=226-(score/100)*226;},300);const bar=document.getElementById('health-bar');if(bar)setTimeout(()=>{bar.style.width=score+'%';},300);document.getElementById('health-tip').textContent=getHealthTip(score);const cb=document.getElementById('ha-cancel-badge');cb.textContent=state.cancelCount>0?state.cancelCount+' done':'0 done';cb.className='ha-badge '+(state.cancelCount>0?'done':'todo');const fb=document.getElementById('ha-free-badge');fb.textContent=state.freeAltCount>0?state.freeAltCount+' done':'0 done';fb.className='ha-badge '+(state.freeAltCount>0?'done':'todo');const gb=document.getElementById('ha-goal-badge');gb.textContent=state.goalSet?'✅ Done':'Not done';gb.className='ha-badge '+(state.goalSet?'done':'todo');const sb=document.getElementById('ha-streak-badge');sb.textContent=state.streakDays+' day'+(state.streakDays!==1?'s':'');sb.className='ha-badge '+(state.streakDays>1?'done':'todo');}
+  function tw_onCancelSubscription(){const s=loadRetention();s.cancelCount+=1;s.healthScore=Math.min(s.healthScore+10,100);saveRetention(s);renderHealth(s);showToast('+10 Health Points! ✂️');}
+  function tw_onPickFreeAlternative(){const s=loadRetention();s.freeAltCount+=1;s.healthScore=Math.min(s.healthScore+8,100);saveRetention(s);renderHealth(s);showToast('+8 Health Points! 🆓');}
+  function tw_onSetSavingsGoal(){const s=loadRetention();if(!s.goalSet){s.goalSet=true;s.healthScore=Math.min(s.healthScore+5,100);saveRetention(s);renderHealth(s);showToast('+5 Health Points! 🎯');}}
   let toastTimer=null;
-  function showToast(msg){
-    const t=document.getElementById('tw-toast');
-    t.textContent=msg;t.classList.add('show');
-    if(toastTimer)clearTimeout(toastTimer);
-    toastTimer=setTimeout(()=>t.classList.remove('show'),2500);
-  }
-
-  // ═══════════════════════════════════════════════════════════
-  //  BUDGET TRACKER
-  // ═══════════════════════════════════════════════════════════
-
-  
-  const DEFAULT_INCOME   = [{ id: Date.now()+1, name: 'Salary', amount: 0 }];
-  const DEFAULT_EXPENSES = [
-    { id: Date.now()+2, name: 'Rent', amount: 0 },
-    { id: Date.now()+3, name: 'Food', amount: 0 },
-    { id: Date.now()+4, name: 'Transport', amount: 0 },
-  ];
-
-  function loadBudget() {
-    try { const b=localStorage.getItem(BUDGET_KEY()); if(b)return JSON.parse(b); } catch(e) {}
-    return { income:DEFAULT_INCOME, expenses:DEFAULT_EXPENSES };
-  }
-  function saveBudget(b) { localStorage.setItem(BUDGET_KEY(), JSON.stringify(b)); }
-
-  function addBudgetItem(type) {
-    const b=loadBudget();
-    const newItem={id:Date.now(),name:'',amount:0};
-    if(type==='income')b.income.push(newItem); else b.expenses.push(newItem);
-    saveBudget(b);
-    renderBudget();
-    setTimeout(()=>{
-      const inputs=document.querySelectorAll(`#${type==='income'?'incomeList':'expenseList'} .budget-item-name`);
-      if(inputs.length)inputs[inputs.length-1].focus();
-    },50);
-  }
-
-  function deleteBudgetItem(type,id) {
-    const b=loadBudget();
-    if(type==='income') b.income=b.income.filter(i=>i.id!==id);
-    else b.expenses=b.expenses.filter(i=>i.id!==id);
-    saveBudget(b);
-    renderBudget();
-  }
-
-  function onBudgetChange(type,id,field,value) {
-    const b=loadBudget();
-    const list=type==='income'?b.income:b.expenses;
-    const item=list.find(i=>i.id===id);
-    if(!item)return;
-    if(field==='name')item.name=value;
-    if(field==='amount')item.amount=parseFloat(value)||0;
-    saveBudget(b);
+  function showToast(msg){const t=document.getElementById('tw-toast');t.textContent=msg;t.classList.add('show');if(toastTimer)clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2500);}
+  function addBudgetItem(type){const b=loadBudget();const newItem={id:Date.now(),name:'',amount:0};if(type==='income')b.income.push(newItem);else b.expenses.push(newItem);saveBudget(b);renderBudget();setTimeout(()=>{const inputs=document.querySelectorAll(`#${type==='income'?'incomeList':'expenseList'} .budget-item-name`);if(inputs.length)inputs[inputs.length-1].focus();},50);}
+  function deleteBudgetItem(type,id){const b=loadBudget();if(type==='income')b.income=b.income.filter(i=>i.id!==id);else b.expenses=b.expenses.filter(i=>i.id!==id);saveBudget(b);renderBudget();}
+  function onBudgetChange(type,id,field,value){const b=loadBudget();const list=type==='income'?b.income:b.expenses;const item=list.find(i=>i.id===id);if(!item)return;if(field==='name')item.name=value;if(field==='amount')item.amount=parseFloat(value)||0;saveBudget(b);updateBudgetSummary(b);}
+  function renderBudget(){
+    const b=loadBudget();const mode=getMode();
+    document.getElementById('incomeList').innerHTML=b.income.map(item=>`<div class="budget-item-row"><input class="budget-item-name" placeholder="${mode==='student'?'e.g. Pocket Money':'e.g. Salary'}" value="${item.name}" onchange="onBudgetChange('income',${item.id},'name',this.value)"/><input class="budget-item-amt" type="number" placeholder="₹" value="${item.amount||''}" onchange="onBudgetChange('income',${item.id},'amount',this.value)"/><button class="budget-del-btn" onclick="deleteBudgetItem('income',${item.id})">✕</button></div>`).join('');
+    const subs=loadSubs();const subTotal=subs.reduce((a,s)=>a+s.price,0);
+    let expHTML=b.expenses.map(item=>`<div class="budget-item-row"><input class="budget-item-name" placeholder="${mode==='student'?'e.g. Food, Recharge':'e.g. Rent'}" value="${item.name}" onchange="onBudgetChange('expense',${item.id},'name',this.value)"/><input class="budget-item-amt" type="number" placeholder="₹" value="${item.amount||''}" onchange="onBudgetChange('expense',${item.id},'amount',this.value)"/><button class="budget-del-btn" onclick="deleteBudgetItem('expense',${item.id})">✕</button></div>`).join('');
+    if(subTotal>0){expHTML+=`<div class="budget-item-row" style="opacity:.7"><input class="budget-item-name" value="📱 Subscriptions (auto)" readonly style="cursor:default"/><input class="budget-item-amt" value="${subTotal}" readonly style="cursor:default;color:var(--orange)"/><button class="budget-del-btn" style="opacity:0;pointer-events:none">✕</button></div>`;}
+    document.getElementById('expenseList').innerHTML=expHTML;
     updateBudgetSummary(b);
   }
-
-  function renderBudget() {
-    const b=loadBudget();
-    const mode=getMode();
-    document.getElementById('incomeList').innerHTML=b.income.map(item=>`
-      <div class="budget-item-row">
-        <input class="budget-item-name" placeholder="${mode==='student'?'e.g. Pocket Money':'e.g. Salary'}" value="${item.name}" onchange="onBudgetChange('income',${item.id},'name',this.value)"/>
-        <input class="budget-item-amt" type="number" placeholder="₹" value="${item.amount||''}" onchange="onBudgetChange('income',${item.id},'amount',this.value)"/>
-        <button class="budget-del-btn" onclick="deleteBudgetItem('income',${item.id})">✕</button>
-      </div>`).join('');
-    const subs=loadSubs();
-    const subTotal=subs.reduce((a,s)=>a+s.price,0);
-    let expenseHTML=b.expenses.map(item=>`
-      <div class="budget-item-row">
-        <input class="budget-item-name" placeholder="${mode==='student'?'e.g. Food, Recharge':'e.g. Rent'}" value="${item.name}" onchange="onBudgetChange('expense',${item.id},'name',this.value)"/>
-        <input class="budget-item-amt" type="number" placeholder="₹" value="${item.amount||''}" onchange="onBudgetChange('expense',${item.id},'amount',this.value)"/>
-        <button class="budget-del-btn" onclick="deleteBudgetItem('expense',${item.id})">✕</button>
-      </div>`).join('');
-    if(subTotal>0){
-      expenseHTML+=`
-        <div class="budget-item-row" style="opacity:.7">
-          <input class="budget-item-name" value="📱 Subscriptions (auto)" readonly style="cursor:default"/>
-          <input class="budget-item-amt" value="${subTotal}" readonly style="cursor:default;color:var(--orange)"/>
-          <button class="budget-del-btn" style="opacity:0;pointer-events:none">✕</button>
-        </div>`;
-    }
-    document.getElementById('expenseList').innerHTML=expenseHTML;
-    updateBudgetSummary(b);
+  function updateBudgetSummary(b){
+    const subs=loadSubs();const subTotal=subs.reduce((a,s)=>a+s.price,0);
+    const totalIncome=b.income.reduce((a,i)=>a+i.amount,0);const manualExp=b.expenses.reduce((a,i)=>a+i.amount,0);const totalExp=manualExp+subTotal;
+    const remaining=totalIncome-totalExp;const savingsRate=totalIncome>0?Math.round((remaining/totalIncome)*100):0;const expPct=totalIncome>0?Math.min(Math.round((totalExp/totalIncome)*100),100):0;
+    const emiTotal=loadSubs().filter(s=>['EMI','Insurance','SIP'].includes(s.category)).reduce((a,s)=>a+s.price,0);const emiPct=totalIncome>0?Math.round((emiTotal/totalIncome)*100):0;
+    const rbiWarn=document.getElementById('rbi-emi-warning');
+    if(emiPct>50&&totalIncome>0){rbiWarn.style.display='flex';document.getElementById('rbi-emi-pct').textContent=emiPct+'%';document.getElementById('rbi-emi-amt').textContent='₹'+emiTotal.toLocaleString('en-IN');}else{rbiWarn.style.display='none';}
+    document.getElementById('budgetTotalIncome').textContent='₹'+totalIncome.toLocaleString('en-IN');document.getElementById('budgetTotalExpense').textContent='₹'+totalExp.toLocaleString('en-IN');document.getElementById('budgetRemainingAmt').textContent='₹'+Math.abs(remaining).toLocaleString('en-IN');document.getElementById('budgetExpenseBar').style.width=expPct+'%';
+    const box=document.getElementById('budgetRemaining');const verdict=document.getElementById('budgetVerdict');
+    if(totalIncome===0){box.className='budget-remaining good';verdict.textContent='Enter your monthly income above to see your full picture.';}
+    else if(remaining>=0){if(savingsRate>=20){box.className='budget-remaining good';verdict.textContent=`🎉 Amazing! You're saving ${savingsRate}% of your income. You're ahead of most Indians!`;}else if(savingsRate>=10){box.className='budget-remaining warn';verdict.textContent=`⚠️ You're saving ${savingsRate}%. Try to reach 20% — cut one subscription to get there.`;}else{box.className='budget-remaining warn';verdict.textContent=`📈 Only saving ${savingsRate}%. Review your biggest expenses and try to free up more.`;}}
+    else{box.className='budget-remaining bad';document.getElementById('budgetRemainingAmt').textContent='-₹'+Math.abs(remaining).toLocaleString('en-IN');verdict.textContent=`🚨 You're overspending by ₹${Math.abs(remaining).toLocaleString('en-IN')}/mo! Cut expenses immediately.`;}
+    const clampedRate=Math.max(0,Math.min(savingsRate,100));const ringFill=document.getElementById('budgetRateRing');const rateNum=document.getElementById('budgetRateNum');const rateColor=savingsRate>=20?'var(--green)':savingsRate>=10?'var(--orange)':'var(--red)';
+    setTimeout(()=>{ringFill.style.strokeDashoffset=157-(clampedRate/100)*157;ringFill.style.stroke=rateColor;},300);rateNum.textContent=clampedRate+'%';rateNum.style.color=rateColor;
+    const categories={};b.expenses.forEach(i=>{if(i.amount>0)categories[i.name||'Other']=(categories[i.name||'Other']||0)+i.amount;});if(subTotal>0)categories['Subscriptions']=(categories['Subscriptions']||0)+subTotal;
+    const catEntries=Object.entries(categories).sort((a,b)=>b[1]-a[1]);const maxCat=catEntries.length?catEntries[0][1]:1;const catColors=['#FF5A3C','#FF9500','#FFD60A','#4A90FF','#9B59F5','#00E5A0','#FF6B9D'];
+    if(catEntries.length){document.getElementById('budgetBreakdown').innerHTML=catEntries.map(([name,amt],i)=>{const pct=totalExp>0?Math.round((amt/totalExp)*100):0;return`<div class="budget-cat-row"><div class="budget-cat-name">${name}</div><div class="budget-cat-bar-bg"><div class="budget-cat-bar" style="width:${Math.round((amt/maxCat)*100)}%;background:${catColors[i%catColors.length]}"></div></div><div class="budget-cat-amt">₹${amt.toLocaleString('en-IN')}</div><div class="budget-cat-pct">${pct}%</div></div>`;}).join('');}
+    else{document.getElementById('budgetBreakdown').innerHTML='<div style="font-size:13px;color:var(--text3)">Add expenses to see breakdown.</div>';}
+    document.getElementById('budgetRateSub').innerHTML=savingsRate>=20?`✅ You're hitting the <strong>20% savings rule</strong>. Great financial discipline!`:`Financial rule of thumb: save at least <strong>20%</strong> of your income every month. You're at ${savingsRate}%.`;
   }
-
-  function updateBudgetSummary(b) {
-    const subs=loadSubs();
-    const subTotal=subs.reduce((a,s)=>a+s.price,0);
-    const totalIncome=b.income.reduce((a,i)=>a+i.amount,0);
-    const manualExp=b.expenses.reduce((a,i)=>a+i.amount,0);
-    const totalExp=manualExp+subTotal;
-    const remaining=totalIncome-totalExp;
-    const savingsRate=totalIncome>0?Math.round((remaining/totalIncome)*100):0;
-    const expPct=totalIncome>0?Math.min(Math.round((totalExp/totalIncome)*100),100):0;
-    // ── RBI EMI RULE ─────────────────────────────────────────
-// RBI says total EMIs should not exceed 50% of monthly income
-const emiTotal = loadSubs()
-  .filter(s => ['EMI', 'Insurance', 'SIP'].includes(s.category))
-  .reduce((a, s) => a + s.price, 0);
-const emiPct = totalIncome > 0 ? Math.round((emiTotal / totalIncome) * 100) : 0;
-if (emiPct > 50 && totalIncome > 0) {
-  document.getElementById('rbi-emi-warning').style.display = 'flex';
-  document.getElementById('rbi-emi-pct').textContent = emiPct + '%';
-  document.getElementById('rbi-emi-amt').textContent = '₹' + emiTotal.toLocaleString('en-IN');
-} else {
-  document.getElementById('rbi-emi-warning').style.display = 'none';
-}
-    document.getElementById('budgetTotalIncome').textContent='₹'+totalIncome.toLocaleString('en-IN');
-    document.getElementById('budgetTotalExpense').textContent='₹'+totalExp.toLocaleString('en-IN');
-    document.getElementById('budgetRemainingAmt').textContent='₹'+Math.abs(remaining).toLocaleString('en-IN');
-    document.getElementById('budgetExpenseBar').style.width=expPct+'%';
-    const box=document.getElementById('budgetRemaining');
-    const verdict=document.getElementById('budgetVerdict');
-    if(totalIncome===0){
-      box.className='budget-remaining good';
-      verdict.textContent='Enter your monthly income above to see your full picture.';
-    } else if(remaining>=0){
-      if(savingsRate>=20){box.className='budget-remaining good';verdict.textContent=`🎉 Amazing! You're saving ${savingsRate}% of your income. You're ahead of most Indians!`;}
-      else if(savingsRate>=10){box.className='budget-remaining warn';verdict.textContent=`⚠️ You're saving ${savingsRate}%. Try to reach 20% — cut one subscription to get there.`;}
-      else{box.className='budget-remaining warn';verdict.textContent=`📈 Only saving ${savingsRate}%. Review your biggest expenses and try to free up more.`;}
-    } else {
-      box.className='budget-remaining bad';
-      document.getElementById('budgetRemainingAmt').textContent='-₹'+Math.abs(remaining).toLocaleString('en-IN');
-      verdict.textContent=`🚨 You're overspending by ₹${Math.abs(remaining).toLocaleString('en-IN')}/mo! Cut expenses immediately.`;
-    }
-    const clampedRate=Math.max(0,Math.min(savingsRate,100));
-    const ringFill=document.getElementById('budgetRateRing');
-    const rateNum=document.getElementById('budgetRateNum');
-    const rateColor=savingsRate>=20?'var(--green)':savingsRate>=10?'var(--orange)':'var(--red)';
-    setTimeout(()=>{ringFill.style.strokeDashoffset=157-(clampedRate/100)*157;ringFill.style.stroke=rateColor;},300);
-    rateNum.textContent=clampedRate+'%';
-    rateNum.style.color=rateColor;
-    const categories={};
-    b.expenses.forEach(i=>{if(i.amount>0)categories[i.name||'Other']=(categories[i.name||'Other']||0)+i.amount;});
-    if(subTotal>0)categories['Subscriptions']=(categories['Subscriptions']||0)+subTotal;
-    const catEntries=Object.entries(categories).sort((a,b)=>b[1]-a[1]);
-    const maxCat=catEntries.length?catEntries[0][1]:1;
-    const catColors=['#FF5A3C','#FF9500','#FFD60A','#4A90FF','#9B59F5','#00E5A0','#FF6B9D'];
-    if(catEntries.length){
-      document.getElementById('budgetBreakdown').innerHTML=catEntries.map(([name,amt],i)=>{
-        const pct=totalExp>0?Math.round((amt/totalExp)*100):0;
-        return `<div class="budget-cat-row"><div class="budget-cat-name">${name}</div><div class="budget-cat-bar-bg"><div class="budget-cat-bar" style="width:${Math.round((amt/maxCat)*100)}%;background:${catColors[i%catColors.length]}"></div></div><div class="budget-cat-amt">₹${amt.toLocaleString('en-IN')}</div><div class="budget-cat-pct">${pct}%</div></div>`;
-      }).join('');
-    } else {
-      document.getElementById('budgetBreakdown').innerHTML=`<div style="font-size:13px;color:var(--text3)">Add expenses to see breakdown.</div>`;
-    }
-    document.getElementById('budgetRateSub').innerHTML=savingsRate>=20
-      ?`✅ You're hitting the <strong>20% savings rule</strong>. Great financial discipline!`
-      :`Financial rule of thumb: save at least <strong>20%</strong> of your income every month. You're at ${savingsRate}%.`;
+  function init(){
+    currentLesson=parseInt(localStorage.getItem('tw_lesson_index')||'0');
+    const savedTheme=localStorage.getItem(THEME_KEY)||'night';setTheme(savedTheme);
+    sb.auth.getSession().then(({data:{session}})=>{
+      if(!session){document.getElementById('login-screen').classList.remove('hidden');return;}
+      currentUser=session.user;document.getElementById('login-screen').classList.add('hidden');updateAuthHeader();onUserLoggedIn();
+    });
+    sb.auth.onAuthStateChange((event,session)=>{
+      if(event==='SIGNED_IN'&&session?.user&&!currentUser){currentUser=session.user;onUserLoggedIn();}
+      if(event==='SIGNED_OUT'){currentUser=null;updateAuthHeader();document.getElementById('login-screen').classList.remove('hidden');}
+    });
   }
-
-  // ── INIT ─────────────────────────────────────────────────
- function init() {
-  // Check if user is already logged in
-  sb.auth.getSession().then(({ data: { session } }) => {
-    if (!session) {
-      // Not logged in — show login screen
-      document.getElementById('login-screen').classList.remove('hidden');
-      const savedTheme = localStorage.getItem(THEME_KEY) || 'night';
-      setTheme(savedTheme);
-      return;
-    }
-    // Already logged in
-    currentUser = session.user;
-    document.getElementById('login-screen').classList.add('hidden');
-    updateAuthHeader();
-    onUserLoggedIn();
-  });
-}
-
-  function initApp() {
-    const savedTheme = localStorage.getItem(THEME_KEY) || 'night';
-    setTheme(savedTheme);
-    const mode = getMode() || 'pro';
-    applyMode(mode);
-    const state = loadRetention();
-    const result = updateStreak(state);
-    saveRetention(state);
-    showStreakBanner(state, result);
-    renderHealth(state);
-    refreshAll();
+  function initApp(){
+    const savedTheme=localStorage.getItem(THEME_KEY)||'night';setTheme(savedTheme);
+    const mode=getMode()||'pro';applyMode(mode);
+    const state=loadRetention();const result=updateStreak(state);saveRetention(state);showStreakBanner(state,result);renderHealth(state);refreshAll();
   }
-
+  let deferredPrompt=null;
+  window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredPrompt=e;if(!localStorage.getItem('pwa-dismissed')){document.getElementById('pwa-banner').classList.add('show');}});
+  document.getElementById('pwa-install-btn').addEventListener('click',async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();const{outcome}=await deferredPrompt.userChoice;if(outcome==='accepted')showToast('🎉 TrackWise installed!');deferredPrompt=null;document.getElementById('pwa-banner').classList.remove('show');});
+  if('serviceWorker'in navigator){navigator.serviceWorker.register('/sw.js').then(()=>console.log('✅ TrackWise SW registered')).catch(e=>console.log('SW error:',e));}
   init();
   </script>
-  <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js')
-      .then(() => console.log('TrackWise SW registered'))
-      .catch(e => console.log('SW error:', e));
-  }
-</script>
 </body>
 </html>
