@@ -538,7 +538,23 @@
       <div class="sec-title" id="subListTitle">📋 My Subscriptions <span class="sub-count" id="subCount">0</span></div>
       <div id="subList"><div class="empty-state"><div class="empty-icon">🎯</div><div class="empty-text">No subscriptions yet.<br>Add one above to get your Waste Score!</div></div></div>
     </div>
+   <!-- BACKUP & RESTORE -->
+    <div class="card card-pad">
+      <div class="sec-title">💾 Backup & Restore <span class="badge badge-green">Keep your data safe</span></div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:16px">
+        Export a backup file anytime — if you switch phones or lose access, import it back and your data is restored instantly.
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <button class="btn btn-green" onclick="exportBackup()">⬇️ Export Backup</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('importFile').click()">⬆️ Import Backup</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importBackup(event)"/>
+      </div>
+      <div id="backupMsg" style="font-size:13px;margin-top:12px;min-height:18px"></div>
+    </div>
+
   </main>
+
+  <footer class="footer">
   <footer class="footer">
     <div class="footer-logo">💸 TrackWise AI</div>
     <div class="footer-tagline">Stop wasting money. Start living better.</div>
@@ -818,6 +834,66 @@
   window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredPrompt=e;if(!localStorage.getItem('pwa-dismissed')){document.getElementById('pwa-banner').classList.add('show');}});
   document.getElementById('pwa-install-btn').addEventListener('click',async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();const{outcome}=await deferredPrompt.userChoice;if(outcome==='accepted')showToast('🎉 TrackWise installed!');deferredPrompt=null;document.getElementById('pwa-banner').classList.remove('show');});
   if('serviceWorker'in navigator){navigator.serviceWorker.register('/sw.js').then(()=>console.log('✅ TrackWise SW registered')).catch(e=>console.log('SW error:',e));}
+  // ── EXPORT / IMPORT BACKUP ────────────────────────────────
+  function exportBackup() {
+    const data = {
+      app: 'TrackWise AI',
+      version: 1,
+      exported_at: new Date().toISOString(),
+      mode: getMode(),
+      subscriptions: loadSubs(),
+      budget: loadBudget(),
+      retention: loadRetention(),
+      kept: loadKept(),
+      theme: localStorage.getItem(THEME_KEY),
+      lesson_index: localStorage.getItem('tw_lesson_index')
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const dateStr = new Date().toISOString().slice(0,10);
+    a.href = url;
+    a.download = `trackwise-backup-${dateStr}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('✅ Backup downloaded!');
+  }
+
+  function importBackup(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const msg = document.getElementById('backupMsg');
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (!data.app || data.app !== 'TrackWise AI') {
+          msg.textContent = '❌ This doesn\'t look like a TrackWise backup file.';
+          msg.style.color = 'var(--red)';
+          return;
+        }
+        if (!confirm('This will replace your current data with the backup. Continue?')) return;
+
+        if (data.mode) saveMode(data.mode);
+        if (data.subscriptions) localStorage.setItem(SUBS_KEY(), JSON.stringify(data.subscriptions));
+        if (data.budget) localStorage.setItem(BUDGET_KEY(), JSON.stringify(data.budget));
+        if (data.retention) localStorage.setItem(RETENTION_KEY(), JSON.stringify(data.retention));
+        if (data.kept) localStorage.setItem(KEPT_KEY(), JSON.stringify(data.kept));
+        if (data.theme) localStorage.setItem(THEME_KEY, data.theme);
+        if (data.lesson_index) localStorage.setItem('tw_lesson_index', data.lesson_index);
+
+        msg.textContent = '✅ Backup restored! Reloading...';
+        msg.style.color = 'var(--green)';
+        syncToCloud();
+        setTimeout(() => location.reload(), 1200);
+      } catch(err) {
+        msg.textContent = '❌ Invalid backup file. Could not read it.';
+        msg.style.color = 'var(--red)';
+      }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+  }
   init();
   </script>
 </body>
