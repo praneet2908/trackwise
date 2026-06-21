@@ -286,7 +286,30 @@
     .budget-cat-bar{height:100%;border-radius:3px;transition:width .8s ease}
     .budget-cat-amt{font-size:12px;font-weight:600;color:var(--text);width:70px;text-align:right;flex-shrink:0}
     .budget-cat-pct{font-size:11px;color:var(--text3);width:34px;text-align:right;flex-shrink:0}
-    .hidden{display:none!important}
+    
+.onboard-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);z-index:6500;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
+.onboard-screen.hidden{display:none!important}
+.onboard-dots{display:flex;gap:8px;margin-bottom:32px}
+.onboard-dots .dot{width:8px;height:8px;border-radius:50%;background:var(--border2)}
+.onboard-dots .dot.active{background:var(--green);width:24px;border-radius:4px;transition:all .3s}
+.onboard-emoji{font-size:48px;margin-bottom:16px}
+.onboard-title{font-family:var(--font-head);font-size:24px;font-weight:800;color:var(--text);margin-bottom:10px}
+.onboard-sub{font-size:14px;color:var(--text3);margin-bottom:32px;max-width:380px;line-height:1.6}
+.onboard-btn{min-width:200px}
+.onboard-cards{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;max-width:600px}
+.onboard-card{background:var(--card);border:2px solid var(--border);border-radius:16px;padding:24px;min-width:200px;cursor:pointer;transition:all .2s}
+.onboard-card:hover{border-color:var(--green);transform:translateY(-3px)}
+.onboard-card-emoji{font-size:36px;margin-bottom:10px}
+.onboard-card-title{font-family:var(--font-head);font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px}
+.onboard-card-desc{font-size:12px;color:var(--text3);line-height:1.5}
+.onboard-card-active{border-color:var(--green)}
+.onboard-card-disabled{opacity:.5;cursor:not-allowed;position:relative}
+.onboard-soon-badge{position:absolute;top:10px;right:10px;background:var(--orange-bg);color:var(--orange);font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px}
+.onboard-msg{font-size:13px;margin-top:16px;min-height:18px}
+.onboard-currency{display:flex;gap:10px;justify-content:center;margin-bottom:24px}
+.onboard-currency-btn{padding:8px 16px;border-radius:10px;border:1.5px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;font-family:var(--font-body);font-size:13px;font-weight:600}
+.onboard-currency-btn.active{background:var(--green);color:#000;border-color:var(--green)}
+.hidden{display:none!important}
     @media(max-width:640px){.score-section{grid-template-columns:1fr}.chart-grid{grid-template-columns:1fr}.pulse-grid{grid-template-columns:repeat(2,1fr)}.score-num{font-size:72px}.main{padding:16px;gap:16px}.tagline{display:none}.sub-badge{display:none}.form-row{flex-direction:column}.card-pad{padding:20px}.header{padding:0 16px}.health-top{flex-direction:column}.header-right{gap:8px}.mode-badge{font-size:10px;padding:3px 8px}}
   </style>
 </head>
@@ -314,9 +337,42 @@
     </div>
     <div style="font-size:11px;color:var(--text3);margin-top:24px;max-width:320px;line-height:1.6">🔒 No password. No tracking. Your data syncs securely to the cloud.</div>
   </div>
+  <!-- ONBOARDING STEP 1: WELCOME -->
+<div id="onboard-step1" class="onboard-screen hidden">
+  <div class="onboard-dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+  <div class="onboard-emoji">👋</div>
+  <div class="onboard-title">Welcome to TrackWise!</div>
+  <div class="onboard-sub">Let's get you set up in under a minute. Just a few quick steps.</div>
+  <button class="btn btn-green onboard-btn" onclick="goToStep('onboard-step1','onboard-step2')">Get Started →</button>
+</div>
+
+<!-- ONBOARDING STEP 2: SETUP -->
+<div id="onboard-step2" class="onboard-screen hidden">
+  <div class="onboard-dots"><span class="dot"></span><span class="dot active"></span><span class="dot"></span><span class="dot"></span></div>
+  <div class="onboard-title">How do you want to start?</div>
+  <div class="onboard-sub">If you've used TrackWise before, restore your backup. Otherwise start fresh.</div>
+  <div class="onboard-cards">
+    <div class="onboard-card" onclick="goToStep('onboard-step2','mode-selector')">
+      <div class="onboard-card-emoji">✨</div>
+      <div class="onboard-card-title">Start Fresh</div>
+      <div class="onboard-card-desc">New here? Begin with a clean slate.</div>
+    </div>
+    <div class="onboard-card" onclick="document.getElementById('onboardImportFile').click()">
+      <div class="onboard-card-emoji">📂</div>
+      <div class="onboard-card-title">Restore Backup</div>
+      <div class="onboard-card-desc">Import your previous TrackWise data.</div>
+    </div>
+  </div>
+  <input type="file" id="onboardImportFile" accept=".json" style="display:none" onchange="importBackupOnboarding(event)"/>
+  <div id="onboardImportMsg" class="onboard-msg"></div>
+</div> 
   <div id="mode-selector" class="hidden">
     <div class="mode-selector-logo">💸 TrackWise AI</div>
     <div class="mode-selector-sub">First, tell us who you are 👇</div>
+    <div class="onboard-currency">
+      <button class="onboard-currency-btn active" id="curr-INR" onclick="setOnboardCurrency('INR')">₹ INR</button>
+      <button class="onboard-currency-btn" id="curr-USD" onclick="setOnboardCurrency('USD')">$ USD</button>
+    </div>
     <div class="mode-cards">
       <div class="mode-card student" onclick="selectMode('student')">
         <span class="mode-card-emoji">🎓</span>
@@ -333,6 +389,25 @@
     </div>
     <div class="mode-selector-note">You can switch modes anytime from the header.</div>
   </div>
+  <!-- ONBOARDING STEP 4: LAUNCH -->
+<div id="onboard-step4" class="onboard-screen hidden">
+  <div class="onboard-dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot active"></span></div>
+  <div class="onboard-title">You're all set! 🎉</div>
+  <div class="onboard-sub">Choose how you'd like to use TrackWise.</div>
+  <div class="onboard-cards">
+    <div class="onboard-card onboard-card-active" onclick="finishOnboarding()">
+      <div class="onboard-card-emoji">🆓</div>
+      <div class="onboard-card-title">Continue Free</div>
+      <div class="onboard-card-desc">Full access to all current features. No card needed.</div>
+    </div>
+    <div class="onboard-card onboard-card-disabled">
+      <div class="onboard-card-emoji">⭐</div>
+      <div class="onboard-card-title">Premium</div>
+      <div class="onboard-card-desc">Coming soon — unlimited AI advice & more.</div>
+      <div class="onboard-soon-badge">Coming Soon</div>
+    </div>
+  </div>
+</div>
   <header class="header">
     <div class="header-inner">
       <div class="logo"><span class="logo-icon">💸</span><span class="logo-text">TrackWise AI</span></div>
@@ -621,14 +696,23 @@
     if(d.lesson_index)localStorage.setItem('tw_lesson_index',d.lesson_index);
     showToast('✅ Data restored!');
   }
-  async function onUserLoggedIn(){
-    document.getElementById('login-screen').classList.add('hidden');
-    updateAuthHeader();
-    await loadFromCloud();
-    const savedMode=getMode();
-    if(!savedMode){document.getElementById('mode-selector').classList.remove('hidden');}
-    else{document.getElementById('mode-selector').classList.add('hidden');initApp();}
+  async function onUserLoggedIn() {
+  document.getElementById('login-screen').classList.add('hidden');
+  updateAuthHeader();
+  await loadFromCloud();
+  if (!localStorage.getItem('tw_onboarded')) {
+    document.getElementById('onboard-step1').classList.remove('hidden');
+    return;
   }
+  const savedMode = getMode();
+  if (!savedMode) {
+    document.getElementById('mode-selector').classList.remove('hidden');
+  } else {
+    document.getElementById('mode-selector').classList.add('hidden');
+    initApp();
+  }
+}
+  
   const FREE_ALTS={'Netflix':{free:'JioCinema Free / YouTube',tip:'JioCinema has thousands of free movies'},'Spotify':{free:'JioSaavn Free / YouTube Music',tip:'JioSaavn free tier has most Indian music'},'YouTube Premium':{free:'YouTube + uBlock Origin',tip:'Free ad blocking on desktop browser'},'Canva Pro':{free:'Canva Free / Adobe Express',tip:'Canva free tier covers 90% of personal use'},'ChatGPT Plus':{free:'Claude Free / Gemini Free',tip:'Both have generous free tiers'},'Microsoft 365':{free:'Google Docs / LibreOffice',tip:'Google Docs is completely free'},'iCloud 50GB':{free:'Google Photos Free 15GB',tip:'Google gives 15GB free — enough for most'},'Google One':{free:'Compress photos to free tier',tip:'Google Photos storage saver mode helps'},'Cult.fit':{free:'YouTube Workout Channels',tip:'MadFit, Chloe Ting — completely free'}};
   const CANCEL_GUIDES={'Netflix':'netflix.com → Account → Cancel Membership','Hotstar':'hotstar.com → Profile → Subscription → Cancel','Amazon Prime':'amazon.in → Account → Prime → End Membership','Spotify':'spotify.com → Account → Subscription → Cancel','YouTube Premium':'youtube.com → Paid Memberships → Cancel','SonyLIV':'sonyliv.com → Profile → Subscription → Cancel','Zee5':'zee5.com → Profile → My Subscription → Cancel','Gym':'Visit gym directly — request cancellation in writing','iCloud 50GB':'iPhone → Settings → Apple ID → iCloud → Manage → Downgrade','ChatGPT Plus':'chat.openai.com → Settings → My Plan → Cancel','Canva Pro':'canva.com → Account → Billing → Cancel'};
   const WASTE_REASONS={'OTT':'Multiple OTTs overlap — you likely watch one more than others','Music':'Music apps have similar libraries — one is enough','Fitness':"Unused gym memberships are India's #1 forgotten subscription",'Cloud':'Check actual storage usage — you might not need this tier','Productivity':'Free tier usually covers personal use','AI Tools':'Only worth it if you use it every single day'};
@@ -746,7 +830,18 @@
   let currentLesson=0;
   function getMode(){return localStorage.getItem(MODE_KEY)||null;}
   function saveMode(mode){localStorage.setItem(MODE_KEY,mode);}
-  function selectMode(mode){saveMode(mode);document.getElementById('mode-selector').classList.add('hidden');setTimeout(()=>{applyMode(mode);initApp();},50);}
+ function selectMode(mode) {
+  saveMode(mode);
+  document.getElementById('mode-selector').classList.add('hidden');
+  setTimeout(() => {
+    applyMode(mode);
+    if (!localStorage.getItem('tw_onboarded')) {
+      document.getElementById('onboard-step4').classList.remove('hidden');
+    } else {
+      initApp();
+    }
+  }, 50);
+}
   function applyMode(mode){
     document.documentElement.setAttribute('data-mode',mode);
     document.getElementById('scoreLbl').textContent=mode==='student'?'Your Spend Score':'Your Waste Score';
@@ -894,6 +989,59 @@
     reader.readAsText(file);
     event.target.value = '';
   }
+  function goToStep(fromId, toId) {
+  document.getElementById(fromId).classList.add('hidden');
+  document.getElementById(toId).classList.remove('hidden');
+}
+
+function setOnboardCurrency(cur) {
+  localStorage.setItem('tw_currency', cur);
+  document.querySelectorAll('.onboard-currency-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('curr-' + cur).classList.add('active');
+}
+
+function finishOnboarding() {
+  localStorage.setItem('tw_onboarded', '1');
+  document.getElementById('onboard-step4').classList.add('hidden');
+  initApp();
+  showToast('🎉 Welcome to TrackWise!');
+}
+
+function importBackupOnboarding(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const msg = document.getElementById('onboardImportMsg');
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.app || data.app !== 'TrackWise AI') {
+        msg.textContent = "❌ This doesn't look like a TrackWise backup file.";
+        msg.style.color = 'var(--red)';
+        return;
+      }
+      if (data.mode) saveMode(data.mode);
+      if (data.subscriptions) localStorage.setItem(SUBS_KEY(), JSON.stringify(data.subscriptions));
+      if (data.budget) localStorage.setItem(BUDGET_KEY(), JSON.stringify(data.budget));
+      if (data.retention) localStorage.setItem(RETENTION_KEY(), JSON.stringify(data.retention));
+      if (data.kept) localStorage.setItem(KEPT_KEY(), JSON.stringify(data.kept));
+      if (data.theme) localStorage.setItem(THEME_KEY, data.theme);
+      if (data.lesson_index) localStorage.setItem('tw_lesson_index', data.lesson_index);
+      msg.textContent = '✅ Backup restored!';
+      msg.style.color = 'var(--green)';
+      syncToCloud();
+      setTimeout(() => {
+        document.getElementById('onboard-step2').classList.add('hidden');
+        document.getElementById('onboard-step4').classList.remove('hidden');
+      }, 800);
+    } catch(err) {
+      msg.textContent = '❌ Invalid backup file.';
+      msg.style.color = 'var(--red)';
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
   init();
   </script>
 </body>
