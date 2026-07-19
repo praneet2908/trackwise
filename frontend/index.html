@@ -11,6 +11,15 @@
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
   <meta name="apple-mobile-web-app-title" content="TrackWise"/>
+  <link rel="icon" href="/icon-192.png" type="image/png"/>
+  <meta name="description" content="Know where every rupee goes. Free personal finance app built for India — track subscriptions, budget, and daily spending."/>
+  <meta property="og:title" content="TrackWise AI — Know Where Every Rupee Goes"/>
+  <meta property="og:description" content="Free personal finance app for Indian students and professionals. No bank login. No ads. Built for Bharat."/>
+  <meta property="og:image" content="https://trackwise-in.netlify.app/icon-512.png"/>
+  <meta property="og:url" content="https://trackwise-in.netlify.app"/>
+  <meta property="og:type" content="website"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="TrackWise AI — Know Where Every Rupee Goes"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -676,10 +685,11 @@ async function loadFromCloud(){
   const{data,error}=await sb.from('user_data').select('data').eq('user_id',currentUser.id).single();
   if(error||!data)return;
   const d=data.data;
-  if(d.subscriptions)localStorage.setItem(SUBS_KEY(),JSON.stringify(d.subscriptions));
-  if(d.budget)localStorage.setItem(BUDGET_KEY(),JSON.stringify(d.budget));
-  if(d.retention)localStorage.setItem(RETENTION_KEY(),JSON.stringify(d.retention));
-  if(d.kept)localStorage.setItem(KEPT_KEY(),JSON.stringify(d.kept));
+  const prefix=(d.mode||'pro')+'_';
+  if(d.subscriptions)localStorage.setItem(prefix+'subscriptions',JSON.stringify(d.subscriptions));
+  if(d.budget)localStorage.setItem(prefix+'budget',JSON.stringify(d.budget));
+  if(d.retention)localStorage.setItem(prefix+'retention',JSON.stringify(d.retention));
+  if(d.kept)localStorage.setItem(prefix+'kept_subs',JSON.stringify(d.kept));
   if(d.mode)saveMode(d.mode);
   if(d.theme)localStorage.setItem(THEME_KEY,d.theme);
   if(d.lesson_index)localStorage.setItem('tw_lesson_index',d.lesson_index);
@@ -926,6 +936,7 @@ function importBackupOnboarding(event){
 }
 
 function init(){
+  setInterval(async()=>{await sb.from('user_data').select('count').limit(1);},345600000);
   currentLesson=parseInt(localStorage.getItem('tw_lesson_index')||'0');
   const savedTheme=localStorage.getItem(THEME_KEY)||'night';setTheme(savedTheme);
   sb.auth.getSession().then(({data:{session}})=>{
