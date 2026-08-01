@@ -6,3 +6,8 @@
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
+
+[[redirects]]
+  from = "/favicon.ico"
+  to = "/icon-192.png"
+  status = 200
